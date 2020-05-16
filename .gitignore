@@ -1,0 +1,8 @@
+data/
+__pycache__/
+logs/
+passwd/
+admin/services/goaccess/front/
+.env
+proxy/vhost/localhost
+webapp/front/js/conf.js
