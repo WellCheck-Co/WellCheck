@@ -1,26 +1,27 @@
 version: '3'
+
 networks:
-   db-net:
-     internal: true
-   proxy:
-     driver: bridge
+  db-net:
+    internal: true
+  proxy:
+    driver: bridge
 
 services:
-   datab:
-     image: mysql:5.7
-     container_name: datab
-     restart: always
-     networks:
-       - db-net
-     volumes:
-       - ./webapp/db/sql/data:/var/lib/mysql
-     environment:
-       MYSQL_RANDOM_ROOT_PASSWORD: 1
-       MYSQL_USER: ${DB_USER}
-       MYSQL_DATABASE: wellcheck
-       MYSQL_PASSWORD: ${DB_PASS}
+  database:
+    image: mysql:5.7
+    container_name: database
+    restart: always
+    networks:
+      - db-net
+    volumes:
+      - ./webapp/db/sql/data:/var/lib/mysql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MYSQL_USER: ${DB_USER}
+      MYSQL_DATABASE: wellcheck
+      MYSQL_PASSWORD: ${DB_PASS}
 
-   elasticsearch:
+  elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
     container_name: elasticsearch
     environment:
@@ -39,130 +40,129 @@ services:
       - db-net
 
 
-   map_bck-end:
-     build: ./webapp/api
-     expose:
-       - 8080
-     tty: true
-     stdin_open: true
-     depends_on:
-       - datab
-     networks:
-       - db-net
-       - proxy
-     volumes:
-       - ./webapp/api:/home/api/
-     environment:
-       VIRTUAL_HOST: api.${DOMAIN}
-       VIRTUAL_PORT: 8080
-       LETSENCRYPT_HOST: api.${DOMAIN}
-       LETSENCRYPT_EMAIL: ${EMAIL}
-       API_MOD: ${API_MOD}
-       API_PASS: password
-       DB_USER: ${DB_USER}
-       DB_PASS: ${DB_PASS}
-       STRIPE_PRIV: ${STRIPE_PRIV}
+  map_bck-end:
+    build: ./webapp/api
+    expose:
+      - 8080
+    tty: true
+    stdin_open: true
+    depends_on:
+      - database
+    networks:
+      - db-net
+      - proxy
+    volumes:
+      - ./webapp/api:/home/api/
+    environment:
+      VIRTUAL_HOST: api.${DOMAIN}
+      VIRTUAL_PORT: 8080
+      LETSENCRYPT_HOST: api.${DOMAIN}
+      LETSENCRYPT_EMAIL: ${EMAIL}
+      API_MOD: ${API_MOD}
+      API_PASS: password
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      STRIPE_PRIV: ${STRIPE_PRIV}
 
-   autodata:
-     build: ./webapp/autodata
-     container_name: autodata
-     tty: true
-     stdin_open: true
-     depends_on:
-       - map_bck-end
-     networks:
-       - db-net
-     environment:
-       DB_USER: ${DB_USER}
-       DB_PASS: ${DB_PASS}
-       CRON_SCHEDULE: "*/15 * * * *"
+  autodata:
+    build: ./webapp/autodata
+    container_name: autodata
+    tty: true
+    stdin_open: true
+    depends_on:
+      - map_bck-end
+    networks:
+      - db-net
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      CRON_SCHEDULE: "*/15 * * * *"
 
-   map_landing:
-      image: nginx
-      restart: always
-      volumes:
-        - ./landing/front:/usr/share/nginx/html:ro
-        - ./landing/conf/landing.conf:/etc/nginx/conf.d/default.conf:ro
-      links:
-        - error
-        - php
-      networks:
-        - proxy
-      environment:
-        VIRTUAL_HOST: ${DOMAIN}
-        VIRTUAL_PORT: 80
-        LETSENCRYPT_HOST: ${DOMAIN}
-        LETSENCRYPT_EMAIL: ${EMAIL}
+  map_landing:
+    image: nginx
+    restart: always
+    volumes:
+      - ./landing/front:/usr/share/nginx/html:ro
+      - ./landing/conf/landing.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - 10085:80
+    links:
+      - error
+      - php
+    networks:
+      - proxy
+    environment:
+      VIRTUAL_HOST: ${DOMAIN}
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: ${DOMAIN}
+      LETSENCRYPT_EMAIL: ${EMAIL}
 
-   map_webapp:
-      image: nginx
-      restart: always
-      volumes:
-        - ./webapp/front:/usr/share/nginx/html:ro
-        - ./webapp/conf/webapp.conf:/etc/nginx/conf.d/default.conf:ro
-      links:
-        - error
-      networks:
-        - proxy
-      environment:
-        VIRTUAL_HOST: dashboard.${DOMAIN}
-        VIRTUAL_PORT: 80
-        LETSENCRYPT_HOST: dashboard.${DOMAIN}
-        LETSENCRYPT_EMAIL: ${EMAIL}
+  map_webapp:
+    image: nginx
+    restart: always
+    volumes:
+      - ./webapp/front:/usr/share/nginx/html:ro
+      - ./webapp/conf/webapp.conf:/etc/nginx/conf.d/default.conf:ro
+    links:
+      - error
+    networks:
+      - proxy
+    environment:
+      VIRTUAL_HOST: dashboard.${DOMAIN}
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: dashboard.${DOMAIN}
+      LETSENCRYPT_EMAIL: ${EMAIL}
 
-   php:
-      image: php:fpm-alpine
-      container_name: php
-      volumes:
-        - ./landing/front:/script:ro
-        - ./admin/services/contact:/result
-      networks:
-        - proxy
+  php:
+    image: php:fpm-alpine
+    container_name: php
+    volumes:
+      - ./landing/front:/script:ro
+      - ./admin/services/contact:/result
+    networks:
+      - proxy
 
 
-   error:
-      image: nginx
-      container_name: error
-      restart: always
-      volumes:
-        - ./error/front:/usr/share/nginx/html:ro
-        - ./error/conf/error.conf:/etc/nginx/conf.d/default.conf:ro
-      networks:
-        - proxy
+  error:
+    image: nginx
+    container_name: error
+    restart: always
+    volumes:
+      - ./error/front:/usr/share/nginx/html:ro
+      - ./error/conf/error.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - proxy
 
-   nginx:
-      image: jwilder/nginx-proxy:alpine
-      container_name: nginx
-      restart: always
-      labels:
-        com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: 'true'
-      ports:
-        - 80:80
-        - 443:443
-      volumes:
-        - ./proxy/logs/global:/var/log/nginx
-        - ./proxy/conf/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
-        - ./proxy/vhost:/etc/nginx/vhost.d
-        - ./proxy/passwd:/etc/nginx/htpasswd
-        - ./proxy/logs/services:/customlogs/
-        - /srv/nginx/data/html:/usr/share/nginx/html
-        - /srv/nginx/data/certs:/etc/nginx/certs:ro
-        - /var/run/docker.sock:/tmp/docker.sock:ro
-      networks:
-        - proxy
+  nginx:
+    image: jwilder/nginx-proxy:alpine
+    container_name: nginx
+    restart: always
+    labels:
+      com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy: 'true'
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./proxy/logs/global:/var/log/nginx
+      - ./proxy/conf/proxy.conf:/etc/nginx/conf.d/proxy.conf:ro
+      - ./proxy/vhost:/etc/nginx/vhost.d
+      - ./proxy/passwd:/etc/nginx/htpasswd
+      - ./proxy/logs/services:/customlogs
+      - ./proxy/html:/usr/share/nginx/html
+      - ./proxy/certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - proxy
 
-   letsencrypt:
-      image: jrcs/letsencrypt-nginx-proxy-companion
-      container_name: letsencrypt
-      volumes:
-        - ./proxy/vhost:/etc/nginx/vhost.d
-        - /srv/nginx/data/certs:/etc/nginx/certs:rw
-        - /srv/nginx/data/html:/usr/share/nginx/html
-        - /var/run/docker.sock:/var/run/docker.sock:ro
-      depends_on:
-        - nginx
-      networks:
-        - proxy
-
-volumes:
-  db:
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt
+    volumes:
+      - ./proxy/vhost:/etc/nginx/vhost.d
+      - /srv/nginx/data/certs:/etc/nginx/certs:rw
+      - /srv/nginx/data/html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - nginx
+    networks:
+      - proxy
