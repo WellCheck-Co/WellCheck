@@ -84,8 +84,6 @@ services:
     volumes:
       - ./landing/front:/usr/share/nginx/html:ro
       - ./landing/conf/landing.conf:/etc/nginx/conf.d/default.conf:ro
-    ports:
-      - 10085:80
     links:
       - error
       - php
