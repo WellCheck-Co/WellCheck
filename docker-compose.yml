@@ -159,8 +159,8 @@ services:
     container_name: letsencrypt
     volumes:
       - ./proxy/vhost:/etc/nginx/vhost.d
-      - /srv/nginx/data/certs:/etc/nginx/certs:rw
-      - /srv/nginx/data/html:/usr/share/nginx/html
+      - ./proxy/certs:/etc/nginx/certs:rw
+      - ./proxy/html:/usr/share/nginx/html
       - /var/run/docker.sock:/var/run/docker.sock:ro
     depends_on:
       - nginx
