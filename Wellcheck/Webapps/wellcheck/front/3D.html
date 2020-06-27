@@ -1,0 +1,138 @@
+<!doctype html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+    <meta name="Description" content="Device to analyse water quality">
+    <title>Wellcheck 3D</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link rel="icon" href="imgs/logo-min.png" type="image/gipng">
+    <script type="module" src="./js/3D/xlayers-lite.esm.js"></script>
+    <script nomodule="" src="./js/3D/xlayers-lite.js"></script>
+    <link href="./css/3d.css" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-154947792-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-154947792-1');
+
+      function changefile(file, update = true){
+        document.getElementById('viewer').data = file;
+        document.getElementById('viewerlink').href = file;
+        PDFObject.embed(file, "#viewer2");
+        var list= document.getElementsByTagName("select");
+        for (var i = 0; i < list.length; i++) {
+           if (list[i].value != file){list[i].selectedIndex = 0;}
+        }
+        if (update) {
+        window.location.href = document.URL.split('#')[0] + '#' +file.split("pdfs/")[1].split(".pdf")[0];
+        }
+      }
+
+      </script>
+    </head>
+    <body>
+    <div style="width: 100vw; height: calc(100vh - 100px)">
+      <x-layers src="./imgs/float.sketch" mode="3d" wireframe="true" zoom="1"></x-layers>
+
+      <script>
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+          navigator.serviceWorker.getRegistration().then(function(registration) {
+            if (registration) {
+              registration.unregister().then(function() { location.reload(true) });
+            }
+          });
+
+
+          var update = -1;
+          var animations = true;
+
+          function stylescon(){
+            document.querySelector("#barre").style =  "transition: 0s; width:0%"
+            var win = window.innerWidth;
+            var res = "";
+            var size = 0.1;
+            var left = 0;
+            var top = 0;
+            s = [0.15, 0.3, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4]
+            for (var i = s.length; i > 0; i--){
+              if (win > (i - 1) * 330){
+                size = s[i - 1]
+                i = 0;
+              }
+            }
+            res = "transform: scale(" + size + ", " + size + ");"
+            s = [[-80, -20, 50], [-125, -60, 60], [-250, -120, 120]]
+            for (var i = s.length; i > 0; i--){
+              if (win > (i - 1) * 330){
+                left = s[i - 1][update % 3]
+                i = 0;
+              }
+            }
+            res += "left: " + left  + "px; transition: " + (animations ? 10 : 1 )+"s;"
+            if (size > 0.7)
+              top = 180;
+            if (size > 1.4)
+              top = 300;
+            var styles = [
+                          "margin-top: " + (180 + top)+ "px; transform: rotateY(60deg) rotateX(20deg);",
+                          "margin-top: " + (200 + top)+ "px; transform: rotateY(0deg) rotateX(25deg);",
+                          "margin-top: " + (200 + top)+ "px; margin-top: -80px; transform: rotateY(-60deg) rotateX(-20deg);"
+                         ][update % 3] + "; transition: " + (animations ? 10 : 1 )+"s;"
+            setTimeout(gobarre, 200);
+            return [res, styles];
+          }
+
+          function gobarre(){
+            document.querySelector("#barre").style = (animations ? "" : "transition: 10.3s linear; width:100%")
+          }
+
+          function anim(){
+            animations = !animations;
+            document.querySelector("#load").style = "display: " + (animations == true ? "none" : "block")
+            updatefnc()
+          }
+
+          function updatefnc(){
+              update += 1;
+              if (document.querySelector("x-layers-canvas") != void 0) {
+                let size = stylescon()
+                document.querySelector("x-layers-container > div").style = size[0]
+                document.querySelector("x-layers-canvas").style = size[1]
+              }
+          }
+
+        }
+      </script>
+</div>
+<div id="load" style="display: none">
+  <div id="barre">
+  </div>
+</div>
+<div id="check" class="nav-text test-nav" style="text-align: center">
+  <input id="s2d" type="checkbox" class="switch test-switch" onclick="anim()" checked>
+  <label for="s2d" style="font-size: 1.8rem;">Animations</label>
+</div>
+<ul class="w3lsg-bubbles">
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+  <li></li>
+</ul>
+</div>
+<script>
+if (window.innerWidth < 660){
+  animations = false;
+  document.querySelector("#check").style = "display: none;"
+  document.querySelector("#s2d").checked = false;
+}
+setTimeout(updatefnc, 2000);
+setInterval(updatefnc, 10400);
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+version: '3'
+networks:
+   db-net:
+     external:
+         name: wellcheckv2_db-net
+
+services:
+  autodata:
+    build: ./Wellcheck/Micro/Autodata
+    container_name: autodata
+    tty: true
+    stdin_open: true
+    networks:
+      - db-net
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      CRON_SCHEDULE: "*/15 * * * *"
