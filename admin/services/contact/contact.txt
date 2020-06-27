@@ -1,4 +1,0 @@
-| From | Message | IP | IP_FORWARDED | Date |
-| - | - | - | - | - |
-| test | bonjour | 192.168.80.13 | 192.168.80.1 | Sat, 09 May 2020 10:28:42 +0000 |
-| test | bonjour | 192.168.80.13 | 192.168.80.1 | Sat, 09 May 2020 10:28:42 +0000 |
