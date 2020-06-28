@@ -1,0 +1,30 @@
+.cont {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(216, 215, 217);
+    width: 100%;
+    border-radius: 7px;
+    min-height: 200px;
+    text-align: center;
+    color: rgb(74, 79, 98);
+    padding: 20px;
+    transition: .1s;
+    margin-bottom: 20px;
+}
+
+.cont-hover:hover {
+    box-shadow: 0px 3px 10px 3px rgba(226, 225, 227, 0.5);
+    border: 1px solid rgb(28, 148, 254);
+}
+
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+  bottom: .5em;
+}

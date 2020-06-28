@@ -1,7 +1,0 @@
-bottle
-pymysql
-requests
-pyjwt
-phonenumbers
-stripe 
-elasticsearch

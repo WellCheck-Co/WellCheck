@@ -1,0 +1,141 @@
+version: '3'
+
+networks:
+  db-net:
+    internal: true
+  proxy:
+    external:
+        name: docker-compose_proxy
+
+services:
+  database:
+    image: mysql:5.7
+    container_name: database
+    restart: always
+    networks:
+      - db-net
+    volumes:
+      - ../Wellcheck/Micro/sql/data:/var/lib/mysql
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MYSQL_USER: ${DB_USER}
+      MYSQL_DATABASE: wellcheck
+      MYSQL_PASSWORD: ${DB_PASS}
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
+    container_name: elasticsearch
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=false
+      - cluster.routing.allocation.disk.threshold_enabled=false
+      - discovery.type=single-node
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ../Wellcheck/Micro/elastic/data:/usr/share/elasticsearch/data
+    networks:
+      - db-net
+
+  map_bck-end:
+    build: ../Wellcheck/Webapps/api.wellcheck
+    expose:
+      - 8080
+    tty: true
+    stdin_open: true
+    depends_on:
+      - database
+    networks:
+      - db-net
+      - proxy
+    volumes:
+      - ../Wellcheck/Webapps/api.wellcheck:/home/api/
+    environment:
+      VIRTUAL_HOST: api.${DOMAIN}
+      VIRTUAL_PORT: 8080
+      LETSENCRYPT_HOST: api.${DOMAIN}
+      LETSENCRYPT_EMAIL: ${EMAIL}
+      API_MOD: ${API_MOD}
+      API_PASS: password
+      API_ADM: ${API_ADM}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      STRIPE_PRIV: ${STRIPE_PRIV}
+
+  map_landing:
+    image: nginx
+    restart: always
+    volumes:
+      - ../Wellcheck/Webapps/wellcheck/front:/usr/share/nginx/html:ro
+      - ../Wellcheck/Webapps/wellcheck/conf/landing.conf:/etc/nginx/conf.d/default.conf:ro
+    links:
+      - error
+      - php
+      - map_bck-end
+    networks:
+      - proxy
+    environment:
+      VIRTUAL_HOST: ${DOMAIN}
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: ${DOMAIN}
+      LETSENCRYPT_EMAIL: ${EMAIL}
+
+  map_documents:
+    image: nginx
+    restart: always
+    volumes:
+      - ../Wellcheck/Webapps/doc.wellcheck/front:/usr/share/nginx/html:ro
+      - ../Wellcheck/Webapps/doc.wellcheck/conf/doc.conf:/etc/nginx/conf.d/default.conf:ro
+    links:
+      - error
+      - php
+    networks:
+      - proxy
+    environment:
+      VIRTUAL_HOST: doc.${DOMAIN}
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: doc.${DOMAIN}
+      LETSENCRYPT_EMAIL: ${EMAIL}
+
+  map_webapp:
+    image: nginx
+    restart: always
+    volumes:
+      - ../Wellcheck/Webapps/dashboard.wellcheck/front:/usr/share/nginx/html:ro
+      - ../Wellcheck/Webapps/dashboard.wellcheck/conf/webapp.conf:/etc/nginx/conf.d/default.conf:ro
+    links:
+      - error
+    networks:
+      - proxy
+    environment:
+      VIRTUAL_HOST: dashboard.${DOMAIN}
+      VIRTUAL_PORT: 80
+      LETSENCRYPT_HOST: dashboard.${DOMAIN}
+      LETSENCRYPT_EMAIL: ${EMAIL}
+
+  php:
+    image: php:fpm-alpine
+    container_name: php
+    volumes:
+      - ../Wellcheck/Webapps/wellcheck/front:/script:ro
+      - ../Wellcheck/Webapps/doc.wellcheck/front:/doc:ro
+      - ../Wellcheck/Webapps/doc.wellcheck/save:/savedoc
+      - ../Wellcheck/Admin/services/contact:/result
+    networks:
+      - proxy
+
+  error:
+    image: nginx
+    container_name: error
+    restart: always
+    volumes:
+      - ../Wellcheck/Webapps/error.wellcheck/front:/usr/share/nginx/html:ro
+      - ../Wellcheck/Webapps/error.wellcheck/conf/error.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - proxy
+
+volumes:
+   db:

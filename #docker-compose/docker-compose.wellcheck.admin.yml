@@ -1,0 +1,89 @@
+version: '3'
+networks:
+   db-net:
+     external:
+         name: docker-compose_db-net
+   proxy:
+     external:
+         name: docker-compose_proxy
+
+services:
+   kibana:
+     image: docker.elastic.co/kibana/kibana:7.6.0
+     container_name: kibana
+     volumes:
+       - ../Wellcheck/Admin/services/kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
+     networks:
+       - db-net
+       - proxy
+
+   phpmyadmin:
+     image: phpmyadmin/phpmyadmin
+     container_name: phpmyadmin
+     environment:
+       - PMA_ARBITRARY=1
+     restart: always
+     volumes:
+       - /sessions
+       - ../Wellcheck/Admin/services/phpmyadmin/config.inc.php:/etc/phpmyadmin/config.inc.php:ro
+     external_links:
+       - database:db
+     networks:
+       - db-net
+       - proxy
+     environment:
+       PMA_USER: ${DB_USER}
+       PMA_PASSWORD: ${DB_PASS}
+
+   goaccess:
+     image: nginx
+     container_name: goaccess
+     restart: always
+     volumes:
+       - ../Wellcheck/Admin/services/goaccess/front:/usr/share/nginx/html:ro
+     networks:
+       - proxy
+
+   goaccesscli:
+    image: allinurl/goaccess
+    container_name: goaccesscli
+    volumes:
+      - ../Proxy/logs/services:/logs/
+      - ../Wellcheck/Admin/services/goaccess/conf:/etc/goaccess/
+      - ../Wellcheck/Admin/services/goaccess/front:/results/
+    entrypoint: "watch `goaccess /logs/${DOMAIN}.log -o /results/${DOMAIN}.html --log-format=COMBINED;
+                        goaccess /logs/dashboard.${DOMAIN}.log -o /results/dashboard${DOMAIN}.html --log-format=COMBINED;
+                        goaccess /logs/api.${DOMAIN}.log -o /results/api${DOMAIN}.html --log-format=COMBINED;`
+                "
+
+   php2:
+      image: php:fpm-alpine
+      container_name: php2
+      volumes:
+        - ../Wellcheck/Admin/front:/script:ro
+        - ../Wellcheck/Admin/services/goaccess/front:/stats:ro
+        - ../Wellcheck/Admin/services/contact:/contact:ro
+      networks:
+        - proxy
+      environment:
+        API_ADM: ${API_ADM}
+
+   admin:
+    image: nginx
+    container_name: admin
+    restart: always
+    volumes:
+     - ../Wellcheck/Admin/front:/usr/share/nginx/html:ro
+     - ../Wellcheck/Admin/conf/admin.conf:/etc/nginx/conf.d/default.conf:ro
+    links:
+     - goaccess
+     - phpmyadmin
+     - kibana
+     - php2
+    networks:
+     - proxy
+    environment:
+     VIRTUAL_HOST: admin.${DOMAIN}
+     VIRTUAL_PORT: 80
+     LETSENCRYPT_HOST: admin.${DOMAIN}
+     LETSENCRYPT_EMAIL: ${EMAIL}

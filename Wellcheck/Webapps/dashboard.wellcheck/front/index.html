@@ -1,0 +1,69 @@
+<!--
+Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register - Wellcheck</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- Custom Theme files -->
+<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+<link href="css/font-awesome.css" rel="stylesheet" type="text/css">
+
+<link rel="icon" href="imgs/logo.png" type="image/gipng">
+<!-- //Custom Theme files -->
+</head>
+<body>
+	<!-- main -->
+	<div id="register" class="main-w3layouts wrapper">
+		<img class="img-fluid" src="imgs/logo_v2.png" alt="">
+		<div class="main-agileinfo">
+			<div class="agileits-top">
+					<input class="text email" type="email" name="email" v-model="email" placeholder="Email" required="">
+					<input class="text" type="password" name="password" v-model="password1" placeholder="Password" required="">
+					<input class="text w3lpass" type="password" name="password" v-model="password2" placeholder="Confirm Password" required="">
+					<input type="checkbox" v-model="conditions" required="">
+					<span style="color: white">I Agree To The Terms & Conditions</span>
+					<input type="submit" value="SIGN UP" v-on:click="register">
+				<p>Already have an account ? <a href="./login.html"> Login Now!</a></p>
+			</div>
+		</div>
+				<!-- copyright -->
+		<msg usualcenter=false ref="extern"></msg>
+		<div class="w3copyright-agile">
+			<p>Wellcheck© 2019. All Rights Reserved.</p>
+		</div>
+		<!-- //copyright -->
+		<ul class="w3lsg-bubbles">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<!-- //main -->
+	<script src="./js/conf.js"></script>
+	<script src="./js/vue.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="./js/commons/comp_messages.js"></script>
+	<script src="./js/commons/location.js"></script>
+	<script src="./js/commons/cred.js"></script>
+	<script src="./js/commons/user.js"></script>
+  <script src="./js/register/register.js"></script>
+</body>
+</html>
