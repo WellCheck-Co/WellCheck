@@ -5,7 +5,7 @@ networks:
     internal: true
   proxy:
     external:
-        name: wellcheckv2_proxy
+        name: docker-compose_proxy
 
 services:
   database:
@@ -15,7 +15,7 @@ services:
     networks:
       - db-net
     volumes:
-      - ./Wellcheck/Micro/sql/data:/var/lib/mysql
+      - ../Wellcheck/Micro/sql/data:/var/lib/mysql
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 1
       MYSQL_USER: ${DB_USER}
@@ -36,12 +36,12 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - ./Wellcheck/Micro/elastic/data:/usr/share/elasticsearch/data
+      - ../Wellcheck/Micro/elastic/data:/usr/share/elasticsearch/data
     networks:
       - db-net
 
   map_bck-end:
-    build: ./Wellcheck/Webapps/api.wellcheck
+    build: ../Wellcheck/Webapps/api.wellcheck
     expose:
       - 8080
     tty: true
@@ -52,7 +52,7 @@ services:
       - db-net
       - proxy
     volumes:
-      - ./Wellcheck/Webapps/api.wellcheck:/home/api/
+      - ../Wellcheck/Webapps/api.wellcheck:/home/api/
     environment:
       VIRTUAL_HOST: api.${DOMAIN}
       VIRTUAL_PORT: 8080
@@ -69,8 +69,8 @@ services:
     image: nginx
     restart: always
     volumes:
-      - ./Wellcheck/Webapps/wellcheck/front:/usr/share/nginx/html:ro
-      - ./Wellcheck/Webapps/wellcheck/conf/landing.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../Wellcheck/Webapps/wellcheck/front:/usr/share/nginx/html:ro
+      - ../Wellcheck/Webapps/wellcheck/conf/landing.conf:/etc/nginx/conf.d/default.conf:ro
     links:
       - error
       - php
@@ -87,8 +87,8 @@ services:
     image: nginx
     restart: always
     volumes:
-      - ./Wellcheck/Webapps/doc.wellcheck/front:/usr/share/nginx/html:ro
-      - ./Wellcheck/Webapps/doc.wellcheck/conf/doc.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../Wellcheck/Webapps/doc.wellcheck/front:/usr/share/nginx/html:ro
+      - ../Wellcheck/Webapps/doc.wellcheck/conf/doc.conf:/etc/nginx/conf.d/default.conf:ro
     links:
       - error
       - php
@@ -104,8 +104,8 @@ services:
     image: nginx
     restart: always
     volumes:
-      - ./Wellcheck/Webapps/dashboard.wellcheck/front:/usr/share/nginx/html:ro
-      - ./Wellcheck/Webapps/dashboard.wellcheck/conf/webapp.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../Wellcheck/Webapps/dashboard.wellcheck/front:/usr/share/nginx/html:ro
+      - ../Wellcheck/Webapps/dashboard.wellcheck/conf/webapp.conf:/etc/nginx/conf.d/default.conf:ro
     links:
       - error
     networks:
@@ -120,10 +120,10 @@ services:
     image: php:fpm-alpine
     container_name: php
     volumes:
-      - ./Wellcheck/Webapps/wellcheck/front:/script:ro
-      - ./Wellcheck/Webapps/doc.wellcheck/front:/doc:ro
-      - ./Wellcheck/Webapps/doc.wellcheck/save:/savedoc
-      - ./Wellcheck/Admin/services/contact:/result
+      - ../Wellcheck/Webapps/wellcheck/front:/script:ro
+      - ../Wellcheck/Webapps/doc.wellcheck/front:/doc:ro
+      - ../Wellcheck/Webapps/doc.wellcheck/save:/savedoc
+      - ../Wellcheck/Admin/services/contact:/result
     networks:
       - proxy
 
@@ -132,8 +132,8 @@ services:
     container_name: error
     restart: always
     volumes:
-      - ./Wellcheck/Webapps/error.wellcheck/front:/usr/share/nginx/html:ro
-      - ./Wellcheck/Webapps/error.wellcheck/conf/error.conf:/etc/nginx/conf.d/default.conf:ro
+      - ../Wellcheck/Webapps/error.wellcheck/front:/usr/share/nginx/html:ro
+      - ../Wellcheck/Webapps/error.wellcheck/conf/error.conf:/etc/nginx/conf.d/default.conf:ro
     networks:
       - proxy
 

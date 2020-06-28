@@ -2,11 +2,11 @@ version: '3'
 networks:
    db-net:
      external:
-         name: wellcheckv2_db-net
+         name: docker-compose_db-net
 
 services:
   autodata:
-    build: ./Wellcheck/Micro/Autodata
+    build: ../Wellcheck/Micro/Autodata
     container_name: autodata
     tty: true
     stdin_open: true
