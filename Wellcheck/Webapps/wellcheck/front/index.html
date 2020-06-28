@@ -37,6 +37,7 @@
             <div id="my-nav" class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#buy">Buy</a></li>
                     <li class="nav-item"><a class="nav-link" href="#team">The Team</a></li>
                     <li class="nav-item"><a class="nav-link" href="#news">News</a></li>
                     <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
@@ -311,6 +312,47 @@
             </div>
         </div>
     </div>
+    <div class="container-fluid gtco-testimonials" id="buy">
+        <div class="container">
+            <div class="row">
+                <div class="offset-lg-3 col-lg-6"
+                    style="box-shadow: 0 15px 40px 0 rgba(149, 179, 247, 0.69); padding: 24px; border-radius: 10px;">
+                    <div class="text-center" data-wow-delay="0.3s"
+                        style="visibility: visible;-webkit-animation-delay: 0.3s; -moz-animation-delay: 0.3s; animation-delay: 0.3s;">
+                        <div class="hidden" style="">
+                        </div>
+                        <div class="usualcenter infos">
+                            <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                <h1 class="txt-lt">Buy devices</h1>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="marge" style="height: inherit;">
+                                <container note="Your basket"
+                                    name="My basket"
+                                    hover=true
+                                    style="height: 100%">
+                                    <div class="row justify-content-md-center">
+                                        <label class="col-md-4">Number of devices</label>
+                                        <input id="number" type="range" class="custom-range col-md-6" min="0" max="10" value="0" onchange="onDevicesChange(event)">
+                                        <span id="numberSpan" class="col-md-2">0</span>
+                                    </div>
+                                    <br>
+                                    <span>249€ / device + 10€ / month / device</span>
+                                    <br><br>
+                                    <span><span id="devicesPrice">0</span>€ now + <span id="subscriptionPrice">0</span>€ / month</span>
+                                    <br><br>
+                                    <button id="buyButton" type="button" class="btn btn-primary col-md-4" onclick="buy()" disabled>Buy</button>
+                                </container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container-fluid gtco-testimonials" id="team">
         <div class="container">
             <h2>The team</h2>
@@ -554,6 +596,30 @@
                 }
             });
         }
+
+        var prices = {
+            "device": 249,
+            "subscription": 10
+        }
+
+        function onDevicesChange(event) {
+            document.querySelector("#numberSpan").innerText = event.target.value;
+            document.querySelector("#devicesPrice").innerText = event.target.value * prices.device;
+            document.querySelector("#subscriptionPrice").innerText = event.target.value * prices.subscription;
+            document.querySelector("#buyButton").disabled = event.target.value <= 0;
+        }
+        function buy() {
+            alert("You just bought " + document.querySelector("#number").value + " devices !");
+        }
+        //$("#number").on("change", (event) => {
+        //    $("#numberSpan").text(event.target.value);
+        //    $("#devicesPrice").text(event.target.value * this.prices.device);
+        //    $("#subscriptionPrice").text(event.target.value * this.prices.subscription);
+        //    $("#buyButton").attr("disabled", event.target.value <= 0);
+        //});
+        //$("#buyButton").on("click", (event) => {
+        //    alert("You just bought " + $("#number").val() + " devices !");
+        //});
     </script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
