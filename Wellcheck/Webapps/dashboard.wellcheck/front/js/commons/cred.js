@@ -12,7 +12,7 @@ let cred = {
       }
       if (localStorage.usrtoken && this.checktime("usrtoken")) {
         let location = localStorage.location ?  localStorage.location  : redirect;
-        loc.methods.redirect(location);
+        loc.methods.redirect(location, (get["force"] == "true" ? true : false));
       } else {
         if (actual != "/" && actual != "/index" && actual != "/login")
           loc.methods.redirect('/login');

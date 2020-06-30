@@ -30,7 +30,7 @@ def setuproute(app, call):
     @app.route('/points/infos/',    ['OPTIONS', 'POST'],        lambda x = None: call([myauth, authuser, points_infos])              )
     @app.route('/points/shared/',   ['OPTIONS', 'GET'],         lambda x = None: call([myauth, authuser, points_shared])             )
 
-    @app.route('/data/add/',        ['OPTIONS', 'POST'],        lambda x = None: call([myauth, data_add])                            )
+    @app.route('/data/add/',        ['OPTIONS', 'POST'],        lambda x = None: call([authadmin, data_add])                            )
 
     @app.route('/pdf/report/',      ['OPTIONS', 'POST'],        lambda x = None: call([pdf_report])                                  )
 

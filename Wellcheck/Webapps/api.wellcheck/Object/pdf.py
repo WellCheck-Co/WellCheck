@@ -38,11 +38,17 @@ class pdf_doc:
         pdf.setTitle(documentTitle)
         pdf.drawImage(image, 0, 0, 210 * mm, 272 * mm)
 
-
         pdf.setFillColorRGB(0, 0, 0)
         page = 1
+        now = int(round(time.time()))
 
-        qr_code = qr.QrCodeWidget('https://doc.wellcheck.fr/?doc=' + id_doc)
+        save = True
+        qr_link = 'https://doc.wellcheck.fr/?doc=' + id_doc
+        if int(date_end) > int(now - 200):
+            qr_link =  "https://doc.wellcheck.fr/src.php?id=" + str(id_points[0]) + "&from=" + str(int(date_start)) + "&to=" + str(int(date_end))
+            save = False
+
+        qr_code = qr.QrCodeWidget(qr_link)
         bounds = qr_code.getBounds()
         width = bounds[2] - bounds[0]
         height = bounds[3] - bounds[1]
@@ -56,7 +62,7 @@ class pdf_doc:
 
         pdf.setFont("Helvetica", 12)
         pdf.drawString(100 * mm, 13 * mm, str(page) + " / "  + str(total_page))
-        pdf.drawString(65 * mm, 5 * mm, id_doc)
+        pdf.drawString(64.5 * mm, 5 * mm, "     unfinished period | temporary document" if not save else id_doc)
         renderPDF.draw(dr, pdf, 210 * mm - 82, 2)
         pdf.drawString(40 * mm, (267 - 54) * mm, "Sigfox_id")
         pdf.drawString(40 * mm, (267 - 58) * mm, "Name")
@@ -114,10 +120,10 @@ class pdf_doc:
                  pdf.drawString(138 * mm, (267 - start + 8) * mm, "Redox")
                  pdf.drawString(168 * mm, (267 - start + 8) * mm, "Turbidity")
                  pdf.setFont("Helvetica", 12)
-                 pdf.drawString(100 * mm, 13 * mm, str(page) + " / "  + str(total_page))
-                 pdf.drawString(65 * mm, 5 * mm, id_doc)
+                 pdf.drawString(100 * mm - ( 0 if page < 10 else 2 * mm if page < 100 else 4 * mm), 13 * mm, str(page) + " / "  + str(total_page))
+                 pdf.drawString(64.5 * mm, 5 * mm, "     unfinished period | temporary document " if not save else id_doc)
                  renderPDF.draw(dr, pdf, 210 * mm - 82, 2)
-        return [True, {"doc_id": id_doc, "Content": str(base64.b64encode(pdf.getpdfdata().decode('utf8', 'ignore').encode('ascii')))[2:-1], "Type": "pdf"}, None]
+        return [True, {"doc_id": id_doc, "Content": str(base64.b64encode(pdf.getpdfdata().decode('utf8', 'ignore').encode('ascii')))[2:-1], "Type": "pdf", "Save": save}, None]
 
     def __getsecret(self):
         return str(os.getenv('API_SCRT', '!@ws4RT4ws212@#%'))

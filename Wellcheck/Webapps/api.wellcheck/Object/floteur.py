@@ -1,6 +1,7 @@
 import json, time
 import uuid
 from .sql import sql
+from .mail import Mailer
 from .elastic import es
 import requests
 import hashlib
@@ -215,24 +216,50 @@ class floteur:
         helpers.bulk(es, inputs)
         return inputs[0]
 
-    def adddata(self, data, id_sig, id_point):
+    def adddata(self, id_sig, id_point, ph, turbidity, redox, temp, pos):
         id_sig = self.__hash(id_sig)
         id_point = id_point
         date = int(round(time.time() * 1000))
-        if "pos" not in data or not data["pos"]:
-            return [False, "Missing index 'pos' inside data", 400]
-        if "lng" not in data['pos'] or "lat" not in data['pos']:
-            return [False, "Missing inbex 'lon' or 'lat' inside data.pos", 400]
+        if "lng" not in pos or "lat" not in pos:
+            return [False, "Missing inbex 'lon' or 'lat' inside pos", 400]
+        note = self.note(ph, turbidity, redox, temp)
         input={
                 "id_sig": id_sig,
                 "id_point": id_point,
-                "data": data,
+                'data': {
+                   'data': {
+                       "ph": ph,
+                       "turbidity": turbidity,
+                       "redox": redox,
+                       "temp": temp,
+                       "note": note
+                   },
+                   'pos': pos
+                   },
                 "date": date
             }
         res = es.index(index='point_test',body=input)
-        return [True, {"data_added": input}, None]
+        act = []
+        if note < 5 :
+            maillist = ["eliot.courtel@gmail.com"]
+            point_name = ""
+            Mailer().alerte(maillist, point_name, id_point, date/1000, note)
+            act.append({"email": [maillist, point_name, id_point, date/1000, note]})
+        return [True, {"data_added": input, "actions": act}, None]
 
-
+    # def pref_mail(self, id_point, mail = 0):
+    #     if not self.__exist(id_point):
+    #         return [False, "Invalid id_point: id_point : '" + str(id_point) + "'", 404]
+    #     if not self.__proprietary(id_point) and not self.__shared(id_point):
+    #         return [False, "Invalid right : id_point : '" + str(id_point) + "'", 403]
+    #     ##to do
+    #     succes = sql.input("INSERT INTO `point_mail` (`id`, `user_id`, `id_point`, `mail`) \
+    #                         VALUES (NULL, %s, %s, %s) ON DUPLICATE KEY \
+    #                         UPDATE `mail` = %s",
+    #              (self.id, str(id_point), mail, mail))
+    #     if not succes:
+    #         return [False, "data input error", 500]
+    #     return [True, {}, None]
 
     def __exist(self, id_point):
         ret = False
@@ -428,7 +455,6 @@ class floteur:
         while i < len(dat):
             ret3[data]["data"].append({"y": dat[i][data]["value"], "t": dat[i]["key"]})
             i += 1
-        #ret1 = { "data": res[i], "limits": {"y": {"min": min_y, "max": max_y}, "x": {"min": min_x - 1 if min_x >= 1 else 0, "max": max_x + 1}, "opt": opt}}
         return ret1, ret2, ret3
 
     def __infos_query(self, id_points, date_start = None, date_end = None, limit = None):

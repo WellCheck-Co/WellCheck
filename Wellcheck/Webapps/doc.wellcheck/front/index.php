@@ -14,15 +14,15 @@ ini_set('display_errors',1);
 </head>
 <?php if (isset($_GET["doc"])){ ?>
 <body style="margin: 0">
-  <object id="viewer" data="./src.php?doc=<?= $_GET["doc]" ?>" type="application/pdf" style="width: 100%; height: calc(100vh - 6px)">
+  <object id="viewer" data="./src.php?doc=<?= $_GET["doc"] ?>" type="application/pdf" style="width: 100%; height: calc(100vh - 6px)">
   	<div id="viewer2" class="pdf"></div>
   	Woups, look like you can't read this document from your device<br>
   	Download it !
-    <a id="viewerlink" href="./src.php?doc=<?= $_GET["doc]" ?>"> Here !</a>
+    <a id="viewerlink" href="./src.php?doc=<?= $_GET["doc"] ?>"> Here !</a>
   </object>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.js"></script>
   <script>
-  PDFObject.embed("./src.php?doc=<?= $_GET["doc]" ?>", "#viewer2");
+  PDFObject.embed("./src.php?doc=<?= $_GET["doc"] ?>", "#viewer2");
   </script>
 </body>
 <?php } ?>>

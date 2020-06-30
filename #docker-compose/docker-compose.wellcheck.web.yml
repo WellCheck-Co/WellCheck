@@ -59,11 +59,14 @@ services:
       LETSENCRYPT_HOST: api.${DOMAIN}
       LETSENCRYPT_EMAIL: ${EMAIL}
       API_MOD: ${API_MOD}
-      API_PASS: password
+      API_PASS: ${API_PASS}
       API_ADM: ${API_ADM}
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       STRIPE_PRIV: ${STRIPE_PRIV}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      SMTP_SERVER: ${SMTP_SERVER}
 
   map_landing:
     image: nginx

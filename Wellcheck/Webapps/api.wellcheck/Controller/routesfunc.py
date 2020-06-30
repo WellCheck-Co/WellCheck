@@ -253,9 +253,23 @@ def data_add(cn, nextc):
     if not err[0]:
         return cn.toret.add_error(err[1], err[2])
     cn.pr = err[1]
+    err = check.contain(cn.pr["data"], ["data", "pos"], "data")
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr["data"] = err[1]
+    err = check.contain(cn.pr["data"]["data"], ["ph", "turbidity", "redox", "temp"], "data.data")
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr["data"]["data"] = err[1]
 
     use = floteur()
-    err = use.adddata(cn.pr["data"], cn.pr["sig_id"], cn.pr["point_id"])
+    err = use.adddata(cn.pr["sig_id"],
+                      cn.pr["point_id"],
+                      cn.pr["data"]["data"]["ph"],
+                      cn.pr["data"]["data"]["turbidity"],
+                      cn.pr["data"]["data"]["redox"],
+                      cn.pr["data"]["data"]["temp"],
+                      cn.pr["data"]["pos"])
     return cn.call_next(nextc, err)
 
 def pdf_report(cn, nextc):

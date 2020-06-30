@@ -19,10 +19,12 @@
         $file =  $res[$i];
       }
     }
+
     if ($docid != NULL){
-       $name = '/savedoc/report.*_*_*.'.$doc_id.'.pdf';
-       $pdf_h = fopen('/savedoc'.'/' . $file,'r');
-       $content = fread($pdf_h, filesize('/savedoc'.'/' . $file));
+       $name = '/savedoc/report.*.'.$docid.'.pdf';
+       $list = glob($name);
+       $pdf_h = fopen($list[0],'r');
+       $content = fread($pdf_h, filesize($list[0]));
        fclose ($pdf_h);
        header('Content-Length: ' . strlen($content));
        print($content);
@@ -44,13 +46,16 @@
       ));
       $response = curl_exec($curl);
       curl_close($curl);
-      $file = base64_decode(json_decode($response)->data->Content);
-      $doc_id = json_decode($response)->data->doc_id;
+      $resp = json_decode($response)->data;
+      $file = base64_decode($resp->Content);
+      $doc_id = $resp ->doc_id;
       print($file);
-      $name = '/savedoc/report.'.$id.'_'.$start.'_'.$end.'.'.$doc_id.'.pdf';
-      $pdf = fopen ($name, 'w');
-      fwrite ($pdf, $file);
-      fclose ($pdf);
+      if ($resp->Save == True){
+        $name = '/savedoc/report.'.$id.'_'.$start.'_'.$end.'.'.$doc_id.'.pdf';
+        $pdf = fopen ($name, 'w');
+        fwrite ($pdf, $file);
+        fclose ($pdf);
+      }
     } else {
       $pdf_h = fopen('/savedoc'.'/' . $file,'r');
       $content = fread($pdf_h, filesize('/savedoc'.'/' . $file));
@@ -60,6 +65,6 @@
       print($content);
     }
   }
-  if (isset($_GET["id"]) &&  isset($_GET["from"]) && isset($_GET["to"])) {
+  if ((isset($_GET["id"]) &&  isset($_GET["from"]) && isset($_GET["to"])) || isset($_GET["doc"])) {
     get_pdf($_GET["id"], $_GET["from"], $_GET["to"], $_GET["doc"]);
   }
