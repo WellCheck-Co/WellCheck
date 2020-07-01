@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from Source.email.heb_report import *
 from Source.email.alerte import *
+from Source.email.new_user import *
 
 smtp_user =     str(os.getenv('SMTP_USER', None))
 smtp_pass =     str(os.getenv('SMTP_PASS', None))
@@ -46,6 +47,16 @@ class Mailer():
                                                        note_10     = "{:.2f}".format(note))
         self.to_list = to_list
         self.msg['Subject'] = "Alerte pollution ! Point " + point_name
+        self.__send()
+        return [True, {}, None]
+
+    def new_user(self, to, key, timestamp):
+        """Send a message to the recipient"""
+        date = datetime.fromtimestamp(timestamp)
+        self.html = new_header + new_body.format(valid_link = "https://dashboard.wellcheck.fr/valid?bindlocal=true&act_key=" + key,
+                                                        key = str(key))
+        self.to_list = [to]
+        self.msg['Subject'] = "Votre inscription Wellcheck"
         self.__send()
         return [True, {}, None]
 

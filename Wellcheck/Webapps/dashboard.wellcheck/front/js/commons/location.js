@@ -9,7 +9,7 @@ let loc = {
       }
       else if (actual != location.split('?')[0]) {
         msg.methods.redirect(true);
-        if (location != '/login' && location != '/register'){
+        if (location != '/login' && location != '/register' && location != '/valid'){
           localStorage.location = location;
           localStorage.page = page;
         }

@@ -66,7 +66,7 @@ input[type="text"], input[type="email"], input[type="password"] {
     font-size: 0.9em;
     color: #fff;
     font-weight: 100;
-    width: 94.5%;
+    width: 99.5%;
     display: block;
     border: none;
     padding: 0.8em;
@@ -114,9 +114,7 @@ input.email,input.text.w3lpass  {
 }
 input[type="submit"] {
     color: #fff;
-		background-image: -moz-linear-gradient(0deg, #1d3ede, #01e6f8 100%);
-    background-image: -webkit-linear-gradient(0deg, #1d3ede, #01e6f8 100%); //
-    background-image: -ms-linear-gradient(0deg, #1d3ede, #01e6f8 100%);
+		background-color: #1C94FE;
     outline: none;
     border: none;
     cursor: pointer;
@@ -128,10 +126,98 @@ input[type="submit"] {
 		font-size: 18px;
     font-family: "OpenSans-Semibold";
     color: #fff;
-    border-radius: 50px;
+    border-radius: 7px;
 		font-weight: bold;
 
 }
+
+.lds-roller {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 40px 40px;
+}
+.lds-roller div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #1C94FE;
+  margin: -4px 0 0 -4px;
+}
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
+}
+.lds-roller div:nth-child(1):after {
+  top: 63px;
+  left: 63px;
+}
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+.lds-roller div:nth-child(2):after {
+  top: 68px;
+  left: 56px;
+}
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+.lds-roller div:nth-child(3):after {
+  top: 71px;
+  left: 48px;
+}
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+.lds-roller div:nth-child(4):after {
+  top: 72px;
+  left: 40px;
+}
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+.lds-roller div:nth-child(5):after {
+  top: 71px;
+  left: 32px;
+}
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+.lds-roller div:nth-child(6):after {
+  top: 68px;
+  left: 24px;
+}
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+.lds-roller div:nth-child(7):after {
+  top: 63px;
+  left: 17px;
+}
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+.lds-roller div:nth-child(8):after {
+  top: 56px;
+  left: 12px;
+}
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+
 input[type="submit"]:hover {
     -moz-box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.58);
     box-shadow:0px -1px 3px 0 rgba(0, 0, 0, 0.58);
@@ -140,7 +226,7 @@ input[type="submit"]:hover {
     -o-transition: .5s all;
     -ms-transition: .5s all;
     transition: .5s all;
-    background: transparent;
+		background-color: rgba(28, 148, 254, 0.85)
 }
 .agileits-top p {
     font-size: 1em;
@@ -414,7 +500,7 @@ input.checkbox:checked:after {
 /*-- responsive-design --*/
 @media(max-width:1440px){
 input[type="text"], input[type="email"], input[type="password"] {
-    width: 94%;
+    width: 99.5%;
 }
 }
 @media(max-width:1366px){
@@ -631,13 +717,10 @@ input[type="submit"] {
 	}
 }
 /*-- //responsive-design --*/
-.main-agileinfo {
-    margin-top: 0px;
-}
 
 .agileits-top {
-    padding-top: 10px;
-    padding-down: 10px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 input.email, input.text.w3lpass {
@@ -1087,8 +1170,7 @@ input.text {
 
 
 .wc-button {
-	background-image: -webkit-linear-gradient(0deg, #1C94FE 0%, #38eaf9 100%);
-	background-image: -ms-linear-gradient(0deg, #1C94FE 0%, #38eaf9 100%);
+	background-color: #1C94FE;
 	font-size: 18px;
 	color: #fff;
 	border-radius: 7px;

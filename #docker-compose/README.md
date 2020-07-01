@@ -30,11 +30,11 @@
 **You're ready to deploy the infrastructure**
 
 * ```bash
-  cd #docker-compose/
-  docker-compose -f docker-compose.reverse.proxy.yml      up -d
-  docker-compose -f docker-compose.wellcheck.web.yml      up -d
-  docker-compose -f docker-compose.wellcheck.services.yml up -d
-  docker-compose -f docker-compose.wellcheck.admin.yml    up -d
+  cd \#docker-compose/; \
+  docker-compose -f docker-compose.reverse.proxy.yml      up -d; \
+  docker-compose -f docker-compose.wellcheck.web.yml      up -d; \
+  docker-compose -f docker-compose.wellcheck.services.yml up -d; \
+  docker-compose -f docker-compose.wellcheck.admin.yml    up -d;
   ```
 
 **Lastly:**

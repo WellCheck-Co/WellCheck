@@ -5,7 +5,7 @@ passwd/
 Wellcheck/Admin/services/goaccess/front/*
 .env
 proxy/vhost/localhost
-conf.js
+Wellcheck/Webapps/dashboard.wellcheck/front/js/conf.js
 documents/save
 
 Proxy/certs

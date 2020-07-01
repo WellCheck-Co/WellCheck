@@ -1,8 +1,7 @@
-#point_id
-#note_10
-#date
-#alerte_link
-alerte_header = """
+#key
+#valid_link
+
+new_header = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 
@@ -121,7 +120,7 @@ alerte_header = """
 </head>
 """
 
-alerte_body =  """
+new_body = """
 <body class="clean-body" style="margin: 0; padding: 0; -webkit-text-size-adjust: 100%; background-color: #ece8e5;">
 	<!--[if IE]><div class="ie-browser"><![endif]-->
 	<table class="nl-container" style="table-layout: fixed; vertical-align: top; min-width: 320px; Margin: 0 auto; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #ece8e5; width: 100%;" cellpadding="0" cellspacing="0" role="presentation" width="100%" bgcolor="#ece8e5" valign="top">
@@ -140,28 +139,20 @@ alerte_body =  """
 										<div style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:20px; padding-bottom:60px; padding-right: 0px; padding-left: 0px;">
 											<!--<![endif]-->
 											<div class="img-container center fixedwidth" align="center" style="padding-right: 0px;padding-left: 0px;">
-												<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 0px;" align="center"><![endif]--><a href="https://wellcheck.fr/" target="_blank" style="outline:none" tabindex="-1"> <img class="center fixedwidth" align="center" border="0" src="https://wellcheck.fr/imgs/logo_v2-min.png" alt="Logo" title="Logo" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: 0; width: 100%; max-width: 360px; display: block;" width="360"></a>
+												<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr style="line-height:0px"><td style="padding-right: 0px;padding-left: 0px;" align="center"><![endif]--><a href="https://wellcheck.fr" target="_blank" style="outline:none" tabindex="-1"> <img class="center fixedwidth" align="center" border="0" src="https://wellcheck.fr/imgs/logo_v2-min.png" alt="Logo" title="Logo" style="text-decoration: none; -ms-interpolation-mode: bicubic; height: auto; border: 0; width: 100%; max-width: 360px; display: block;" width="360"></a>
 												<div style="font-size:1px;line-height:40px">&nbsp;</div>
 												<!--[if mso]></td></tr></table><![endif]-->
 											</div>
 											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 40px; padding-left: 40px; padding-top: 10px; padding-bottom: 25px; font-family: Arial, sans-serif"><![endif]-->
 											<div style="color:#000000;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.8;padding-top:10px;padding-right:40px;padding-bottom:25px;padding-left:40px;">
-												<div style="line-height: 1.8; font-size: 12px; color: #000000; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 22px;">
-													<p style="text-align: center; line-height: 1.8; word-break: break-word; mso-line-height-alt: NaNpx; margin: 0;"><strong><span style="font-size: 18px;">Alert !</span></strong></p>
-												</div>
-											</div>
-											<!--[if mso]></td></tr></table><![endif]-->
-											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 40px; padding-left: 40px; padding-top: 10px; padding-bottom: 25px; font-family: Arial, sans-serif"><![endif]-->
-											<div style="color:#000000;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.8;padding-top:10px;padding-right:40px;padding-bottom:25px;padding-left:40px;">
 												<div style="font-size: 14px; line-height: 1.8; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000; mso-line-height-alt: 25px;">
-													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;">One of your device just got a mark below the check average</p>
+													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;">You can now use your wellcheck account !</p>
+													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;">Click the link below to activate it.</p>
 												</div>
 											</div>
 											<!--[if mso]></td></tr></table><![endif]-->
 											<div class="button-container" align="center" style="padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
-												<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word"
-                                                href="{alerte_link}" style="height:49.5pt; width:207.75pt; v-text-anchor:middle;" arcsize="0%" stroke="false" fillcolor="#1c94fe"><w:anchorlock/><v:textbox inset="0,0,0,0"><center style="color:#ffffff; font-family:Georgia, serif; font-size:18px"><![endif]-->
-                                                <a href="{alerte_link}" target="_blank" style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #ffffff; background-color: #1c94fe; border-radius: 0px; -webkit-border-radius: 0px; -moz-border-radius: 0px; width: auto; width: auto; border-top: 1px solid #1c94fe; border-right: 1px solid #1c94fe; border-bottom: 1px solid #1c94fe; border-left: 1px solid #1c94fe; padding-top: 15px; padding-bottom: 15px; font-family: Georgia, Times, Times New Roman, serif; text-align: center; mso-border-alt: none; word-break: keep-all;"><span style="padding-left:40px;padding-right:40px;font-size:18px;display:inline-block;"><span style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;"><span style="font-size: 18px; line-height: 36px;" data-mce-style="font-size: 18px; line-height: 36px;"><strong>Mon flotteur</strong></span></span></span></a>
+												<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;"><tr><td style="padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="{valid_link}" style="height:49.5pt; width:286.5pt; v-text-anchor:middle;" arcsize="0%" stroke="false" fillcolor="#1c94fe"><w:anchorlock/><v:textbox inset="0,0,0,0"><center style="color:#ffffff; font-family:Georgia, serif; font-size:18px"><![endif]--><a href="{valid_link}" target="_blank" style="-webkit-text-size-adjust: none; text-decoration: none; display: inline-block; color: #ffffff; background-color: #1c94fe; border-radius: 0px; -webkit-border-radius: 0px; -moz-border-radius: 0px; width: auto; width: auto; border-top: 1px solid #1c94fe; border-right: 1px solid #1c94fe; border-bottom: 1px solid #1c94fe; border-left: 1px solid #1c94fe; padding-top: 15px; padding-bottom: 15px; font-family: Georgia, Times, Times New Roman, serif; text-align: center; mso-border-alt: none; word-break: keep-all;"><span style="padding-left:40px;padding-right:40px;font-size:18px;display:inline-block;"><span style="font-size: 16px; line-height: 2; word-break: break-word; mso-line-height-alt: 32px;"><span style="font-size: 18px; line-height: 36px;" data-mce-style="font-size: 18px; line-height: 36px;"><strong>Valider mon inscription</strong></span></span></span></a>
 												<!--[if mso]></center></v:textbox></v:roundrect></td></tr></table><![endif]-->
 											</div>
 											<table class="divider" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;" role="presentation" valign="top">
@@ -180,13 +171,23 @@ alerte_body =  """
 												</tbody>
 											</table>
 											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 40px; padding-left: 40px; padding-top: 20px; padding-bottom: 0px; font-family: Arial, sans-serif"><![endif]-->
-											<div style="color:#000000;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.8;padding-top:20px;padding-right:40px;padding-bottom:0px;padding-left:40px;">
-												<div style="font-size: 14px; line-height: 1.8; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000; mso-line-height-alt: 25px;">
-													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;">Device: &nbsp; <span style="color: #1c94fe;">{point_id}</span></p>
-													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;">Date:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; {date} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</p>
-													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0; color: #000000;">Mark:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;{note_10} / 10&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>
-													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0; color: #000000;">&nbsp;</p>
-													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0; color: #000000;">Access all reports for this device using your <a style="text-decoration: underline; color: #0068A5;" href="https://dashboard.wellcheck.fr/" target="_blank" rel="noopener">wellcheck dashboard&nbsp;</a></p>
+											<div style="color:#0068a5;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.8;padding-top:20px;padding-right:40px;padding-bottom:0px;padding-left:40px;">
+												<div style="font-size: 14px; line-height: 1.8; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0068a5; mso-line-height-alt: 25px;">
+													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;"><span style="color: #000000;">If you can't use the button for some reason, go on <a style="text-decoration: underline; color: #0068A5;" href="https://dashboard.wellcheck.fr/valid" target="_blank" rel="noopener">https://dashboard.wellcheck.fr/valid</a> with the key :&nbsp;</span></p>
+												</div>
+											</div>
+											<!--[if mso]></td></tr></table><![endif]-->
+											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 20px; padding-left: 20px; padding-top: 20px; padding-bottom: 20px; font-family: 'Courier New', Courier, monospace"><![endif]-->
+											<div style="color:#0068a5;font-family:'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;line-height:1.2;padding-top:20px;padding-right:20px;padding-bottom:20px;padding-left:20px;">
+												<div style="line-height: 1.2; font-size: 12px; color: #0068a5; font-family: 'Courier New', Courier, 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace; mso-line-height-alt: 14px;">
+													<p style="text-align: center; line-height: 1.2; word-break: break-word; font-size: 10px; mso-line-height-alt: 12px; margin: 0;"><span style="font-size: 10px; color: #000000;">{key}</span></p>
+												</div>
+											</div>
+											<!--[if mso]></td></tr></table><![endif]-->
+											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 40px; padding-left: 40px; padding-top: 20px; padding-bottom: 0px; font-family: Arial, sans-serif"><![endif]-->
+											<div style="color:#0068a5;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.8;padding-top:20px;padding-right:40px;padding-bottom:0px;padding-left:40px;">
+												<div style="font-size: 14px; line-height: 1.8; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #0068a5; mso-line-height-alt: 25px;">
+													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;"><span style="color: #000000;">This link will only work once, after using it login use :&nbsp; <a style="text-decoration: underline; color: #0068A5;" href="https://dashboard.wellcheck.fr/login " target="_blank" rel="noopener">https://dashboard.wellcheck.fr/login</a></span><a style="text-decoration: underline; color: #0068A5;" href="https://dashboard.wellcheck.fr/login " target="_blank" rel="noopener">&nbsp;</a></p>
 												</div>
 											</div>
 											<!--[if mso]></td></tr></table><![endif]-->

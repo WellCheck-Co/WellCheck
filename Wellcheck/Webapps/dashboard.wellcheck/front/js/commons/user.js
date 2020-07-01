@@ -5,7 +5,7 @@ let user = {
       url = method + "://" + api + "/signup/";
       localStorage.email = data.data["email"];
       axios.post(url, data.data, { headers: data.headers})
-        .then(response => vm.$refs.extern.check(response.data, this.storecred))
+        .then(response => vm.$refs.extern.check(response.data, this.waitvalidation))
         .catch(error => this.error(error));
 
     },
@@ -14,6 +14,14 @@ let user = {
       this.ajaxRequest = true;
       url = method + "://" + api + "/signin/";
       localStorage.email = data.data["email"];
+      axios.post(url, data.data, { headers: data.headers})
+        .then(response => vm.$refs.extern.check(response.data, this.storecred))
+        .catch(error => this.error(error));
+    },
+
+    validate: function(data) {
+      this.ajaxRequest = true;
+      url = method + "://" + api + "/validate/";
       axios.post(url, data.data, { headers: data.headers})
         .then(response => vm.$refs.extern.check(response.data, this.storecred))
         .catch(error => this.error(error));
@@ -61,6 +69,10 @@ let user = {
       localStorage.usrtoken_exp = cred.methods.time(data.exp);
       let location = localStorage.location ?  localStorage.location  : redirect;
       loc.methods.redirect(location);
+    },
+
+    waitvalidation: function(data) {
+      loc.methods.redirect("/valid");
     },
   }
 }

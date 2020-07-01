@@ -36,6 +36,17 @@ def signup(cn, nextc):
 
     return cn.call_next(nextc, err)
 
+def verifykey(cn, nextc):
+    err = check.contain(cn.pr, ["key"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    use = user()
+    err = use.verify_key(cn.pr["key"])
+    cn.private["user"] = use
+    return cn.call_next(nextc, err)
+
 def signin(cn, nextc):
     err = check.contain(cn.pr, ["email", "password1"])
     if not err[0]:
@@ -46,6 +57,11 @@ def signin(cn, nextc):
     err = use.login(cn.pr["email"], cn.pr["password1"])
     cn.private["user"] = use
 
+    return cn.call_next(nextc, err)
+
+def check_act(cn, nextc):
+    use = cn.private["user"]
+    err = use.check_activation()
     return cn.call_next(nextc, err)
 
 def authuser(cn, nextc):

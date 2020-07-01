@@ -23,6 +23,9 @@ let msg = {
           user.methods.logout();
         }
         let type = "error";
+        if (vm._data.send != void 0 && vm._data.send == true) {
+          vm._data.send = false
+        }
         this.set(data.error, type);
         return;
       }

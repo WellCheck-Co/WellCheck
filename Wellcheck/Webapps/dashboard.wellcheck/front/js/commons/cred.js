@@ -6,7 +6,7 @@ let cred = {
       if (get["bindlocal"] == "true"){
         for (i in get){
           if (i != "bindlocal") {
-            localStorage[i] = "" + get[i];
+            localStorage[i] = "" + decodeURI(get[i]);
           }
         }
       }
@@ -14,7 +14,7 @@ let cred = {
         let location = localStorage.location ?  localStorage.location  : redirect;
         loc.methods.redirect(location, (get["force"] == "true" ? true : false));
       } else {
-        if (actual != "/" && actual != "/index" && actual != "/login")
+        if (actual != "/" && actual != "/index" && actual != "/login" && actual != "/valid" )
           loc.methods.redirect('/login');
       }
     },

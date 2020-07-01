@@ -149,8 +149,8 @@ report_body = """
 											<!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 40px; padding-left: 40px; padding-top: 10px; padding-bottom: 25px; font-family: Arial, sans-serif"><![endif]-->
 											<div style="color:#000000;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.8;padding-top:10px;padding-right:40px;padding-bottom:25px;padding-left:40px;">
 												<div style="font-size: 14px; line-height: 1.8; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000; mso-line-height-alt: 25px;">
-													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;">Votre rapport <span style="color: #007bff;">hebdomadaire</span> pour le flotteur
-                                                    <span style="color: #007bff;">{point_id}</span> est disponible</p>
+													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;">Your <span style="color: #007bff;">Monthly</span> report for your device
+                                                    <span style="color: #007bff;">{point_id}</span> is available</p>
 												</div>
 											</div>
 											<!--[if mso]></td></tr></table><![endif]-->
@@ -179,7 +179,7 @@ report_body = """
 											<div style="color:#000000;font-family:'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;line-height:1.8;padding-top:20px;padding-right:40px;padding-bottom:0px;padding-left:40px;">
 												<div style="font-size: 14px; line-height: 1.8; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #000000; mso-line-height-alt: 25px;">
 													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;">Date: {date_start} - {date_end}</p>
-													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;">Accédez a la totalité des rapports jusqu'au&nbsp; {date_origin} pour ce point depuis votre <a style="text-decoration: underline; color: #0068A5;" href="dashboard.wellcheck.fr" target="_blank" rel="noopener">dashboard wellcheck&nbsp;</a></p>
+													<p style="font-size: 14px; line-height: 1.8; word-break: break-word; text-align: center; font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; mso-line-height-alt: 25px; margin: 0;">Access all reports for this device from &nbsp; {date_origin} using your <a style="text-decoration: underline; color: #0068A5;" href="https://dashboard.wellcheck.fr/" target="_blank" rel="noopener">wellcheck dashboard</a></p>
 												</div>
 											</div>
 											<!--[if mso]></td></tr></table><![endif]-->

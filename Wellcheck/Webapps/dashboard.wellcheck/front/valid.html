@@ -7,7 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE html>
 <html>
 <head>
-<title>Register - Wellcheck</title>
+<title>Valid - Wellcheck</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="" />
@@ -21,23 +21,17 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 </head>
 <body>
 	<!-- main -->
-	<div id="register" class="main-w3layouts wrapper">
+	<div id="valid" class="main-w3layouts wrapper">
 		<img class="img-fluid" src="imgs/logo_v2.png" alt="">
-		<div v-if="this.send == false" class="main-agileinfo">
+		<div class="main-agileinfo">
 			<div class="agileits-top">
-					<input class="text email" type="email" name="email" v-model="email" placeholder="Email" required="">
-					<input class="text" type="password" name="password" v-model="password1" placeholder="Password" required="">
-					<input class="text w3lpass" type="password" name="password" v-model="password2" placeholder="Confirm Password" required="">
-					<input type="checkbox" v-model="conditions" required="">
-					<span style="color: white">I Agree To The Terms & Conditions</span>
-					<input type="submit" value="SIGN UP" v-on:click="register">
-				<p>Already have an account ? <a href="./login.html"> Login Now!</a></p>
+					<div style="color: white; margin-bottom: 12px;text-align:center; font-size: 18px">Check your emails to activate your account !</div>
+					<input class="text" type="text" name="key" v-model="act_key" placeholder="Key" required="">
+					<input class="wc-button" type="submit" value="ACTIVATE" v-on:click="validate">
 			</div>
 		</div>
-		<div v-if="this.send == true" style="display: none; margin: 97px auto 250px;" :style="(this.send == true) ? 'display: block': '' " class="lds-roller">
-			<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-		</div>
-				<!-- copyright -->
+		<br>
+		<!-- copyright -->
 		<msg usualcenter=false ref="extern"></msg>
 		<div class="w3copyright-agile">
 			<p>Wellcheck© 2019. All Rights Reserved.</p>
@@ -67,6 +61,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	<script src="./js/commons/location.js"></script>
 	<script src="./js/commons/cred.js"></script>
 	<script src="./js/commons/user.js"></script>
-  <script src="./js/register/register.js"></script>
+  <script src="./js/valid/valid.js"></script>
 </body>
 </html>

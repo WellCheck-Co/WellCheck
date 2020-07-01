@@ -5,17 +5,20 @@ let vm = new Vue({
       password1: "",
       password2: "",
       email: "",
-      conditions: false
+      conditions: false,
+      send: false
     },
 
     components: { msg },
 
     methods:{
        register: function() {
+
          if (this.conditions == false) {
             vm.$refs.extern.set("You must accept the Terms & Conditions", "error")
             return;
           }
+         this.send = true;
          let data = {
            headers: {},
            data: {
