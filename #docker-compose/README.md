@@ -8,12 +8,22 @@
   * Path: `#docker-compose/`
   * Content :
     ```bash
-    API_MOD=DEV #API DEBUG MOD
-    DOMAIN=localhost #the domain your deploying on
-    EMAIL=eliot.courtel@wanadoo.fr #a mail to be used in let's encrypt
-    DB_USER=wellcheck #a database username
-    DB_PASS=1q2W3e4R #a database password
-    STRIPE_PRIV=XXXXXX #your stripe private key
+    API_MOD=DEV
+    #API DEBUG MOD
+    
+    DOMAIN=localhost
+    #the domain your deploying on
+    
+    EMAIL=eliot.courtel@wanadoo.fr 
+    #a mail to be used in let's encrypt
+    
+    DB_USER=wellcheck 
+    #a database username
+    DB_PASS=1q2W3e4R 
+    #a database password
+
+    STRIPE_PRIV=XXXXXX 
+    #your stripe private key
     ```
 
 - `conf.js` file:
