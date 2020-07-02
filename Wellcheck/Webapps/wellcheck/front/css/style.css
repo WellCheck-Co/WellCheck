@@ -269,13 +269,12 @@ body {
 }
 
 .gtco-banner-area a, .gtco-feature a, .gtco-features a, .gtco-news .owl-carousel .card a, #gtco-footer .submit-button {
-  background-image: -moz-linear-gradient(0deg, #06c6f9 0%, #38eaf9 100%);
-  background-image: -webkit-linear-gradient(0deg, #06c6f9 0%, #38eaf9 100%);
-  background-image: -ms-linear-gradient(0deg, #06c6f9 0%, #38eaf9 100%);
+  color: #fff;
+  background-color: #1C94FE;
+  cursor: pointer;
   font-size: 18px;
   font-family: "OpenSans-Semibold";
-  color: #fff;
-  border-radius: 50px;
+  border-radius: 7px;
   padding: 5px 30px;
   display: inline-block;
   text-transform: uppercase;
