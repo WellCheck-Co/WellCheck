@@ -100,7 +100,7 @@ let leftnav = {
                 <img v-if="open" class="menu-open"  v-on:click=changeopen src="imgs/back.png">
                 <div test class="overflow">
                   <img class="img-nav" src="imgs/logo_v2.png" alt="">
-                  <p>{{ email }}</p>
+                  <p style="font-size: 0.9rem;">{{ email }}</p>
                   <div class="sep"></div>
                   <div ref="link1" class="nav-text"  v-on:click="redirect('/profile')"         >Your profile</div>
                   <div ref="link2" class="nav-text nav-second" v-on:click="modale('Billing')"   >Billing</div>
