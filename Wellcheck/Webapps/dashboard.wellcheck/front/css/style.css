@@ -243,7 +243,7 @@ input[type="submit"]:hover {
     font-weight: 400;
 }
 .agileits-top p a:hover {
-    color: #1d3ede;
+    color: #1C94FE;
 }
 /*-- //main --*/
 /*-- checkbox --*/
@@ -335,7 +335,7 @@ input.checkbox:checked:after {
 	-ms-transition: 0.5s all;
 }
 .w3copyright-agile p a:hover{
-    color: #6f6f6f;
+    color: #1C94FE;
 }
 /*-- //copyright --*/
 .wrapper {
