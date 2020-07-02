@@ -863,8 +863,7 @@ input.text {
 
 }
 
-.close {
-
+.closediv {
 	margin-left: -200px;
 }
 
@@ -922,7 +921,7 @@ input.text {
 	right: -46px;
 }
 
-.close .overflow {
+.closediv .overflow {
 	opacity: 0;
 }
 

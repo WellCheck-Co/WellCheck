@@ -10,7 +10,7 @@ let leftnav = {
   methods: {
     changeopen: function() {
       this.open = !this.open;
-      this.type = this.open ? 'open' : 'close';
+      this.type = this.open ? 'open' : 'closediv';
     },
     modale: function(template) {
       this.opentemplate(template)
