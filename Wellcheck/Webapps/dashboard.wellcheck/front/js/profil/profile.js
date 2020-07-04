@@ -1,7 +1,5 @@
 Vue.use(vcdonut.default);
 Vue.component('compModInfos', compModInfos);
-Vue.component('compModBilling', compModBilling);
-
 
 let vm = new Vue({
     el: '#profile',

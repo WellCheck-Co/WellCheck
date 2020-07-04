@@ -50,10 +50,12 @@ let leftnav = {
       localStorage.testmode = this.display_test;
       if (vm.$refs.modal.$refs.inside && vm.$refs.modal.$refs.inside.update){
         vm.$refs.modal.$refs.inside.update();
-        console.log(vm.$refs.modal.$refs.inside.update());
       }
       if (vm.testpointer != void 0){
         vm.testpointer(this.display_test);
+      }
+      if (vm.$refs.main.testpointer != void 0){
+        vm.$refs.main.testpointer(this.display_test);
       }
     }
   },
@@ -102,15 +104,15 @@ let leftnav = {
                   <img class="img-nav" src="imgs/logo_v2.png" alt="">
                   <p style="font-size: 0.9rem;">{{ email }}</p>
                   <div class="sep"></div>
-                  <div ref="link1" class="nav-text"  v-on:click="redirect('/profile')"         >Your profile</div>
-                  <div ref="link2" class="nav-text nav-second" v-on:click="modale('Billing')"   >Billing</div>
-                  <div ref="link3" class="nav-text nav-second" v-on:click="modale('Invoices')"  >Invoices</div>
-                  <div ref="link4" class="nav-text"  v-on:click="redirect('/map')"            >Map</div>
-                  <div ref="link5" class="nav-text nav-second" v-on:click="modale('Devices')"    >Devices</div>
+                  <div ref="link1" class="nav-text"  v-on:click="redirect('/profile')"          >Your profile</div>
+                  <div ref="link4" class="nav-text"  v-on:click="redirect('/map')"              >Map</div>
+                  <div ref="link5" class="nav-text nav-second" v-on:click="modale('Devices')"   >Devices</div>
                   <div ref="link6" class="nav-text nav-second" v-on:click="modale('Share')"     >Share</div>
                   <div ref="link7" class="nav-text"  v-on:click="redirect('/stats')"            >Stats</div>
-                  <div ref="link8" class="nav-text"  v-on:click="redirect('/basket')"            >Basket</div>
-                  <div ref="link9" class="nav-text" v-on:click="user.methods.logout"          >Logout</div>
+                  <div ref="link8" class="nav-text"  v-on:click="redirect('/cart')"             >Cart</div>
+                  <div ref="link2" class="nav-text nav-second" v-on:click="modale('Billing')"   >Billing</div>
+                  <div ref="link3" class="nav-text nav-second" v-on:click="modale('Invoices')"  >Invoices</div>
+                  <div ref="link9" class="nav-text" v-on:click="user.methods.logout"            >Logout</div>
                   <br>
                   <div ref="link9" class="nav-text test-nav">
                     <input id="s2d" type="checkbox" class="switch test-switch" v-on:click=changetest>

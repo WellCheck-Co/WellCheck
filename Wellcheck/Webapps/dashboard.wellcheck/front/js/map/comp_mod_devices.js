@@ -3,6 +3,7 @@ let compModDevices = {
     return {
       points: [],
       limit: 0,
+      send: false
     }
   },
 
@@ -32,6 +33,7 @@ let compModDevices = {
         }
       });
     },
+
     redirect: function(location){
       loc.methods.redirect(location)
     },
@@ -46,6 +48,7 @@ let compModDevices = {
       data['headers'] = cred.methods.get_headers()
       data['data'] = {"id_sig": -1, "lng": vm.$refs.main.$mapObject.center.lng(), "lat": vm.$refs.main.$mapObject.center.lat()}
       user.methods.send('point/add', data, this.infos);
+      this.send = true;
     },
     infos: function(res) {
       let data = {}
@@ -114,10 +117,15 @@ let compModDevices = {
       </div>
     </div>
   </form>
-    <br><br>
-      <div style="width:160px" class="wc-button" v-on:click=addPoint> Add a device </div>
-    <br><br>
-      <div v-if="display_test == true" style="width:160px" class=" test wc-button" v-on:click=addTest> Add a Test device </div>
+    <div v-if="this.send == true" style="display: none; margin: 97px auto 250px;" :style="(this.send == true) ? 'display: block': '' " class="lds-roller">
+      <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <div v-if="this.send == false">
+      <br><br>
+        <div style="width:160px" class="wc-button" v-on:click=addPoint> Add a device </div>
+      <br><br>
+        <div v-if="display_test == true" style="width:160px" class=" test wc-button" v-on:click=addTest> Add a Test device </div>
+    </div>
   </div>
   `,
   beforeMount(){

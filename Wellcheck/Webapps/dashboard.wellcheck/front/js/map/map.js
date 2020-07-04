@@ -127,7 +127,6 @@ let vm = new Vue({
       },
       testpointer: function(d){
         this.testmode = d + "";
-        console.log(this.currentMidx)
         if ((this.testmode == "false" || this.testmode == void 0) && this.currentMidx != void 0 && this.markers['proprietary'][this.currentMidx].test == true) {
           this.infoWinOpen = false;
        } else if (this.testmode == "true" && this.currentMidx != void 0 && this.markers['proprietary'][this.currentMidx].test == true) {
@@ -166,7 +165,6 @@ let vm = new Vue({
      cred.methods.api_cred()
      cred.methods.usr_cred()
      this.$refs.main.$mapPromise.then((map) => {
-       console.log(map)
        if (localStorage.position != null) {
          let position = JSON.parse(localStorage.position);
          map.setCenter({lat:position['lat'], lng:position['lng']});

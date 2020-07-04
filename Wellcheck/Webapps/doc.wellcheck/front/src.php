@@ -20,15 +20,15 @@
       }
     }
 
-    if ($docid != NULL){
+    if ($docid != NULL){ //doc id specifie explicitement en get
        $name = '/savedoc/report.*.'.$docid.'.pdf';
        $list = glob($name);
        $pdf_h = fopen($list[0],'r');
        $content = fread($pdf_h, filesize($list[0]));
        fclose ($pdf_h);
-       header('Content-Length: ' . strlen($content));
+       //header('Content-Length: ' . strlen($content));
        print($content);
-    } else if ($file == ""){
+    } else if ($file == ""){ //file deja present en sauvegarde
       $curl = curl_init();
       curl_setopt_array($curl, array(
         CURLOPT_URL => "map_bck-end:8080/pdf/report/",

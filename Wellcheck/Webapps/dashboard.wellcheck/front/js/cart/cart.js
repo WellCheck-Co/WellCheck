@@ -1,3 +1,5 @@
+Vue.component('compModBilling', compModBilling);
+
 let vm = new Vue({
     el: '#stats',
 

@@ -16,6 +16,12 @@ let msg = {
   },
   methods: {
     check: function (data, callback, redirect = true, message = false){
+      if (vm._data.send != void 0 && vm._data.send == true) {
+        setTimeout(function(){vm._data.send = false;}, 200);
+      }
+      if (vm.$refs.modal != void 0 && vm.$refs.modal.$refs.inside != void 0 && vm.$refs.modal.$refs.inside._data.send == true){
+        setTimeout(function(){vm.$refs.modal.$refs.inside._data.send = false;}, 200);
+      }
       if (data.status != 200){
         if (data.error == 'Invalid token'){
           cred.methods.api_cred(true);
@@ -23,9 +29,6 @@ let msg = {
           user.methods.logout();
         }
         let type = "error";
-        if (vm._data.send != void 0 && vm._data.send == true) {
-          vm._data.send = false
-        }
         this.set(data.error, type);
         return;
       }

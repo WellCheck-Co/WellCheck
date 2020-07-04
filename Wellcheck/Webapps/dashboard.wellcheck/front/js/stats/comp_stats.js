@@ -4,7 +4,8 @@ data: function() {
     limit: 0,
     selected: [],
     charts: {"chart1": null, "chart2": null, "chart3": null},
-    received: ["ph", 0]
+    received: ["ph", 0],
+    testmod: (localStorage.testmode == 'true' ? true : false)
   }
 },
 
@@ -23,7 +24,7 @@ watch:{
         for ( i2 = 0; i2 < this.data["proprietary"].length; i2++) {
           if (this.data["proprietary"][i2].id == localStorage["selected"]) {
             i =  this.data["proprietary"][i2]
-            arr = [i.id, i.surname, i.data]
+            arr = [i.id, i.surname, i.data, i.date, i.test]
             this.select(arr);
           }
         }
@@ -31,7 +32,7 @@ watch:{
         for ( i2 = 0; i2 < this.data["shared"].length; i2++) {
           if (this.data["shared"][i2].id == localStorage["selected"]) {
             i =  this.data["shared"][i2]
-            arr = [i.id, i.surname, i.data]
+            arr = [i.id, i.surname, i.data, i.date, i.test]
             this.select(arr);
           }
         }
@@ -40,10 +41,10 @@ watch:{
     if (oldd == "" && this.selected.length == 0 && arr == void 0){
       if (this.data["proprietary"].length > 0){
         i =  this.data["proprietary"][0]
-        arr = [i.id, i.surname, i.data]
+        arr = [i.id, i.surname, i.data, i.date, i.test]
       } else if (this.data["shared"].length > 0){
         i =  this.data["shared"][0]
-        arr = [i.id, i.surname, i.data]
+        arr = [i.id, i.surname, i.data, i.date, i.test]
       }
       this.select(arr);
     }
@@ -70,15 +71,34 @@ filters:{
 
 
 methods: {
+  reportlist: function () {
+    vm.$refs.nav.modale('Reports');
+    let data;
+    data = {"id": this.selected[0],
+            "surname": this.selected[1],
+            "date": this.selected[3],
+            "test": this.selected[4]
+           }
+    vm.$refs.modal.loaddata(data);
+  },
+
+  testpointer: function(teststatus) {
+    this.testmod = teststatus;
+  },
+
   cap: function(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 },
 
   select: function(arr){
-    this.selected = arr
-    this.infos(arr[0]);
+    this.selected = arr;
+    if (arr != void 0){
+      this.infos(arr[0]);
+    }
   },
   create0: function(){
+    var ctx = document.getElementById('globalbar')
+    ctx = ctx.getContext('2d');
     var barChartData = {
 			labels: ['Good', 'Medium', 'Bad'],
 			datasets: [{
@@ -108,7 +128,7 @@ methods: {
 			}]
 
 		};
-			var ctx = document.getElementById('globalbar').getContext('2d');
+
 			var gloabalbar = new Chart(ctx, {
 				type: 'bar',
 				data: barChartData,
@@ -135,11 +155,12 @@ methods: {
   },
 
   create1: function(){
+    var ctx = document.getElementById('chart1')
+    ctx = ctx.getContext('2d');
     var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     var color = Chart.helpers.color;
     var timeFormat = 'MM/DD/YYYY HH:mm';
 
-      var ctx = document.getElementById('chart1').getContext('2d');
       this.charts["chart1"] = new Chart(ctx, {
         type: 'bar',
         data: {
@@ -199,6 +220,8 @@ methods: {
   },
 
   create2: function(){
+    var ctx = document.getElementById('chart2')
+    ctx = ctx.getContext('2d');
     var timeFormat = 'MM/DD/YYYY HH:mm';
 
 		function newDate(days) {
@@ -287,13 +310,13 @@ methods: {
 			}
 		};
 
-		var ctx = document.getElementById('chart2').getContext('2d');
 		this.charts["chart2"] = new Chart(ctx, config);
 
   },
 
   create3: function(){
-		var ctx = document.getElementById('chart3').getContext('2d');
+    var ctx = document.getElementById('chart3')
+    ctx = ctx.getContext('2d');
 
 		var color = Chart.helpers.color;
 		var cfg = {
@@ -385,34 +408,36 @@ methods: {
 
   store: function(data) {
     if (data != '') {
-       this.charts["chart1"].config.data.labels = data["chart1"]["data"]["label"];
-       this.charts["chart1"].update();
-       this.charts["chart1"].config.data.datasets[0].data = data["chart1"]["data"]["data"];
-       this.charts["chart1"].update();
-       this.charts["chart2"].config.data.datasets[2].data = data["chart2"][this.received[0]]["data"];
-       this.charts["chart2"].config.data.datasets[0].data = [{
-         x: data["chart2"][this.received[0]]["limits"]["y"]["min"],
-         y: data["chart2"][this.received[0]]["limits"]["opt"]["low"]
-       }, {
-         x: data["chart2"][this.received[0]]["limits"]["y"]["max"],
-         y: data["chart2"][this.received[0]]["limits"]["opt"]["low"]
-       }];
-       this.charts["chart2"].config.data.datasets[1].data = [{
-         x: data["chart2"][this.received[0]]["limits"]["y"]["min"],
-         y: data["chart2"][this.received[0]]["limits"]["opt"]["high"]
-       }, {
-         x: data["chart2"][this.received[0]]["limits"]["y"]["max"],
-         y: data["chart2"][this.received[0]]["limits"]["opt"]["high"]
-       }];
-       this.charts["chart2"].config.options.scales.yAxes[0].ticks.min = data["chart2"][this.received[0]].limits.x.min
-       this.charts["chart2"].config.options.scales.yAxes[0].ticks.max = data["chart2"][this.received[0]].limits.x.max
-       this.charts["chart2"].config.data.datasets[2].label = this.received[0]
-       this.charts["chart2"].update();
-       this.charts["chart3"].config.data.datasets[0].data = data["chart3"][this.received[0]]["data"];
-       this.charts["chart3"].config.options.scales.yAxes[0].ticks.min = data["chart3"][this.received[0]].limits.x.min
-       this.charts["chart3"].config.options.scales.yAxes[0].ticks.max = data["chart3"][this.received[0]].limits.x.max
-       this.charts["chart3"].config.data.datasets[0].label = this.received[0]
-       this.charts["chart3"].update();
+       if ( this.charts["chart1"] != void 0) {
+         this.charts["chart1"].config.data.labels = data["chart1"]["data"]["label"];
+         this.charts["chart1"].update();
+         this.charts["chart1"].config.data.datasets[0].data = data["chart1"]["data"]["data"];
+         this.charts["chart1"].update();
+         this.charts["chart2"].config.data.datasets[2].data = data["chart2"][this.received[0]]["data"];
+         this.charts["chart2"].config.data.datasets[0].data = [{
+           x: data["chart2"][this.received[0]]["limits"]["y"]["min"],
+           y: data["chart2"][this.received[0]]["limits"]["opt"]["low"]
+         }, {
+           x: data["chart2"][this.received[0]]["limits"]["y"]["max"],
+           y: data["chart2"][this.received[0]]["limits"]["opt"]["low"]
+         }];
+         this.charts["chart2"].config.data.datasets[1].data = [{
+           x: data["chart2"][this.received[0]]["limits"]["y"]["min"],
+           y: data["chart2"][this.received[0]]["limits"]["opt"]["high"]
+         }, {
+           x: data["chart2"][this.received[0]]["limits"]["y"]["max"],
+           y: data["chart2"][this.received[0]]["limits"]["opt"]["high"]
+         }];
+         this.charts["chart2"].config.options.scales.yAxes[0].ticks.min = data["chart2"][this.received[0]].limits.x.min
+         this.charts["chart2"].config.options.scales.yAxes[0].ticks.max = data["chart2"][this.received[0]].limits.x.max
+         this.charts["chart2"].config.data.datasets[2].label = this.received[0]
+         this.charts["chart2"].update();
+         this.charts["chart3"].config.data.datasets[0].data = data["chart3"][this.received[0]]["data"];
+         this.charts["chart3"].config.options.scales.yAxes[0].ticks.min = data["chart3"][this.received[0]].limits.x.min
+         this.charts["chart3"].config.options.scales.yAxes[0].ticks.max = data["chart3"][this.received[0]].limits.x.max
+         this.charts["chart3"].config.data.datasets[0].label = this.received[0]
+         this.charts["chart3"].update();
+       }
        this.received[1] = 1
     }
   },
@@ -437,10 +462,23 @@ template: `
                   </div>
                 </div>
                 <br>
-                <div class="row">
-
-                  <div class="col-lg-8 col-sm-12 marge" style="height: inherit;">
-                    <container note="Your consomption for this month, it may take up to 10 hours to update"
+                <div :style="'display: ' + (selected != void 0 && selected.length > 0 ? 'none' : 'flex') + ';'" class="row">
+                  <div class="col-12 marge" style="height: inherit;">
+                    <container name="Add your first device"
+                               hover=true
+                               style="height: 100%">
+                               <ul>
+                                <li v-if="testmod"><strike>Enable <b>test mod</b> in the nav bar</strike></li>
+                                <li v-if="!testmod">Enable <b>test mod</b> in the nav bar</li>
+                                <li>Go to <b>Map -> Devices</b></li>
+                                <li>Click on <b>add a test device</b></li>
+                              </ul>
+                    </container>
+                  </div>
+                </div>
+                <div :style="'display: ' + (selected != void 0 && selected.length > 0 ? 'flex' : 'none') + ';'" class="row">
+                  <div class="col-xl-7 col-lg-12 col-sm-12 marge" style="height: inherit;">
+                    <container note="Repartition of your devices by mark. Good > Medium > Bad, one step every 3.33 point"
                                name="Global stats"
                                hover=true
                                fullscreen=true
@@ -448,30 +486,29 @@ template: `
                                <canvas id="globalbar" width="7" height="3" style="display: block; height: 200px; width: 100%;" class="chartjs-render-monitor"></canvas>
                     </container>
                   </div>
-                  <div class="col-lg-4 col-sm-12 marge" style="height: inherit;">
-                    <container name="Devices datas" hover=true style="height: 100%">
+                  <div class="col-lg-5 col-sm-12 marge" style="height: inherit;">
+                    <container name="Devices datas" hover=true style="height: 100%; min-height: 230px;">
                       <ul class='list-group col-12 sm-modalelist' style="overflow-x: hidden; height: calc(100% - 33px);">
                         <li v-for="point in data.proprietary" v-if="point.test == false || point.test == true" v-on:click="select([point.id, point.surname, point.data])" class="list-devices-stats list-group-item-action">
                           <div class="row">
-                            <div class="ml-1 mr-0"style="text-align: left"> {{ point.surname }}</div>
+                            <div class="ml-0 mr-0"style="text-align: left"> {{ point.surname }}</div>
                             <div v-if="selected[0] == point.id" class="ml-1 mr-0"style="text-align: left; color: #1C94FE"> &#10004</div>
                             <div v-if="point.data[0]" class="ml-auto mr-1 datelist"> Up. {{ point.data[0].date  | tostr }} min ago</div>
-                            <div v-if="!point.data[0]" class="ml-auto mr-1 datelist"> No data </div>
+                            <div v-if="!point.data[0]" class="ml-auto mr-0 datelist"> No data </div>
                           </div>
                         </li>
                       </ul>
                     </container>
                   </div>
-                  </div>
-                  <div class="row">
-                  <div class="col-lg-5 col-sm-12 marge" style="height: inherit;">
+
+                  <div class="col-xl-5 col-lg-7 col-sm-12 marge" style="height: inherit;">
                   <container note="Your consomption for this month, it may take up to 10 hours to update"
-                             :name="'24H - ' + selected[1] + ' score'"
+                             :name="'24H - ' + (selected != void 0 && selected.length > 0 ? selected[1] : '') + ' score'"
                              hover=true style="height: 100%">
                              <canvas class="marge" id="chart1" width="5" height="3" style="display: block; height: 300px; width: 1000px;" class="chartjs-render-monitor"></canvas>
                   </container>
                   </div>
-                  <div class="col-lg-7 col-sm-12 marge" style="height: inherit;">
+                  <div v-if="selected != void 0 && selected.length > 0" class="col-xl-7 col-sm-12 marge" style="height: inherit;">
                     <container note="Your consomption for this month, it may take up to 10 hours to update"
                                name="Current Consumption"
                                hover=true style="height: 100%">
@@ -494,27 +531,26 @@ template: `
                                   <td><pre style="margin-bottom: 0">{{ data.data.data.turbidity }}</pre></td>
                                 </tr>
                               </table>
-                              <a class="wc-button" style="width: 230px; margin-top: 20px" :href="method + '://doc.'+ address +'/src.php?id='+selected[0]+'&from=0&to=1690922658'"> Get full report </a>
-
+                                <div class="wc-button" style="width: 275px; margin-top: 20px;" v-on:click=reportlist> Reports for this device </div>
                     </container>
                   </div>
                   </div>
-                  <div class="row">
+                  <div :style="'display: ' + (selected != void 0 && selected.length > 0 ? 'flex' : 'none') + ';'" class="row">
                   <div class="col-lg-12 col-sm-12 marge">
                     <container hover=false
                                border=false
                                style="height: 100%">
                                  <div class="row">
-                                  <div class="col-3">
+                                  <div class="col-6 col-md-3" style="margin-bottom: 30px">
                                     <div class="wc-button"  v-on:click="change('ph')"> ph </div>
                                   </div>
-                                  <div class="col-3">
+                                  <div class="col-6 col-md-3" style="margin-bottom: 30px">
                                     <div class="wc-button" v-on:click="change('turbidity')"> turbidity </div>
                                   </div>
-                                  <div class="col-3">
+                                  <div class="col-6 col-md-3" style="margin-bottom: 30px">
                                     <div class="wc-button" v-on:click="change('temp')"> temp </div>
                                   </div>
-                                  <div class="col-3">
+                                  <div class="col-6 col-md-3" style="margin-bottom: 30px">
                                     <div class="wc-button" v-on:click="change('redox')"> redox </div>
                                   </div>
                                 </div>
@@ -522,7 +558,7 @@ template: `
                   </div>
                   <div class="col-lg-12 col-sm-12 marge">
                     <container note="Your consomption for this month, it may take up to 10 hours to update"
-                               :name="'24H - ' + selected[1] + ' - ' + cap(received[0])"
+                               :name="'24H - ' + (selected != void 0 && selected.length > 0 ? selected[1] : '') + ' - ' + cap(received[0])"
                                hover=false
                                border=false
                                fullscreen=true
@@ -533,7 +569,7 @@ template: `
                   </div>
                   <div class="col-lg-12 col-sm-12 marge">
                     <container note="Your consomption for this month, it may take up to 10 hours to update"
-                               :name="'ALL - ' + selected[1] + ' - ' + cap(received[0])"
+                               :name="'ALL - ' + (selected != void 0 && selected.length > 0 ? selected[1] : '') + ' - ' + cap(received[0])"
                                hover=false
                                border=false
                                fullscreen=true

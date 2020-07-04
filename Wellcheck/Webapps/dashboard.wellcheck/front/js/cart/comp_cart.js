@@ -9,27 +9,24 @@ let stats = {
     },
 
     components: {container, warning},
-    
+
     props: {data: {default: void 0}},
-    
+
     methods: {
         handleChanges: function() {
             $("#number").on("change", (event) => {
                 $("#numberSpan").text(event.target.value);
                 $("#devicesPrice").text(event.target.value * this.prices.device);
                 $("#subscriptionPrice").text(event.target.value * this.prices.subscription);
-                $("#buyButton").attr("disabled", event.target.value <= 0);
-            });
-            $("#buyButton").on("click", () => {
-                alert("You just bought " + $("#number").val() + " devices !");
+                
             });
         }
     },
-    
+
     mounted(){
         this.handleChanges();
     },
-    
+
     template: `
               <div class="main">
                 <div class="hidden" style="">
@@ -38,13 +35,12 @@ let stats = {
                   <div class="container">
                     <div class="row">
                       <div class="col-lg-12">
-                        <h1 class="txt-lt">Basket</h1>
+                        <h1 class="txt-lt">Cart</h1>
                       </div>
                     </div>
                     <br>
                     <div class="marge" style="height: inherit;">
-                        <container note="Your basket"
-                                    name="My basket"
+                        <container  name="Your cart"
                                     hover=true
                                     style="height: 100%">
                                     <div class="row justify-content-md-center">
@@ -57,11 +53,10 @@ let stats = {
                                     <br><br>
                                     <span><span id="devicesPrice">0</span>€ now + <span id="subscriptionPrice">0</span>€ / month</span>
                                     <br><br>
-                                    <button id="buyButton" type="button" class="btn btn-primary col-md-4" disabled>Buy</button>
+                                    <button id="buyButton" type="button" class="btn btn-primary col-md-4" disabled>Soon</button>
                         </container>
                     </div>
                 </div>
               </div>
              `
     }
-    

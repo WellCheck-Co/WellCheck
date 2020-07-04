@@ -1,3 +1,5 @@
+Vue.component('compModReports', compModReports);
+
 let vm = new Vue({
     el: '#stats',
 

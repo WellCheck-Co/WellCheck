@@ -1,4 +1,4 @@
-FROM python:latest AS BACK_END
+FROM python:latest AS BACK_END_WellCHECK
 
 LABEL maintainer="Courtel Eliot"
 LABEL maintainermail="eliot.courtel@wanadoo.fr"
