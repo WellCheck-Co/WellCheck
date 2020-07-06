@@ -53,7 +53,7 @@ class Mailer():
     def new_user(self, to, key, timestamp):
         """Send a message to the recipient"""
         date = datetime.fromtimestamp(timestamp)
-        self.html = new_header + new_body.format(valid_link = "https://dashboard.wellcheck.fr/valid?bindlocal=true&act_key=" + key,
+        self.html = new_header + new_body.format(valid_link = "https://dashboard.wellcheck.fr/valid?bindlocal=true&act_key=" + key.replace("=", "%3D"),
                                                         key = str(key))
         self.to_list = [to]
         self.msg['Subject'] = "Votre inscription Wellcheck"
