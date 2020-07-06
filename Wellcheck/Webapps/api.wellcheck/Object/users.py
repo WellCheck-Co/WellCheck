@@ -2,6 +2,7 @@ import json, datetime, time
 import jwt
 import hashlib
 import time
+import base64
 import os
 import re
 import phonenumbers
@@ -37,13 +38,13 @@ class user:
         arr_key = key.split("|")
         if len(arr_key) < 2:
             return [False, "Invalid key", 400]
-        email= arr_key[0]
+        email = base64.b64decode(str.encode(arr_key[0])).decode("utf-8")
         password = arr_key[1]
         res = sql.get("SELECT `id`, `password`, `valid`  FROM `user` WHERE `email` = %s", (email))
         if len(res) != 1:
-            return [False, "Invalid user or key", 400]
+            return [False, "Invalid user or key: " + email, 400]
         if self.__activationkey(email, res[0][1]) != key:
-            return [False, "Invalid user or key", 400]
+            return [False, "Invalid user or key: "+ self.__activationkey(email, res[0][1]), 400]
         if int(res[0][2]) != 0:
             return [False, "Acccount already activated", 400]
         succes = sql.input("UPDATE `user` SET valid = 1 WHERE `email` = %s", (email))
@@ -128,7 +129,7 @@ class user:
         return [True, details , None]
 
     def __activationkey(self, email, password):
-        return str(email) + '|' + hashlib.sha512((email + password).encode('utf-8')).hexdigest()
+        return base64.b64encode(str.encode(email)).decode("utf-8")  + '|' + hashlib.sha512((email + password).encode('utf-8')).hexdigest()
 
     def __hash(self, email, password):
         if password is None or email is None:
