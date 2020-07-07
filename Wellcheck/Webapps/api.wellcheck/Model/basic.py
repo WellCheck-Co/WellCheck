@@ -1,4 +1,4 @@
-from bottle import request, response
+from bottle import request, response,  HTTPResponse
 import os, datetime, re
 import json as JSON
 import jwt
@@ -35,7 +35,7 @@ class ret:
                 'header': header,
                 'cookie': cookie
                 },
-            'status' :  500,
+            'status' :  200,
             'error' :   None,
             'data' :    None,
             'succes' :  False,
@@ -60,7 +60,8 @@ class ret:
         if level == 0 :
             return
         if level == 2 :
-            del self.data["queryInfos"]
+            if "queryInfos" in self.data:
+                del self.data["queryInfos"]
             return
         forb = ["content-type", "connection", "x-real-ip", "x-forwarded-for",
                 "x-forwarded-proto", "x-forwarded-ssl", "x-forwarded-port",
@@ -210,6 +211,7 @@ class callnext:
 
     def call_next(self, nextc, err = [True]):
         if not err[0]:
+            self.resp.status = err[2]
             return self.toret.add_error(err[1], err[2])
         nextc.pop(0)
         if len(nextc) == 0:
@@ -225,7 +227,7 @@ class callnext:
                 self.resp.set_cookie(cookie, self.cookie[cookie], path='/')
             self.resp.content_type = 'application/json'
             self.resp.status = self.toret.data['status']
-            return JSON.dumps(self.toret.ret())
+            return self.toret.ret()
         return self.toret.ret()
 
     def __merge_cookie(self, cookies):

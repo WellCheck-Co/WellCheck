@@ -6,7 +6,7 @@ let user = {
       localStorage.email = data.data["email"];
       axios.post(url, data.data, { headers: data.headers})
         .then(response => vm.$refs.extern.check(response.data, this.waitvalidation))
-        .catch(error => this.error(error));
+        .catch(error => vm.$refs.extern.check(error.response.data, this.waitvalidation));
 
     },
 
@@ -16,7 +16,7 @@ let user = {
       localStorage.email = data.data["email"];
       axios.post(url, data.data, { headers: data.headers})
         .then(response => vm.$refs.extern.check(response.data, this.storecred))
-        .catch(error => this.error(error));
+        .catch(error => vm.$refs.extern.check(error.response.data, this.storecred));
     },
 
     validate: function(data) {
@@ -24,7 +24,7 @@ let user = {
       url = method + "://" + api + "/validate/";
       axios.post(url, data.data, { headers: data.headers})
         .then(response => vm.$refs.extern.check(response.data, this.storecred))
-        .catch(error => this.error(error));
+        .catch(error => vm.$refs.extern.check(error.response.data, this.storecred));
     },
 
     retrieve: function(route, headers, callback) {
@@ -42,11 +42,11 @@ let user = {
       if (req_method == 'GET') {
         axios.get(url, { headers: data.headers})
           .then(response => this.relay(response.data, callback, false))
-          .catch(error => this.error(error));
+          .catch(error => this.relay(error.response.data, callback, false));
       } else {
         axios.post(url, data.data, { headers: data.headers})
           .then(response => this.relay(response.data, callback, false))
-        //  .catch(error => this.error(error));
+          .catch(error => this.relay(error.response.data, callback, false));
       }
     },
 
@@ -61,6 +61,7 @@ let user = {
     },
 
     error: function(error) {
+      console.log(error.response);
       vm.$refs.extern.set(String(error), "error")
     },
 

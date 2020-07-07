@@ -6,7 +6,7 @@ let cred = {
       if (get["bindlocal"] == "true"){
         for (i in get){
           if (i != "bindlocal") {
-            localStorage[i] = "" + decodeURI(get[i]);
+            localStorage[i] = "" + decodeURI(get[i]).replace("%3D", "=");
           }
         }
       }
