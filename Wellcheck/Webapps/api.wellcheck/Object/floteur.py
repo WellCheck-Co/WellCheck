@@ -10,81 +10,136 @@ from elasticsearch import helpers
 
 
 class floteur:
-    def __init__(self, usr_id = -1):
+    def __init__(self, usr_id=-1):
         self.usr_id = str(usr_id)
 
-    def add(self, id_sig, lat = None, lng = None):
+    def add(self,
+            id_sig,
+            lat=None,
+            lng=None):
+        """
+            Add a float to a user
+
+            test floats are identified by `id_sig == -1`
+            `lat` and `lng` should be specified if this is a test float
+        """
         id_sig = str(id_sig)
-        if (id_sig == "-1"):
-            if lat is None or lng is None:
+        date = self.time()
+        id_point = str(uuid.uuid4())
+        if (id_sig == "-1"):                                                    #check for test float
+            if lat is None or lng is None:                                      #check for args
                 return [False, "Missing lat or lng", 400]
-            number = sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s AND id_sig = -1", (self.usr_id))[0][0]
-            if number > 2:
+            number = sql.get("SELECT COUNT(*) \
+                FROM `point` \
+                WHERE id_user = %s \
+                AND id_sig = -1",
+                (self.usr_id,))[0][0]
+            if number > 2:                                                      #check for max test float
                 return [False, "Can't have more than 3 test devices", 401]
             name = "test_" + str(number + 1)
+            data = {"data": None, "pos": {"lat": lat, "lng": lng}}
+            input = self.inputrandom(id_point, self.__hash(id_sig), data, date) #input random test data
         else:
-            number = sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s", (self.usr_id))[0][0]
-            name = "point_" + str(number + 1)
-            return [False, "Invalid Sigfox_id", 400]
-        date = str(int(round(time.time() * 1000)))
-        id_point = str(uuid.uuid4())
-        succes = sql.input("INSERT INTO `point` (`id`, `id_user`, `id_sig`, `name`, `surname`, `date`) VALUES (%s, %s, %s, %s, %s, %s)", \
-        (id_point, int(self.usr_id), id_sig, name, name, date))
+            return [False, "Invalid Sigfox_id", 400]                            #sigfox connection not supported yet
+        succes = sql.input("INSERT INTO `point` \
+            (`id`, `id_user`, `id_sig`, `name`, `surname`, `date`) \
+            VALUES (%s, %s, %s, %s, %s, %s)",
+            (id_point, int(self.usr_id), id_sig, name, name, date))
         if not succes:
             return [False, "data input error", 500]
-        if id_sig == "-1":
-            id_sig = self.__hash(id_sig)
-            data = {"data": None, "pos": {"lat": lat, "lng": lng}}
-            input = self.inputrandom(id_point, id_sig, data, date)
         return [True, {}, None]
 
-    def delete(self, id_points):
+    def delete(self,
+               id_points):
         return
 
-    def rename(self, id_point, surname):
+    def rename(self,
+               id_point,
+               surname):
+        """
+            rename a float for a user
+
+            float should be shared to the user or owned by user
+        """
         if not self.__exist(id_point):
             return [False, "Invalid point_id: '" + id_point + "'", 400]
         succes = False
         if self.__proprietary(id_point):
-            succes = sql.input("UPDATE `point` SET surname = %s WHERE id = %s AND id_user = %s", (surname, id_point, self.usr_id))
+            succes = sql.input("UPDATE `point` \
+                SET surname = %s \
+                WHERE id = %s \
+                AND id_user = %s",
+                (surname, id_point, self.usr_id))
         elif self.__shared(id_point):
-            succes = sql.input("UPDATE `point_shared` SET surname = %s WHERE id_point = %s AND id_user = %s", (surname, id_point, self.usr_id))
+            succes = sql.input("UPDATE `point_shared` \
+                SET surname = %s \
+                WHERE id_point = %s \
+                AND id_user = %s",
+                (surname, id_point, self.usr_id))
         else:
             return [False, "Invalid right", 403]
         if not succes:
             return [False, "Data input error", 500]
         return [True, {}, None]
 
-    def share(self, id_points, email):
-        if not isinstance(id_points, list):
+    def share(self,
+              id_points,
+              email):
+        """
+            share a list of float to a user
+
+            the user must be the owner of the float
+        """
+        if not isinstance(id_points, list):                                     #check the type of args
             return [False, "Id_points should be a list", 400]
         for id_point in id_points:
             if not self.__exist(id_point):
-                return [False, "Invalid id_point: id_point : '" + str(id_point) + "'", 400]
+                return [False, "Invalid id_point:'" + str(id_point) + "'", 400]
             succes = False
             if self.__proprietary(id_point):
-                id_to = sql.get("SELECT id FROM `user` WHERE email = %s", (email))
+                id_to = sql.get("SELECT \
+                    id FROM `user` \
+                    WHERE email = %s",
+                    (email,))
                 if len(id_to) < 1:
-                    return [False, "Invalid email: '" + email + "'", 400]
+                    return [False, "Invalid email: '" + str(email) + "'", 400]
                 id_to = str(id_to[0][0])
                 if id_to == self.usr_id:
-                    return [False, "Can't share to yourself: id_point : '" + str(id_point) + "'", 401]
+                    return [False, "Can't share to yourself: '" + str(id_point) + "'", 401]
                 if self.__shared(id_point, id_to):
                     return [False, "Already shared with: '"+ email +"'", 401]
-                date = str(int(round(time.time() * 1000)))
-                number = sql.get("SELECT COUNT(*) FROM `point_shared` WHERE id_user = %s", (id_to))[0][0]
+                date = self.time()
+                number = sql.get("SELECT \
+                    COUNT(*) \
+                    FROM `point_shared` \
+                    WHERE id_user = %s",
+                    (id_to,))[0][0]
                 name = "point_" + str(number)
                 id_share = str(uuid.uuid4())
-                succes =  sql.input("INSERT INTO `point_shared` (`id`, `id_user`, `id_point`, `date`, `surname`) VALUES (%s, %s, %s, %s, %s)", \
-                (id_share, id_to, id_point, date, name))
+                succes =  sql.input("INSERT \
+                    INTO `point_shared` \
+                    (`id`, `id_user`, `id_point`, `date`, `surname`) \
+                    VALUES (%s, %s, %s, %s, %s)",
+                    (id_share, id_to, id_point, date, name))
                 if not succes:
                     return [False, "Data input error", 500]
             else:
-                return [False, "Invalid right : id_point : '" + str(id_point) + "'", 403]
+                return [False, "Invalid right : '" + str(id_point) + "'", 403]
         return [True, {}, None]
 
     def my_shares(self):
-        res = sql.get("SELECT point_shared.id_point, user.email, point_shared.date FROM point_shared INNER JOIN user ON point_shared.id_user = user.id INNER JOIN point ON point_shared.id_point = point.id WHERE point.id_user = %s", (self.usr_id))
+        """
+            return wich float that the user own he shares and to who
+        """
+        res = sql.get("SELECT \
+            point_shared.id_point, user.email, point_shared.date \
+            FROM point_shared \
+            INNER JOIN user \
+            ON point_shared.id_user = user.id \
+            INNER JOIN point \
+            ON point_shared.id_point = point.id \
+            WHERE point.id_user = %s",
+            (self.usr_id,))
         ret = {}
         for i in res:
             index = str(i[0])
@@ -97,54 +152,84 @@ class floteur:
         return [True, {"shares": ret} , None]
 
     def infos_points(self,
-              id_points = None,
-              period_start = None,
-              period_end = None,
-              longlat = None,
-              range = None,
-              limit = None):
+              id_points=None,
+              period_start=None,
+              period_end=None,
+              longlat=None,
+              range=None,
+              limit=None):
+        """
+            return main infos about floats
+
+            default return last 5 data off all your floats, shared and owned
+        """
         if period_end and period_start:
             if period_start > period_end:
                 return [False, "'period_start' should be before 'period_end'", 400]
+
         prop = self.__get_point("proprietary")
         shar = self.__get_point("shared")
+
         if id_points:
              prop = list(set(prop).intersection(id_points))
              shar = list(set(shar).intersection(id_points))
+
         propdetail = self.__get_point("proprietary", details=True)
         shardetail = self.__get_point("shared", details=True)
         propdata = self.__infos_query(prop, period_start, period_end, limit)
         shardata = self.__infos_query(shar, period_start, period_end, limit)
+
         ret = {
             "proprietary": [],
             "shared": []
         }
         for i in prop:
-             propdetail[str(i)]["data"] = propdata[str(i)] if str(i) in propdata else []
+             if str(i) in propdata:
+                 propdetail[str(i)]["data"] = propdata[str(i)]
+             else:
+                 propdetail[str(i)]["data"] = []
              ret["proprietary"].append(propdetail[str(i)])
         for i in shar:
-             shardetail[str(i)]["data"] = shardata[str(i)] if str(i) in shardata else []
+             if str(i) in shardata:
+                 shardetail[str(i)]["data"] = shardata[str(i)]
+             else:
+                 shardetail[str(i)]["data"] = []
              ret["shared"].append(shardetail[str(i)])
+
         return [True, {"points": ret}, None]
 
     def infos_point(self, id_point, period_start, period_end, limit = 100000000):
+        """
+            return main infos about one float
+        """
         if not self.__exist(id_point):
             return [False, "Invalid id_point: '" + str(id_point) + "'", 400]
-        status = "proprietary" if self.__proprietary(id_point) else "shared" if self.__shared(id_point) else None
-        if not status:
+        if self.__proprietary(id_point):
+            status = "proprietary"
+        elif self.__shared(id_point):
+            status = "shared"
+        else:
             return [False, "Invalid right", 403]
+
         ret = self.__get_point(status, details=True)[str(id_point)]
         res = self.__infos_query([id_point], period_start, period_end, limit)
         ret["data"] = res[str(id_point)] if str(id_point) in res else []
+
         return [True, ret, None]
 
     def graph_point(self, id_point, data):
+        """
+            return data of one float in order to build graphs
+        """
         basetime = int(time.time() * 1000)
         ret = {}
         ret["chart1"], ret["chart2"], ret["chart3"] = self.__graph(id_point, data, basetime - 86400000, basetime)
         return [True, ret, None]
 
     def upval(self, num, der, rou, max, min, mod = None):
+        """
+            check border value for random input
+        """
         randNbr = random.randrange(-der * 100, der * 100 + 1, mod * 100 if mod else 1)/100
         if num + randNbr < min or num + randNbr > max:
             randNbr *= -1
@@ -156,7 +241,14 @@ class floteur:
         return ret
 
     def pdf_report(self, id_points, date_start = None, date_end = None, limit = 10000000):
-        res = sql.get("SELECT `id`, `id_sig`, `name`, `surname`, `id_user` FROM `point` WHERE id = %s", (id_points[0]))
+        """
+            return data in order to build a report pdf
+        """
+        res = sql.get("SELECT \
+            `id`, `id_sig`, `name`, `surname`, `id_user` \
+            FROM `point` \
+            WHERE id = %s",
+            (id_points[0],))
         ret = {}
         for i in res:
             ret[str(i[0])] = {
@@ -170,16 +262,22 @@ class floteur:
         return [True, {"detail": ret, "data": data}, None]
 
     def note(self, ph, turb, orp, temp):
-        ph_point = 1.4*10**-32-29.3*ph+8.19*ph**2-0.56*ph**3
+        """
+            calculate a mark from all mesurement
+        """
+        ph_point = 1.4 * 10 ** -32 - 29.3 * ph + 8.19 * ph ** 2 - 0.56 * ph ** 3
         ph_point = 0 if float(ph_point) < float(0) else 5 if float(ph_point) > float(5) else ph_point
-        orp_point = -3.39*10**-32-0.0846*turb+6.73*10**-4*turb**2-1.12*10**-6*turb**3
+        orp_point = -3.39 * 10 ** -32 - 0.0846 * turb + 6.73 * 10 ** -4 * turb ** 2 - 1.12 * 10 ** -6 * turb ** 3
         orp_point = 0 if float(ph_point) < float(0) else 5 if float(ph_point) > float(5) else ph_point
-        temp_point = 5.83+0.235*temp-0.0241*temp**2
+        temp_point = 5.83 + 0.235 * temp - 0.0241 * temp ** 2
         temp_point = 0 if float(orp_point) < float(0) else 6 if float(orp_point) > float(6) else orp_point
         turb_point = 0 if float(turb) < float(921) else 3
         return float("{0:.1f}".format(ph_point + orp_point + temp_point + turb_point))
 
     def inputrandom(self, id_point, id_sig, data, date):
+        """
+            input one data set each 15 minutes 1004 times for a given float
+        """
         ph = 7
         turbidity = 1000
         redox = 300
@@ -217,6 +315,9 @@ class floteur:
         return inputs[0]
 
     def adddata(self, id_sig, id_point, ph, turbidity, redox, temp, pos):
+        """
+            add manually a data set for a given float
+        """
         id_sig = self.__hash(id_sig)
         id_point = id_point
         date = int(round(time.time() * 1000))
@@ -261,38 +362,74 @@ class floteur:
     #         return [False, "data input error", 500]
     #     return [True, {}, None]
 
+    def __time():
+        """
+            return a timestamp
+        """
+        return str(int(round(time.time() * 1000)))
+
     def __exist(self, id_point):
+        """
+            check if a float exist
+        """
         ret = False
         try:
-            if sql.get("SELECT COUNT(*) FROM `point` WHERE id = %s", (id_point))[0][0] > 0:
+            if sql.get("SELECT \
+                COUNT(*) \
+                FROM `point` \
+                WHERE id = %s",
+                (id_point))[0][0] > 0:
                 ret = True
         except:
             ret = False
         return ret
 
     def __proprietary(self, id_point):
+        """
+            check if user is owner
+        """
         ret = False
         try:
-            if sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s AND id = %s", (self.usr_id, id_point))[0][0] > 0:
+            if sql.get("SELECT \
+                COUNT(*) \
+                FROM `point` \
+                WHERE id_user = %s \
+                AND id = %s",
+                (self.usr_id, id_point))[0][0] > 0:
                 ret = True
         except:
             ret = False
         return ret
 
     def __shared(self, id_point, id_user = None):
+        """
+            check if float is shared to the owner
+        """
         ret = False
         try:
-            if sql.get("SELECT COUNT(*) FROM `point_shared` WHERE id_user = %s AND id_point = %s", (id_user if id_user else self.usr_id, id_point))[0][0] > 0:
+            if sql.get("SELECT \
+                COUNT(*) \
+                FROM `point_shared` \
+                WHERE id_user = %s \
+                AND id_point = %s",
+                (id_user if id_user else self.usr_id, id_point))[0][0] > 0:
                 ret = True
         except:
             ret = False
         return ret
 
     def __get_point(self, type = "proprietary", details = False):
+        """
+            return points by type ('proprietary' or 'shared')
+        """
         res = []
         if type == "proprietary":
             if details:
-                res = sql.get("SELECT `id`, `id_sig`, `name`, `surname`, `date` FROM `point` WHERE id_user = %s", (self.usr_id))
+                res = sql.get("SELECT \
+                    `id`, `id_sig`, `name`, `surname`, `date` \
+                    FROM `point` \
+                    WHERE id_user = %s",
+                    (self.usr_id))
                 ret = {}
                 for i in res:
                     ret[str(i[0])] = {
@@ -303,13 +440,24 @@ class floteur:
                             "date": i[4]
                         }
             else:
-                res = sql.get("SELECT id FROM `point` WHERE id_user = %s", (self.usr_id))
+                res = sql.get("SELECT \
+                    `id` \
+                    FROM `point` \
+                    WHERE id_user = %s",
+                    (self.usr_id))
                 ret = []
                 for i in res:
                     ret.append(i[0])
         elif type == "shared":
             if details:
-                res = sql.get("SELECT point.id, point.id_sig, point.name, point_shared.surname, point_shared.date FROM `point_shared` INNER JOIN `point` ON `id_point` = point.id WHERE point_shared.id_user = %s", (self.usr_id))
+                res = sql.get("SELECT \
+                    point.id, point.id_sig, point.name, \
+                    point_shared.surname, point_shared.date \
+                    FROM `point_shared` \
+                    INNER JOIN `point` \
+                    ON `id_point` = point.id \
+                    WHERE point_shared.id_user = %s",
+                    (self.usr_id))
                 ret = {}
                 for i in res:
                     ret[str(i[0])] = {
@@ -320,13 +468,20 @@ class floteur:
                             "date": i[4]
                         }
             else:
-                res = sql.get("SELECT id_point FROM `point_shared` WHERE id_user = %s", (self.usr_id))
+                res = sql.get("SELECT \
+                    `id_point` \
+                    FROM `point_shared` \
+                    WHERE id_user = %s",
+                    (self.usr_id))
                 ret = []
                 for i in res:
                     ret.append(i[0])
         return ret
 
     def __graph(self, id_point, data, date_start = None, date_end = None,limit = None):
+        """
+            retrun data to build graph for a given float
+        """
         id_point = [id_point]
         range = {"from": "0"}
         if date_start:
@@ -430,9 +585,38 @@ class floteur:
         max_data = res["dedup"]["date_range"]["buckets"][0]["max"]["value"]
         max_data = (d_opt["max_x"] if d_opt["max_x"] > max_data else max_data) + 1
 
-        ret1 = {"data": {"data": [], "label": []}, "limits": {"y": {"min": min_date, "max": max_date}, "x": {"min": n_opt["min_x"], "max": n_opt["max_x"]}, "opt": n_opt["opt"]}}
-        ret2 = { data: {"data": [], "limits": {"y": {"min": min_date, "max": max_date}, "x": {"min": min_data, "max": max_data}, "opt": d_opt["opt"]}}}
-
+        ret1 = {"data": {
+                     "data": [],
+                     "label": []
+                     },
+                "limits": {
+                     "y": {
+                        "min": min_date,
+                        "max": max_date
+                        },
+                     "x": {
+                        "min": n_opt["min_x"],
+                        "max": n_opt["max_x"]
+                        },
+                    "opt": n_opt["opt"]
+                  }
+               }
+        ret2 = {"data": {
+                     "data": [],
+                     "label": []
+                     },
+                "limits": {
+                     "y": {
+                        "min": min_date,
+                        "max": max_date
+                        },
+                     "x": {
+                        "min": min_data,
+                        "max": max_data
+                        },
+                    "opt": d_opt["opt"]
+                  }
+               }
         i = 0
         while i < len(dat):
             ret1["data"]["data"].append(dat[i]["note"]["value"])

@@ -17,7 +17,10 @@ class user:
         id = self.__getid(id, self.id)
         secret =  self.__getsecret()
         exp = datetime.datetime.utcnow() + datetime.timedelta(hours=48)
-        ret = jwt.encode({'exp': exp, 'id': id, 'password': hash(str(id) + str(secret))}, secret).decode('utf-8')
+        ret = jwt.encode({'exp': exp,
+                          'id': id,
+                          'password': hash(str(id) + str(secret))
+                         }, secret).decode('utf-8')
         return [True, {'exp': str(exp), "usrtoken": str(ret)}, None, {"usrtoken": str(ret)}]
 
     def verify(self, token, id = None):
@@ -40,7 +43,10 @@ class user:
             return [False, "Invalid key", 400]
         email = base64.b64decode(str.encode(arr_key[0])).decode("utf-8")
         password = arr_key[1]
-        res = sql.get("SELECT `id`, `password`, `valid`  FROM `user` WHERE `email` = %s", (email))
+        res = sql.get("SELECT `id`, `password`, `valid` \
+                       FROM `user` \
+                       WHERE `email` = %s",
+                       (email))
         if len(res) != 1:
             return [False, "Invalid user or key: " + email, 400]
         if self.__activationkey(email, res[0][1]) != key:

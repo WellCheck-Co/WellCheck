@@ -224,6 +224,7 @@ class callnext:
             for cookie in self.cookie:
                 self.resp.set_cookie(cookie, self.cookie[cookie], path='/')
             self.resp.content_type = 'application/json'
+            self.resp.status = self.toret.data['status']
             return JSON.dumps(self.toret.ret())
         return self.toret.ret()
 

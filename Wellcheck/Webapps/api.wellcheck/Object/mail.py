@@ -13,8 +13,8 @@ smtp_server =   str(os.getenv('SMTP_SERVER', None))
 
 
 class Mailer():
-    """Open connection to the mail server"""
     def __init__(self):
+        """Open connection to the mail server"""
         self.sender = smtp_user
         self.password = smtp_pass
         self.server = smtplib.SMTP_SSL(smtp_server, 465)
