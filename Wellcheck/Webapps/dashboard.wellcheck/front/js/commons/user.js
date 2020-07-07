@@ -56,12 +56,11 @@ let user = {
       cred.methods.usr_cred();
     },
 
-    relay: function(data, callback, redirect, message = false) {
+    relay: function(data, callback, redirect, message = false, t = void 0) {
       vm.$refs.extern.check(data, callback, redirect, message)
     },
 
     error: function(error) {
-      console.log(error.response);
       vm.$refs.extern.set(String(error), "error")
     },
 

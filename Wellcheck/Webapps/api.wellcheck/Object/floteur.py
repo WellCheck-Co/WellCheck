@@ -585,38 +585,8 @@ class floteur:
         max_data = res["dedup"]["date_range"]["buckets"][0]["max"]["value"]
         max_data = (d_opt["max_x"] if d_opt["max_x"] > max_data else max_data) + 1
 
-        ret1 = {"data": {
-                     "data": [],
-                     "label": []
-                     },
-                "limits": {
-                     "y": {
-                        "min": min_date,
-                        "max": max_date
-                        },
-                     "x": {
-                        "min": n_opt["min_x"],
-                        "max": n_opt["max_x"]
-                        },
-                    "opt": n_opt["opt"]
-                  }
-               }
-        ret2 = {"data": {
-                     "data": [],
-                     "label": []
-                     },
-                "limits": {
-                     "y": {
-                        "min": min_date,
-                        "max": max_date
-                        },
-                     "x": {
-                        "min": min_data,
-                        "max": max_data
-                        },
-                    "opt": d_opt["opt"]
-                  }
-               }
+        ret1 = {"data": {"data": [], "label": []}, "limits": {"y": {"min": min_date, "max": max_date}, "x": {"min": n_opt["min_x"], "max": n_opt["max_x"]}, "opt": n_opt["opt"]}}
+        ret2 = { data: {"data": [], "limits": {"y": {"min": min_date, "max": max_date}, "x": {"min": min_data, "max": max_data}, "opt": d_opt["opt"]}}}
         i = 0
         while i < len(dat):
             ret1["data"]["data"].append(dat[i]["note"]["value"])
