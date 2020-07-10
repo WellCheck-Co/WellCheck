@@ -65,6 +65,22 @@ let profile = {
         data['note'] = "These informations are privates and will not be shared";
 
       vm.$refs.modal.loaddata(data);
+    },
+    changePassword: function () {
+      vm.$refs.nav.modale('Password');
+      let data;
+      if (this.data == void 0) {
+        data = {}
+      }
+      else {
+        data = this.data;
+      }
+      if (data['email'] == void 0)
+        data['warning'] = true;
+      else
+        data['note'] = "These informations are privates and will not be shared";
+
+      vm.$refs.modal.loaddata(data);
     }
   },
 
