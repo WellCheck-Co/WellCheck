@@ -101,9 +101,10 @@ class user:
     def changepass(self, pass1, pass2):
         if pass1 != pass2:
             return [False, "Passwords do not match", 400]
-        email = sql.get("SELECT `email` FROM `user` WHERE `user_id` = %s", (self.id, ))[0][0]
+        email = sql.get("SELECT `email` FROM `user` WHERE `id` = %s", (self.id, ))[0][0]
         password = self.__hash(email, pass1)
-        succes = sql.input("UPDATE `user` SET `password` = %s WHERE `user_id` = %s", (self.id, password))
+        print(email, password, self.id)
+        succes = sql.input("UPDATE `user` SET `password` = %s WHERE `id` = %s", (password, self.id))
         if not succes:
             return [False, "data input error", 500]
         return [True, {}, None]
