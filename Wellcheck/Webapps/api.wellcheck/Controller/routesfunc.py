@@ -86,6 +86,16 @@ def gettoken(cn, nextc):
     err = use.gettoken()
     return cn.call_next(nextc, err)
 
+def changepassword(cn, nextc):
+    err = check.contain(cn.pr, ["password1", "password2"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    use = cn.private["user"]
+    err = use.changepass(cn.pr["password1"], cn.pr["password2"])
+    return cn.call_next(nextc, err)
+
 def infos(cn, nextc):
     use = cn.private["user"]
     err = use.getdetails()

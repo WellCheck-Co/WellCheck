@@ -86,7 +86,7 @@ class user:
         try:
             Mailer().new_user(email, key, int(date)/1000)
         except:
-            sql.input("DELETE FROM `user` WHERE `email` = %s", (email))
+            sql.input("DELETE FROM `user` WHERE `email` = %s", (email,))
             return [False, "Registration error", 500]
         return [True, {}, None]
 
@@ -97,6 +97,16 @@ class user:
             self.id = str(res[0][0])
             return [True, {"user_id": self.id}, None]
         return [False, "Invalid email or password", 403]
+
+    def changepass(self, pass1, pass2):
+        if pass1 != pass2:
+            return [False, "Passwords do not match", 400]
+        email = sql.get("SELECT `email` FROM `user` WHERE `user_id` = %s", (self.id, ))[0][0]
+        password = self.__hash(email, pass1)
+        succes = sql.input("UPDATE `user` SET `password` = %s WHERE `user_id` = %s", (self.id, password))
+        if not succes:
+            return [False, "data input error", 500]
+        return [True, {}, None]
 
     def updetails(self, phone, fname, lname):
         if phone != "":
