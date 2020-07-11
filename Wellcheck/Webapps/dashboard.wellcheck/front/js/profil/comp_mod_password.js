@@ -11,7 +11,10 @@ let compModPassword = {
 
   methods: {
     close: function(data){
-      console.log("updated");
+      this.pass1 = "";
+      this.pass2 = "";
+      vm.$refs.extern.set("Password changed");
+      vm.$refs.modal.close();
     },
 
     updatepass: function(){
@@ -32,20 +35,19 @@ let compModPassword = {
       <form class="insidecomp">
         <div class="container">
           <div class="row">
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-12 col-sm-12" style="margin-bottom: 20px">
               <div class="container">
                 <div class="row">
-                  <div class="hidemd col-xl-5 col-sm-12 col-4 margin5px" for="firstname">Firstname</div>
-                  <input class="form-control compinput col-xl-7  col-md-12  col-sm-12 col-8" id="firstname"  type="password" placeholder="Password" v-model=pass1>
+                  <div class="hidemd col-xl-4 col-sm-12 col-4 margin5px" for="firstname">New password</div>
+                  <input class="form-control compinput col-xl-8  col-md-12  col-sm-12 col-8" id="firstname"  type="password" placeholder="New Password" v-model=pass1>
                 </div>
               </div>
             </div>
-            <div class="intersepinput"></div>
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-12 col-sm-12">
               <div class="container">
                 <div class="row">
-                  <div class="hidemd col-xl-5 col-sm-12 col-4 margin5px" for="lastname">Lastname</div>
-                  <input class="form-control compinput col-xl-7  col-md-12  col-sm-12 col-8" id="lastname"  type="password" placeholder="Password" v-model=pass2>
+                  <div class="hidemd col-xl-4 col-sm-12 col-4 margin5px" for="lastname">Repeat password</div>
+                  <input class="form-control compinput col-xl-8  col-md-12  col-sm-12 col-8" id="lastname"  type="password" placeholder="Repeat Password" v-model=pass2>
                 </div>
               </div>
             </div>
