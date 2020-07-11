@@ -147,7 +147,9 @@ methods: {
 						}],
 						yAxes: [{
               ticks: {
-							min: 0
+							min: 0,
+                                                        max: 5,
+							stepSize: 1
 						  },
 							stacked: true
 						}]
@@ -414,9 +416,9 @@ methods: {
   store: function(data) {
     if (data != '') {
        if ( this.charts["chart1"] != void 0) {
-         this.charts["chart0"].config.data.datasets[0] = data["chart0"]["Test"]
-         this.charts["chart0"].config.data.datasets[1] = data["chart0"]["Your\'s"]
-         this.charts["chart0"].config.data.datasets[2] = data["chart0"]["Shared with you"]
+         this.charts["chart0"].config.data.datasets[0]["data"] = data["chart0"]["Test"]
+         this.charts["chart0"].config.data.datasets[1]["data"] = data["chart0"]["Your\'s"]
+         this.charts["chart0"].config.data.datasets[2]["data"] = data["chart0"]["Shared with you"]
          this.charts["chart0"].update();
 
          this.charts["chart1"].config.data.labels = data["chart1"]["data"]["label"];
@@ -493,7 +495,7 @@ template: `
                 </div>
                 <div :style="'display: ' + (request == 1 && selected != void 0 && selected.length > 0 ? 'flex' : 'none') + ';'" class="row">
                   <div class="col-xl-7 col-lg-12 col-sm-12 marge" style="height: inherit;">
-                    <container note="Repartition of your devices by mark. Good > Medium > Bad, one step every 3.33 point"
+                    <container note="Repartition of your devices by score. Good > Medium > Bad, one step every 6.66 points."
                                name="Global stats"
                                hover=true
                                fullscreen=true
@@ -517,20 +519,20 @@ template: `
                   </div>
 
                   <div class="col-xl-5 col-lg-7 col-sm-12 marge" style="height: inherit;">
-                  <container note="Your consomption for this month, it may take up to 10 hours to update"
+                  <container note="Scoreboards for the last 24 hours based on the average score of your device over a period of 2 hours."
                              :name="'24H - ' + (selected != void 0 && selected.length > 0 ? selected[1] : '') + ' score'"
                              hover=true style="height: 100%">
                              <canvas class="marge" id="chart1" width="5" height="3" style="display: block; height: 300px; width: 1000px;" class="chartjs-render-monitor"></canvas>
                   </container>
                   </div>
                   <div v-if="selected != void 0 && selected.length > 0" class="col-xl-7 col-sm-12 marge" style="height: inherit;">
-                    <container note="Your consomption for this month, it may take up to 10 hours to update"
-                               name="Current Consumption"
+                    <container note="Contains the last 5 measurement series transmitted by your device."
+                               name="Measurement series"
                                hover=true style="height: 100%">
                                <table style="width:100%">
                                 <tr style="margin-bottom: 5px;">
                                   <th>Time</th>
-                                  <th>Note</th>
+                                  <th>Score</th>
                                   <th>PH</th>
                                   <th>Temperature</th>
                                   <th>Redox</th>
@@ -572,7 +574,7 @@ template: `
                     </container>
                   </div>
                   <div class="col-lg-12 col-sm-12 marge">
-                    <container note="Your consomption for this month, it may take up to 10 hours to update"
+                    <container :note="'Evolution of ' + received[0] + ' for the last 24 hours based on the average ' + received[0] + ' measures of your device over a period of 2 hours'"
                                :name="'24H - ' + (selected != void 0 && selected.length > 0 ? selected[1] : '') + ' - ' + cap(received[0])"
                                hover=false
                                border=false
@@ -583,7 +585,7 @@ template: `
                     </container>
                   </div>
                   <div class="col-lg-12 col-sm-12 marge">
-                    <container note="Your consomption for this month, it may take up to 10 hours to update"
+                    <container :note="'Evolution of ' + received[0] + ' since its inception based on the average ' + received[0] + ' measures of your device over a period of 12 hours'"
                                :name="'ALL - ' + (selected != void 0 && selected.length > 0 ? selected[1] : '') + ' - ' + cap(received[0])"
                                hover=false
                                border=false

@@ -106,7 +106,7 @@ let vm = new Vue({
                           Last report: ` + (this.markers['proprietary'][i]['data'].length > 0 ? this.datestr(this.markers['proprietary'][i]['data'][0]["date"]) : '/' ) + `
                         </div>
                         <div class="col-12 col-sm-12" style="text-align: center; margin-top: 5px;">
-                        Note: ` + (this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] != void 0 ? this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] / 2 : '_' ) + ` / 10
+                        Score: ` + (this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] != void 0 ? this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] / 2 : '_' ) + ` / 10
                         <div class="notebarholder">
                           <div class="notebar" style=" ` + (
                               this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] != void 0 ?

@@ -26,18 +26,18 @@ let profile = {
 
     updatevisend: function(save) {
         clearInterval(this.interval);
-        this.updatevisend(
-          [
-            { label: "test3", value: 31, color: "#1C94FE"},
-            { label: "test4", value: 21, color: "#211267" }
-          ]
-        );
         this.angle = 0;
-        this.data.sections = save;
+        this.data.sections = [
+            { label: "Subscription", value: 3, color: "#1C94FE"},
+            { label: "Purchase", value: 3, color: "#211267" }
+          ];
 
     },
 
     updatevis: function () {
+      if (this.interval != void 0){
+	return;	
+      }
       var value = 0;
       var sections = JSON.parse(JSON.stringify(this.data.sections));
 
@@ -48,6 +48,7 @@ let profile = {
 
       this.data.sections = sections
       this.interval = setInterval(this.animevis, 6);
+      setTimeout(this.updatevisend, 4000);
     },
 
     editProfile: function () {
@@ -81,7 +82,15 @@ let profile = {
         data['note'] = "These informations are privates and will not be shared";
 
       vm.$refs.modal.loaddata(data);
-    }
+    },
+    price: function (str) {
+      if (str == void 0){
+        str = 0;
+      }
+      let price = parseFloat(str).toFixed(2) + ""
+      let pricehtml = "<b>" + price.split(".")[0] + ".<span style='font-size: 60%;'>" + price.split(".")[1] + "</span>$</b>";
+      return pricehtml;
+    },
   },
 
   watch: {
@@ -93,13 +102,6 @@ let profile = {
     }
   },
   filters: {
-    price: function (str) {
-      let len = str.length;
-      let price = str;
-      if (price[len - 2] != '.')
-        price = str.slice(0, len - 2) + '.' + str.slice(len - 2, len - 1);
-      return price + "  $";
-    },
     exist: function(str){
       if (str == "" || str == void 0 )
         return "____";
@@ -148,7 +150,8 @@ let profile = {
                   </div>
                   <br>
                   <div class="row">
-                    <div class="col-lg-4 col-sm-8">
+                  <div class="row col-lg-4 col-md-12">
+                    <div class="col-lg-12 col-md-6 col-sm-12" style="margin-bottom: 30px">
                       <container name="Infos" hover=true :warning=infos>
                         <div class="container">
                           <div class="row">
@@ -187,10 +190,18 @@ let profile = {
                         <div class="wc-button" v-on:click=editProfile> update </div>
                       </container>
                     </div>
+                    <div class="col-lg-12 col-md-6 col-sm-12" style="margin-bottom: 30px">
+                    <container name="Password" hover=true>
+                        <br>
+                        <div class="wc-button" style="width: 100%" v-on:click=changePassword> Change your password </div>
+                      </container>
+		    </div>
+                    </div>
                     <div class="col-lg-1 col-sm-12">
                       <br>
                     </div>
-                    <div class="col-lg-7 col-sm-12">
+                    <div class="row col-lg-7 col-sm-12">
+                    <div class="col-12">
                       <container note="Your consomption for this month, it may take up to 10 hours to update" name="Current Consumption" hover=true :warning="(data == void 0 || data.totalpaid == void 0 )">
                         <vc-donut ref='donut'
                           :background=background
@@ -200,22 +211,15 @@ let profile = {
                           :sections=data.sections
                           :start-angle=angle
                           >
-                            <h3>{{ data.totalpaid | exist | price }}</h3>
+                            <h3 v-html="price(data.totalpaid)" style="margin-bottom: 0;"></h3>
                             <span>excl. taxes</span>
                         </vc-donut>
                         <br>
                         <div class="wc-button" v-on:click="updatevis()"> update </div>
                       </container>
                     </div>
-                    <div class="col-lg-1 col-sm-12 hidelg">
-                      <br>
                     </div>
-                    <div class="col-lg-4 col-sm-8">
-                      <container name="Password" hover=true>
-                        <br>
-                        <div class="wc-button" style="width: 100%" v-on:click=changePassword> Change your password </div>
-                      </container>
-                    </div>
+		  </div>
                   </div>
                 </div>
               </div>

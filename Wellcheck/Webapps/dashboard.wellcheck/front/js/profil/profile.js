@@ -26,9 +26,10 @@ let vm = new Vue({
         this.data = JSON.parse(JSON.stringify(data));
         if (this.data.sections == void 0)
           this.data.sections =  [
-               { label: "test", value: 25, color: "#1C94FE"},
-               { label: "test2", value: 25, color: "#211267" }
+            { label: "Subscription", value: 3, color: "#1C94FE"},
+            { label: "Purchase", value: 3, color: "#211267" }
           ]
+         this.data.totalpaid = "0";
       }
    },
    mounted(){
