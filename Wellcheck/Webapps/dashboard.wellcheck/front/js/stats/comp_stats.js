@@ -5,7 +5,8 @@ data: function() {
     selected: [],
     charts: {"chart1": null, "chart2": null, "chart3": null},
     received: ["ph", 0],
-    testmod: (localStorage.testmode == 'true' ? true : false)
+    testmod: (localStorage.testmode == 'true' ? true : false),
+    request: 0,
   }
 },
 
@@ -18,7 +19,9 @@ watch:{
     var i;
     var i2;
     var arr;
-
+    if (this.data["proprietary"].length + this.data["shared"].length == 0){
+      this.request = 1;
+    }
     if (typeof localStorage["selected"] == "string"){
       if (this.data["proprietary"].length > 0){
         for ( i2 = 0; i2 < this.data["proprietary"].length; i2++) {
@@ -404,6 +407,8 @@ methods: {
     this.received[1] = 0
     if (id != void 0)
       user.methods.send('point/graph', data, this.store);
+    else
+     this.request = 1;
   },
 
   store: function(data) {
@@ -437,6 +442,7 @@ methods: {
          this.charts["chart3"].config.options.scales.yAxes[0].ticks.max = data["chart3"][this.received[0]].limits.x.max
          this.charts["chart3"].config.data.datasets[0].label = this.received[0]
          this.charts["chart3"].update();
+         this.request = 1;
        }
        this.received[1] = 1
     }
@@ -462,7 +468,10 @@ template: `
                   </div>
                 </div>
                 <br>
-                <div :style="'display: ' + (selected != void 0 && selected.length > 0 ? 'none' : 'flex') + ';'" class="row">
+                <div style="display: block; margin: 97px auto 250px;" :style="'display: ' + (request == 1 ? 'none' : 'block') + ';'" class="lds-roller">
+			<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+		</div>
+                <div :style="'display: ' + (request == 0 || (selected != void 0 && selected.length > 0) ? 'none' : 'flex') + ';'" style="display:None" class="row">
                   <div class="col-12 marge" style="height: inherit;">
                     <container name="Add your first device"
                                hover=true
@@ -476,7 +485,7 @@ template: `
                     </container>
                   </div>
                 </div>
-                <div :style="'display: ' + (selected != void 0 && selected.length > 0 ? 'flex' : 'none') + ';'" class="row">
+                <div :style="'display: ' + (request == 1 && selected != void 0 && selected.length > 0 ? 'flex' : 'none') + ';'" class="row">
                   <div class="col-xl-7 col-lg-12 col-sm-12 marge" style="height: inherit;">
                     <container note="Repartition of your devices by mark. Good > Medium > Bad, one step every 3.33 point"
                                name="Global stats"
@@ -491,7 +500,7 @@ template: `
                       <ul class='list-group col-12 sm-modalelist' style="overflow-x: hidden; height: calc(100% - 33px);">
                         <li v-for="point in data.proprietary" v-if="point.test == false || point.test == true" v-on:click="select([point.id, point.surname, point.data])" class="list-devices-stats list-group-item-action">
                           <div class="row">
-                            <div class="ml-0 mr-0"style="text-align: left"> {{ point.surname }}</div>
+                            <div class="ml-1 mr-0"style="text-align: left"> {{ point.surname }}</div>
                             <div v-if="selected[0] == point.id" class="ml-1 mr-0"style="text-align: left; color: #1C94FE"> &#10004</div>
                             <div v-if="point.data[0]" class="ml-auto mr-1 datelist"> Up. {{ point.data[0].date  | tostr }} min ago</div>
                             <div v-if="!point.data[0]" class="ml-auto mr-0 datelist"> No data </div>
@@ -535,22 +544,22 @@ template: `
                     </container>
                   </div>
                   </div>
-                  <div :style="'display: ' + (selected != void 0 && selected.length > 0 ? 'flex' : 'none') + ';'" class="row">
+                  <div :style="'display: ' + (request == 1 && selected != void 0 && selected.length > 0 ? 'flex' : 'none') + ';'" class="row">
                   <div class="col-lg-12 col-sm-12 marge">
                     <container hover=false
                                border=false
                                style="height: 100%">
                                  <div class="row">
-                                  <div class="col-6 col-md-3" style="margin-bottom: 30px">
+                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 45px">
                                     <div class="wc-button"  v-on:click="change('ph')"> ph </div>
                                   </div>
-                                  <div class="col-6 col-md-3" style="margin-bottom: 30px">
+                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 45px">
                                     <div class="wc-button" v-on:click="change('turbidity')"> turbidity </div>
                                   </div>
-                                  <div class="col-6 col-md-3" style="margin-bottom: 30px">
+                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 45px">
                                     <div class="wc-button" v-on:click="change('temp')"> temp </div>
                                   </div>
-                                  <div class="col-6 col-md-3" style="margin-bottom: 30px">
+                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 45px">
                                     <div class="wc-button" v-on:click="change('redox')"> redox </div>
                                   </div>
                                 </div>

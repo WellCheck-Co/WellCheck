@@ -71,6 +71,8 @@ class user:
     def register(self, email, pass1, pass2, role = 0):
         if pass1 != pass2:
             return [False, "Passwords do not match", 400]
+        if len(pass1) < 8:
+            return [False, "Password should containt at least 8 characters", 400]
         if self.__exist(email):
             return [False, "Email already in use", 400]
         if not self.__email(email):
@@ -101,6 +103,8 @@ class user:
     def changepass(self, pass1, pass2):
         if pass1 != pass2:
             return [False, "Passwords do not match", 400]
+        if len(pass1) < 8:
+            return [False, "Password should containt at least 8 characters", 400]
         email = sql.get("SELECT `email` FROM `user` WHERE `id` = %s", (self.id, ))[0][0]
         password = self.__hash(email, pass1)
         print(email, password, self.id)

@@ -24,7 +24,7 @@ class floteur:
             `lat` and `lng` should be specified if this is a test float
         """
         id_sig = str(id_sig)
-        date = self.time()
+        date = self.__time()
         id_point = str(uuid.uuid4())
         if (id_sig == "-1"):                                                    #check for test float
             if lat is None or lng is None:                                      #check for args
@@ -108,7 +108,7 @@ class floteur:
                     return [False, "Can't share to yourself: '" + str(id_point) + "'", 401]
                 if self.__shared(id_point, id_to):
                     return [False, "Already shared with: '"+ email +"'", 401]
-                date = self.time()
+                date = self.__time()
                 number = sql.get("SELECT \
                     COUNT(*) \
                     FROM `point_shared` \
@@ -362,7 +362,7 @@ class floteur:
     #         return [False, "data input error", 500]
     #     return [True, {}, None]
 
-    def __time():
+    def __time(self):
         """
             return a timestamp
         """

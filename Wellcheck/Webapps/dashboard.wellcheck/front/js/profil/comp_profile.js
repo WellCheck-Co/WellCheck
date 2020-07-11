@@ -213,7 +213,7 @@ let profile = {
                     <div class="col-lg-4 col-sm-8">
                       <container name="Password" hover=true>
                         <br>
-                        <div class="wc-button" style="width: 100%" v-on:click=editProfile> Change your password </div>
+                        <div class="wc-button" style="width: 100%" v-on:click=changePassword> Change your password </div>
                       </container>
                     </div>
                   </div>
