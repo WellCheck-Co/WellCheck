@@ -89,7 +89,6 @@ let vm = new Vue({
                       url: this.buildsvg(this.markers['proprietary'][i]["test"] == true ? 'test' : 'your', this.markers['proprietary'][i]["data"][0]["data"]["data"]['note']), //this.markers['proprietary'][i]["test"] == true ? "./imgs/float.svg" : "./imgs/float.svg", // url
                       scaledSize: {height: 39, i: undefined, j: undefined, width: 39}, // scaled size
                       origin: {x: 0, y: 0} // origin
-
                   },
                   infoText:  `<div class="inf-content" style="font-size: 15px;">
                     <div class="container">
@@ -171,6 +170,7 @@ let vm = new Vue({
          map.setZoom(position['zoom']);
        }
        this.$refs.main.$on('zoom_changed', function(){
+         console.log(map.getZoom());
          let center = map.getCenter();
          let pos = {'lat': center.lat(), 'lng': center.lng(), 'zoom': map.getZoom()};
          localStorage.position = JSON.stringify(pos);
