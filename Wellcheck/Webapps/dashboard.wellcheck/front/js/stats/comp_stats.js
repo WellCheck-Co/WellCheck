@@ -108,31 +108,31 @@ methods: {
 				label: 'Test',
 				backgroundColor: '#ff970f',
 				data: [
-					1,
-					2,
+					0,
+					0,
 					0,
 				]
 			}, {
 				label: 'Your\'s',
 				backgroundColor:'#1C94FE',
 				data: [
-					1,
 					0,
-					2,
+					0,
+					0,
 				]
 			}, {
 				label: 'Shared with you',
 				backgroundColor: '#79befa',
 				data: [
-					3,
-					5,
-					1,
+					0,
+					0,
+					0,
 				]
 			}]
 
 		};
 
-			var gloabalbar = new Chart(ctx, {
+			this.charts["chart0"] = new Chart(ctx, {
 				type: 'bar',
 				data: barChartData,
 				options: {
@@ -414,10 +414,16 @@ methods: {
   store: function(data) {
     if (data != '') {
        if ( this.charts["chart1"] != void 0) {
+         this.charts["chart0"].config.data.datasets[0] = data["chart0"]["Test"]
+         this.charts["chart0"].config.data.datasets[1] = data["chart0"]["Your\'s"]
+         this.charts["chart0"].config.data.datasets[2] = data["chart0"]["Shared with you"]
+         this.charts["chart0"].update();
+
          this.charts["chart1"].config.data.labels = data["chart1"]["data"]["label"];
          this.charts["chart1"].update();
          this.charts["chart1"].config.data.datasets[0].data = data["chart1"]["data"]["data"];
          this.charts["chart1"].update();
+         
          this.charts["chart2"].config.data.datasets[2].data = data["chart2"][this.received[0]]["data"];
          this.charts["chart2"].config.data.datasets[0].data = [{
            x: data["chart2"][this.received[0]]["limits"]["y"]["min"],

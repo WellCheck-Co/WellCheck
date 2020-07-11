@@ -6,6 +6,7 @@ from .elastic import es
 import requests
 import hashlib
 import random
+import math
 from elasticsearch import helpers
 
 
@@ -223,6 +224,21 @@ class floteur:
         """
         basetime = int(time.time() * 1000)
         ret = {}
+        prop = self.__get_point("proprietary")
+        shar = self.__get_point("shared")
+        propdetail = self.__get_point("proprietary", details=True)
+        propdata = self.__infos_query(prop, None, None, 1)
+        shardata = self.__infos_query(shar, None, None, 1)
+        ret["chart0"] = {'Test': [0, 0, 0], 'Your\'s': [0, 0, 0], 'Shared with you': [0, 0, 0]}
+        for i in prop:
+            index = 2 - math.floor(propdata[str(i)][0]["data"]["data"]["note"] / 7)
+            if propdetail[str(i)]["test"]:
+                ret["chart0"]["Test"][index] += 1
+            else:
+                ret["chart0"]["Your\'s"][index] += 1
+        for i in shar:
+            index = 2 - math.floor(shardata[str(i)][0]["data"]["data"]["note"] / 7)
+            ret["chart0"]["Shared with you"][index] += 1
         ret["chart1"], ret["chart2"], ret["chart3"] = self.__graph(id_point, data, basetime - 86400000, basetime)
         return [True, ret, None]
 
