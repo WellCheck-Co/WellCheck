@@ -80,8 +80,8 @@ let vm = new Vue({
             this.markers['proprietary'][i]['note'] = 3
             this.markers['proprietary'][i]["marker"] = {
                   position: {
-                              lat: last_data['data']['pos']['lat'],
-                              lng: last_data['data']['pos']['lng']
+                              lat: parseFloat(last_data['data']['pos']['lat']),
+                              lng: parseFloat(last_data['data']['pos']['lng'])
                             },
                   title:this.markers['proprietary'][i]["name"],
                   data: {'id': this.markers['proprietary'][i]['id'], 'order': i, 'test': this.markers['proprietary'][i]["test"]},

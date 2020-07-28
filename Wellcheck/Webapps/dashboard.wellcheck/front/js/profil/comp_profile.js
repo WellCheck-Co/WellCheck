@@ -150,7 +150,7 @@ let profile = {
                   </div>
                   <br>
                   <div class="row">
-                  <div class="row col-lg-4 col-md-12">
+                  <div class="row col-lg-5 col-md-12">
                     <div class="col-lg-12 col-md-6 col-sm-12" style="margin-bottom: 30px">
                       <container name="Infos" hover=true :warning=infos>
                         <div class="container">
@@ -196,9 +196,6 @@ let profile = {
                         <div class="wc-button" style="width: 100%" v-on:click=changePassword> Change your password </div>
                       </container>
 		    </div>
-                    </div>
-                    <div class="col-lg-1 col-sm-12">
-                      <br>
                     </div>
                     <div class="row col-lg-7 col-sm-12">
                     <div class="col-12">

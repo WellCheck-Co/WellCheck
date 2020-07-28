@@ -138,7 +138,7 @@ methods: {
 				options: {
 					tooltips: {
 						mode: 'index',
-						intersect: false
+					    intersect: false,
 					},
 					responsive: true,
 					scales: {
@@ -215,7 +215,7 @@ methods: {
   							if (label) {
   								label += ': ';
   							}
-  							label += parseFloat(tooltipItem.value).toFixed(2);
+  							label += parseFloat(tooltipItem.value - 0.5).toFixed(1);
   							return label;
   						}
   					}
@@ -423,7 +423,7 @@ methods: {
 
          this.charts["chart1"].config.data.labels = data["chart1"]["data"]["label"];
          this.charts["chart1"].update();
-         this.charts["chart1"].config.data.datasets[0].data = data["chart1"]["data"]["data"];
+           this.charts["chart1"].config.data.datasets[0].data = data["chart1"]["data"]["data"].map(n => n + 0.5);
          this.charts["chart1"].update();
          
          this.charts["chart2"].config.data.datasets[2].data = data["chart2"][this.received[0]]["data"];
@@ -531,16 +531,16 @@ template: `
                                hover=true style="height: 100%">
                                <table style="width:100%">
                                 <tr style="margin-bottom: 5px;">
-                                  <th>Time</th>
+                                  <th>Time ago</th>
                                   <th>Score</th>
                                   <th>PH</th>
-                                  <th>Temperature</th>
+                                  <th>Temp</th>
                                   <th>Redox</th>
                                   <th>Turbidity</th>
                                 </tr>
                                 <br>
                                 <tr v-for="data in selected[2]">
-                                  <td><pre style="margin-bottom: 0">{{ data.date | tostr }} min ago</pre></td>
+                                  <td><pre style="margin-bottom: 0">{{ data.date | tostr }} <small>min</small></pre></td>
                                   <td><pre style="margin-bottom: 0">{{ data.data.data.note }}</pre></td>
                                   <td><pre style="margin-bottom: 0">{{ data.data.data.ph }}</pre></td>
                                   <td><pre style="margin-bottom: 0">{{ data.data.data.temp }}</pre></td>
@@ -556,18 +556,18 @@ template: `
                   <div class="col-lg-12 col-sm-12 marge">
                     <container hover=false
                                border=false
-                               style="height: 100%">
+                               style="padding: 0px">
                                  <div class="row">
-                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 45px">
+                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 30px">
                                     <div class="wc-button"  v-on:click="change('ph')"> ph </div>
                                   </div>
-                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 45px">
+                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 30px">
                                     <div class="wc-button" v-on:click="change('turbidity')"> turbidity </div>
                                   </div>
-                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 45px">
+                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 30px">
                                     <div class="wc-button" v-on:click="change('temp')"> temp </div>
                                   </div>
-                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 45px">
+                                  <div class="col-md-6 col-lg-3" style="margin-bottom: 30px">
                                     <div class="wc-button" v-on:click="change('redox')"> redox </div>
                                   </div>
                                 </div>

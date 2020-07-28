@@ -716,6 +716,22 @@ input[type="submit"] {
 		margin-left: 0px;
 	}
 }
+
+@media(max-height:800px){
+    .img-fluid {
+	width: 190px;
+	margin-left: calc(50% - 95px);
+    }
+    input[type="text"], input[type="email"], input[type="password"] {
+	padding: 0.4em;
+    }
+    input[type="submit"] {
+	padding: 0.3em;
+    }
+    .agileits-top {
+	font-size: 13px;
+    }
+}
 /*-- //responsive-design --*/
 
 .agileits-top {
@@ -879,6 +895,7 @@ input.text {
 	font-size: .8rem;
 }
 
+
 .img-nav {
 	width: 180px;
 	min-width: 180px;
@@ -972,6 +989,32 @@ input.text {
 .nav-second-active:hover:before {
 	background-color: #211267;
 	color: #211267;
+}
+
+@media(max-height:800px){
+    .in-nav p {
+        font-size: .7rem;
+	margin-bottom: 0rem;
+    }
+    .sep {
+	 margin-top: 0px;
+	 margin-bottom: 0px;
+     }
+
+     .nav-text {
+	 font-size: 1rem;
+     }
+
+     .nav-second {
+	 font-size: .8rem;
+     }
+
+     .nav-second-active::before {
+	 width: 7px;
+	 height: 7px;
+	 margin-right: 3px;
+	 margin-left: 4px;
+     }
 }
 
 .back {
@@ -1085,6 +1128,17 @@ input.text {
 		margin-top: 0px;
 		border-radius: 0px;
 	}
+
+	.cont table {
+	    font-size: .8rem;
+	}
+}
+
+@media(max-width:550px){
+    .cont table {
+	margin-left: -6%;
+	width: 112% !important;
+    }
 }
 
 
