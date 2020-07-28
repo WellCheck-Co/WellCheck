@@ -758,9 +758,8 @@ input.text {
 }
 
 .message {
-	padding: 10px;
-	width: 322px;
-	height: 45px;
+    padding: 0px 10px 0px 10px;
+    width: 322px;
 	margin-left: calc(50% - 161px);
 	border-radius: 7px;
 	color: white;
@@ -795,17 +794,16 @@ input.text {
 }
 
 .cross {
-		position: relative;
-		font-size: 8px;
+    position: relative;
+    font-size: 8px;
     border-radius: 50%;
-    width: 16px;
-    height: 15px;
-    padding-right: 1px;
-    padding-left: 2px;
-    padding-bottom: 3px;
+    width: 14px;
+    height: 14px;
+    padding-right: 1.7px;
+    padding-left: 1.7px;
+    padding-top: 0.01px;
     left: 295px;
     border: 1px solid white;
-    bottom: 36px;
     cursor: pointer;
 }
 
@@ -1145,7 +1143,7 @@ input.text {
 #errorProgress {
   width: 322px;
 	margin-left: -11px;
-	margin-top: -11px;
+	margin-top: 3px;
 	border-radius: 0px 0px 7px 7px;
 	overflow: hidden;
 }

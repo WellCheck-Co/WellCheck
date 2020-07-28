@@ -106,8 +106,9 @@ let msg = {
     this.uc = this.usualcenter == true ? 'usualcenter' : '';
   },
   template: `<div class="txt-center errdiv" :class=uc>
-                <div id="message" :class=type class="message"> {{ msg }}
+                <div id="message" :class=type class="message">
                   <div id="cross" class="cross" :class=type v-on:click=hide>╳</div>
+                   {{ msg }}
                   <div id="errorProgress">
                     <div id="errorBar"></div>
                   </div>
