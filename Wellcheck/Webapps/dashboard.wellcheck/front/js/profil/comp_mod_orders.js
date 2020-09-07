@@ -102,7 +102,9 @@ let compModOrders = {
                     </br>
                   </div>
                   <div v-if="page == 1 && order" class="col-12" style="overflow-y: scroll;max-height: 500px;">
-                    <div class="row">
+                    <div class="row justify-content-md-center"">
+                      <h1 :class="'badge badge-pill badge-' + order.status.color">{{order.status.label}}</h1>
+                      <div class="col-12"></div>
                       <div style="text-align: end" class="hidemd col-3" :for="'id_' + order.id">Identifier :</div>
                       <div style="text-align: left" class="col-9" :id="'id_' + order.id">{{order.id}}</div>
                       <div class="sepinput"></div>
