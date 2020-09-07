@@ -1575,6 +1575,10 @@ font-size: 21px;
 	overflow-y: scroll;
 }
 
+#vuecart {
+	overflow-y: scroll;
+}
+
 .list-devices-stats {
 	position: relative;
   display: block;
@@ -1596,4 +1600,9 @@ font-size: 21px;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	margin-bottom: 30px
+}
+
+.basic-input {
+	border: 1px solid #ced4da;
+	color: black;
 }

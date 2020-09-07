@@ -45,7 +45,7 @@ class tpe:
         stripe_id = tpe.__getcus(user_id)
         if stripe_id is None:
             return [True, {"cards": []}, None]
-        cards = stripe.Customer.retrieve(stripe_id)["sources"]["data"]
+        cards = stripe.Customer.list_sources(stripe_id)
         return [True, {"cards": tpe.__formatcards(cards)}, None]
 
     def pay(amount, source, user_id):
@@ -95,6 +95,59 @@ class tpe:
         except:
             return [False, "Invalid pay id", 401]
         return tpe.paymentdetails(chr_token)
+
+    def addaddress(address, user_id):
+        if len(address["name"]) > 50 or len(address["country"]) > 30 or len(address["city"]) > 30 or\
+            len(address["address"]) > 100 or len(address["complement"]) > 100 or len(address["postal_code"]) > 5:
+            return [False, "The length of an input is too long", 500]
+        if not address["postal_code"].isnumeric():
+            return [False, "Postal code needs to be numeric", 500]
+        succes = False
+        try:
+            succes = sql.input("INSERT INTO `addresses` (`user_id`, `name`, `country`, `city`, `address`, `complement`, `postal_code`) VALUES (%s, %s, %s, %s, %s, %s, %s)", \
+                (user_id, address['name'], address["country"], address["city"], address["address"], address["complement"], address["postal_code"]))
+        except Exception as e:
+            return [False, str(e), 500]
+        if not succes:
+            return [False, "Data input error", 500]
+        return [True, {"address": address}, None]
+
+    def deladdress(address_id):
+        try:
+            deleted = sql.input("DELETE FROM `addresses` WHERE `id` = %s", (address_id))
+        except:
+            return [False, "Invalid address id", 404]
+        return [True, {"deleted": deleted}, None]
+
+    def listaddresses(user_id):
+        addresses = []
+        res = sql.get("SELECT * FROM `addresses` WHERE `user_id` = %s", (user_id))
+        for i in res:
+            addresses.append({
+                "id": i[0],
+                "name": i[2],
+                "country": i[3],
+                "city": i[4],
+                "address": i[5],
+                "complement": i[6],
+                "postal_code": i[7]
+            })
+        return [True, {"addresses": addresses}, None]
+
+    def getaddress(user_id, address_id):
+        res = sql.get("SELECT * FROM `addresses` WHERE `user_id` = %s AND `id` = %s", (user_id, address_id))
+        if len(res) == 0:
+            return [False, "Invalid address id / user id match", 400]
+        address ={
+            "id": res[0][0],
+            "name": res[0][2],
+            "country": res[0][3],
+            "city": res[0][4],
+            "address": res[0][5],
+            "complement": res[0][6],
+            "postal_code": res[0][7]
+        }
+        return [True, {"address": address}, None]
 
     def __getcus(user_id):
         res = sql.get("SELECT `stripe_id` FROM `userstripes` WHERE `user_id` = %s", (user_id))

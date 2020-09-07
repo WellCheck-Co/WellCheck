@@ -41,7 +41,7 @@ let compModBilling = {
   },
 
   mounted(){
-    this.stripe = Stripe(`pk_live_342u3Fth66OBYoQH5n4bHB3Z`),
+    this.stripe = Stripe(`pk_test_51HNFqIG0ojBoDfME0Evors7Kcf5WwPG5ldVASvXaD6rV5rKIF8yrLD6HElonTZecBBItfGihuXkogGiqivSWRkLe00sxJDtgEA`),
     elements = this.stripe.elements(),
     style = {
       base: {
