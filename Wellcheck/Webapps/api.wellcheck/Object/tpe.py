@@ -22,7 +22,10 @@ class tpe:
             (user_id, customer["id"]))
             if not succes:
                 return [False, "data input error", 500]
-            card = customer["sources"]["data"][0]
+            card = stripe.Customer.retrieve_source(
+                customer.id,
+                customer.default_source,
+            )
         else:
             try:
                 card = stripe.Customer.create_source(stripe_id, source=token)
