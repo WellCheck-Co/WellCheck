@@ -41,7 +41,6 @@ let compModOrders = {
     storeOrder: function(data) {
       if (data != '') {
         this.order = data['order'];
-        console.log(this.order);
         this.getAddress("billing", this.order.details.addresses.billingId);
         this.getAddress("shipping", this.order.details.addresses.shippingId);
         this.page = 1;
@@ -88,9 +87,11 @@ let compModOrders = {
                     <div class="hidemd col-sm-12 col-12 margin5px" for="input2">{{ orders.length > 1 ? "Your orders" : "Your order" }}</div>
                     </br>
                     <div class="col-md-1 hidesms"></div>
-                    <ul class='list-group col-12 modalelist'>
+                    <ul class="list-group col-12 modalelist" style="height: auto;max-height: 400px;">
                       <li v-for="order in orders" class="list-group-item list-group-item-action" v-on:click="getOrder(order.id)">
-                        <div class="row">
+                        <div class="row justify-content-md-center">
+                          <h1 :class="'badge badge-pill badge-' + order.status.color">{{order.status.label}}</h1>
+                          <div class="col-12"></div>
                           <div style="text-align: end" class="hidemd col-3" :for="'id_' + order.id">Identifier :</div>
                           <div style="text-align: left" class="col-9" :id="'id_' + order.id">{{order.id}}</div>
                           <div style="text-align: end" class="hidemd col-3" :for="'date_' + order.id">Date :</div>
@@ -101,7 +102,9 @@ let compModOrders = {
                     </br>
                   </div>
                   <div v-if="page == 1 && order" class="col-12" style="overflow-y: scroll;max-height: 500px;">
-                    <div class="row">
+                    <div class="row justify-content-md-center"">
+                      <h1 :class="'badge badge-pill badge-' + order.status.color">{{order.status.label}}</h1>
+                      <div class="col-12"></div>
                       <div style="text-align: end" class="hidemd col-3" :for="'id_' + order.id">Identifier :</div>
                       <div style="text-align: left" class="col-9" :id="'id_' + order.id">{{order.id}}</div>
                       <div class="sepinput"></div>
@@ -124,7 +127,7 @@ let compModOrders = {
                       </div>
                       <div class="sepinput"></div>
                     </div>
-                    <div class="row">
+                    <div class="row" v-if="shippingAddress">
                       <div class="sepinput"></div>
                       <div class="col-12">
                         <h2 style="text-alignment: center;font-weight: bold;">Shipping address</h2>

@@ -19,6 +19,13 @@ CREATE TABLE `addresses` (
   `postal_code` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+CREATE TABLE `order_status` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `label` varchar(50) NOT NULL,
+  `color` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `orderdetails` (
   `id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
@@ -29,6 +36,7 @@ CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `payment_id` varchar(64) NOT NULL,
+  `status_id` int(11) NOT NULL,
   `date` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -83,6 +91,9 @@ CREATE TABLE `userstripes` (
 ALTER TABLE `addresses`
   ADD PRIMARY KEY (`id`);
 
+ALTER TABLE `order_status`
+  ADD PRIMARY KEY (`id`);
+
 ALTER TABLE `orderdetails`
   ADD PRIMARY KEY (`id`);
 
@@ -106,6 +117,9 @@ ALTER TABLE `userstripes`
 ALTER TABLE `addresses`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `order_status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `orderdetails`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -123,6 +137,14 @@ ALTER TABLE `userdetails`
 
 ALTER TABLE `userstripes`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+INSERT INTO `order_status` (`name`, `label`, `color`) VALUES
+("toValidate", "Waiting for validation", "warning"),
+("processing", "Being processed", "info"),
+("sent", "Package sent", "primary"),
+("processed", "Finalized", "success"),
+("canceled", "Canceled", "danger");
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
