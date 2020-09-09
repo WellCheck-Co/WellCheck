@@ -8,6 +8,16 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+CREATE TABLE `addresses` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `country` varchar(30) NOT NULL,
+  `city` varchar(30) NOT NULL,
+  `address` varchar(100) NOT NULL,
+  `complement` varchar(100),
+  `postal_code` varchar(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `orderdetails` (
   `id` int(11) NOT NULL,
@@ -70,6 +80,9 @@ CREATE TABLE `userstripes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+ALTER TABLE `addresses`
+  ADD PRIMARY KEY (`id`);
+
 ALTER TABLE `orderdetails`
   ADD PRIMARY KEY (`id`);
 
@@ -90,6 +103,8 @@ ALTER TABLE `userstripes`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `user_id` (`user_id`);
 
+ALTER TABLE `addresses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `orderdetails`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

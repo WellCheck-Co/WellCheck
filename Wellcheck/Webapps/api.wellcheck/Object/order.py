@@ -3,6 +3,7 @@ import time
 from .sql import sql
 from .tpe import tpe
 import jwt
+from datetime import datetime
 
 class order:
     def do_order(user_id, pay_id, details):
@@ -34,17 +35,18 @@ class order:
         for i in res:
             orders.append({
                 "id": i[0],
-                "date": i[1]
+                "date": datetime.fromtimestamp(float(i[1]) / 1000.0).strftime("%Y-%m-%d %I:%M%p")
             })
         return [True, {"orders": orders}, None]
 
     def orderdetails(user_id, order_id):
         order = {}
-        res = sql.get("SELECT `date`, `payment_id` FROM `orders` WHERE `id` = %s AND user_id = %s", (order_id, user_id))
+        res = sql.get("SELECT `id`, `date`, `payment_id` FROM `orders` WHERE `id` = %s AND user_id = %s", (order_id, user_id))
         if len(res) == 0:
             return [False, "Invalid order id / user id match", 400]
-        order["date"] = res[0][0]
-        order["payment"] = res[0][1]
+        order["id"] = res[0][0]
+        order["date"] = datetime.fromtimestamp(float(res[0][1]) / 1000.0).strftime("%Y-%m-%d %I:%M%p")
+        order["payment"] = res[0][2]
         res = sql.get("SELECT `json` FROM `orderdetails` WHERE `order_id` = %s", (order_id))
         if len(res) == 0:
             return [False, "Invalid order id", 400]
@@ -55,7 +57,7 @@ class order:
     def gettoken(res):
         secret =  "ijshzgoubzsdogbzosengozwsbdg9ouigubnzwsoeg"
         ret = jwt.encode(res, str(secret)).decode('utf-8')
-        return ret
+        return [True, ret, None]
 
     def tokendata(token = None):
         secret = "ijshzgoubzsdogbzosengozwsbdg9ouigubnzwsoeg"

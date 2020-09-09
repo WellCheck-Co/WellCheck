@@ -177,6 +177,15 @@ def emulate(cn, nextc):
     err = sim.calc()
     return cn.call_next(nextc, err)
 
+def order_token(cn, nextc):
+    err = check.contain(cn.pr, ["order"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    err = order.gettoken(cn.pr["order"])
+    return cn.call_next(nextc, err)
+
 def point_add(cn, nextc):
     err = check.contain(cn.pr, ["id_sig"])
     if not err[0]:
@@ -299,4 +308,38 @@ def gettokenadm(cn, nextc):
 
     use = user(cn.pr["usr_id"])
     err = use.gettoken()
+    return cn.call_next(nextc, err)
+
+def add_address(cn, nextc):
+    err = check.contain(cn.pr, ["address"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    use = cn.private["user"]
+    err = tpe.addaddress(cn.pr["address"], use.id)
+    return cn.call_next(nextc, err)
+
+def list_addresses(cn, nextc):
+    use = cn.private["user"]
+    err = tpe.listaddresses(use.id)
+    return cn.call_next(nextc, err)
+
+def del_address(cn, nextc):
+    err = check.contain(cn.pr, ["address_id"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    err = tpe.deladdress(cn.pr["address_id"])
+    return cn.call_next(nextc, err)
+
+def get_address(cn, nextc):
+    err = check.contain(cn.pr, ["address_id"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    use = cn.private["user"]
+    err = tpe.getaddress(use.id, cn.pr["address_id"])
     return cn.call_next(nextc, err)

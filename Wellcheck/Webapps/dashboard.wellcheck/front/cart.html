@@ -7,7 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE html>
 <html>
 <head>
-<title>Basket - Wellcheck</title>
+<title>Cart - Wellcheck</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="" />
@@ -33,32 +33,31 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 </head>
 <body>
 	<!-- main -->
-  <div id="stats" style="" class="main-w3layouts wrapper">
+  	<div id="cart" style="" class="main-w3layouts wrapper">
 		<leftnav ref="nav"></leftnav>
 		<mod ref="modal"></mod>
-		<stats id="vuestats" :data=data ref="main"></stats>
+		<cart id="vuecart" :data=data ref="main"></cart>
 		<msg ref="extern"></msg>
 	</div>
 	<!-- //main -->
 	<script src="./js/conf.js"></script>
 	<script src="./js/vue.js"></script>
 	<script src="./js/axios.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-css-donut-chart@1/dist/vcdonut.css">
-  <script src="https://cdn.jsdelivr.net/npm/vue-css-donut-chart@1/dist/vcdonut.umd.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-css-donut-chart@1/dist/vcdonut.css">
+	<script src="https://cdn.jsdelivr.net/npm/vue-css-donut-chart@1/dist/vcdonut.umd.min.js"></script>
+	<script src="https://js.stripe.com/v3/"></script>
 	<script src="./js/commons/comp_messages.js"></script>
-  <script src="./js/commons/comp_warning.js"></script>
-  <script src="./js/commons/comp_container.js"></script>
+	<script src="./js/commons/comp_warning.js"></script>
+	<script src="./js/commons/comp_container.js"></script>
 	<script src="./js/commons/location.js"></script>
 	<script src="./js/commons/cred.js"></script>
 	<script src="./js/commons/user.js"></script>
-  <script src="./js/profil/comp_mod_infos.js"></script>
-  <script src="./js/profil/comp_mod_billing.js"></script>
 	<script src="./js/commons/comp_modale.js"></script>
 	<script src="./js/commons/comp_nav.js"></script>
-  <script src="./js/basket/comp_basket.js"></script>
-	<script src="./js/basket/basket.js"></script>
+	<script src="./js/cart/comp_cart.js"></script>
+	<script src="./js/cart/cart.js"></script>
 </body>
 </html>
