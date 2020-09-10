@@ -1,15 +1,30 @@
-import json, datetime, time
-import jwt
-import hashlib
-import time
-import os
-import re
-import phonenumbers
+import json, datetime, time, jwt
+import hashlib, time, os, re
+import phonenumbers, smtplib
 from .sql import sql
+
+mailer_user = os.getenv("MAILER_USER")
+mailer_pass = os.getenv("MAILER_PASS")
+mailer_host = os.getenv("MAILER_HOST")
+mailer_port = os.getenv("MAILER_PORT")
 
 class user:
     def __init__(self, id = -1):
         self.id = str(id)
+
+    def send_mail(self, message):
+        try:
+            message["To"] = self.getdetails()[1]["email"]
+            message["From"] = mailer_user
+            server = smtplib.SMTP_SSL(mailer_host, mailer_port)
+            server.ehlo()
+            server.login(mailer_user, mailer_pass)
+
+            server.send_message(message, mailer_user, message["To"])
+            server.quit()
+            return [True, {"email_status": "sent"}, None]
+        except:
+            return [False, "Cannot send email, please contact an administrator", 500]
 
     def gettoken(self, id = None):
         id = self.__getid(id, self.id)
@@ -73,20 +88,23 @@ class user:
             return [False, "data input error", 500]
         return [True, {}, None]
 
-    def getdetails(self):
+    def getdetails(self, user_id = None):
+        if user_id is None:
+            user_id = self.id
         details = {
+        "id": user_id,
         "email": None,
         "firstname": None,
         "lastname": None,
         "phone": None,
         "date": None
         }
-        res = sql.get("SELECT `fname`, `lname`, `phone` FROM `userdetails` WHERE `user_id` = %s", (self.id))
+        res = sql.get("SELECT `fname`, `lname`, `phone` FROM `userdetails` WHERE `user_id` = %s", (user_id))
         if len(res) > 0:
             details["firstname"] = str(res[0][0])
             details["lastname"] = str(res[0][1])
             details["phone"] = str(res[0][2])
-        res = sql.get("SELECT `email`, `date` FROM `user` WHERE `id` = %s", (self.id))
+        res = sql.get("SELECT `email`, `date` FROM `user` WHERE `id` = %s", (user_id))
         if len(res) > 0:
             details["email"] = str(res[0][0])
             details["date"] = str(res[0][1])

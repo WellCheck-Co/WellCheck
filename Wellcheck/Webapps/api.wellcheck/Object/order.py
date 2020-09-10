@@ -1,9 +1,9 @@
-import json
-import time
+import json, time, uuid, jwt
 from .sql import sql
 from .tpe import tpe
-import jwt
+from .users import user
 from datetime import datetime
+from email.mime.text import MIMEText
 
 class order:
     def do_order(user_id, pay_id, details):
@@ -12,8 +12,9 @@ class order:
             details = json.dumps(details)
         except:
             return [False, "Invalid json", 401]
-        succes = sql.input("INSERT INTO `orders` (`id`, `user_id`, `payment_id`, `status_id`, `date`) VALUES (NULL, %s, %s, %s, %s)", \
-        (user_id, pay_id, order.getstatus("toValidate")[1]["id"], date))
+        uid = str(uuid.uuid4()).upper().split("-")
+        succes = sql.input("INSERT INTO `orders` (`id`, `user_id`, `payment_id`, `status_id`, `date`) VALUES (%s, %s, %s, %s, %s)", \
+        (uid[4], user_id, pay_id, order.getstatus("toValidate")[1]["id"], date))
         if not succes:
             return [False, "data input error12", 500]
         res = sql.get("SELECT `id`  FROM `orders` WHERE `user_id` = %s AND `date` = %s", (user_id, date))
@@ -29,15 +30,17 @@ class order:
             return [False, "data input error", 500]
         return [True, {"order_id": order_id}, None]
 
-    def orders(user_id):
-        res = sql.get("SELECT `id`, `date`, `status_id`  FROM `orders` WHERE `user_id` = %s", (user_id))
+    def orders(user_id = None, toValidate = False):
+        if toValidate:
+            status = order.getstatus("toValidate")[1]
+        param = status["id"] if toValidate else user_id
+        query = "SELECT `id` FROM `orders` WHERE `"+("status" if toValidate else "user")+"_id` = %s"
+        res = sql.get(query, (param))
         orders = []
         for i in res:
-            orders.append({
-                "id": i[0],
-                "date": datetime.fromtimestamp(float(i[1]) / 1000.0).strftime("%Y-%m-%d %I:%M%p"),
-                "status": order.getstatus(i[2])[1]
-            })
+            orderDetail = order.orderdetails(i[0])
+            if orderDetail[0]:
+                orders.append(orderDetail[1]['order'])
         return [True, {"orders": orders}, None]
 
     def getstatus(status_id_or_name):
@@ -53,20 +56,22 @@ class order:
         }
         return [True, status, None]
 
-    def orderdetails(user_id, order_id):
+    def orderdetails(order_id):
         orderObj = {}
-        res = sql.get("SELECT `id`, `date`, `payment_id`, `status_id` FROM `orders` WHERE `id` = %s AND user_id = %s", (order_id, user_id))
+        res = sql.get("SELECT `id`, `date`, `user_id`, `payment_id`, `status_id` FROM `orders` WHERE `id` = %s", (order_id))
         if len(res) == 0:
-            return [False, "Invalid order id / user id match", 400]
+            return [False, "Invalid order id", 400]
         orderObj["id"] = res[0][0]
         orderObj["date"] = datetime.fromtimestamp(float(res[0][1]) / 1000.0).strftime("%Y-%m-%d %I:%M%p")
-        orderObj["payment"] = res[0][2]
-        orderObj["status"] = order.getstatus(res[0][3])[1]
+        orderObj["user"] = res[0][2]
+        orderObj["payment"] = res[0][3]
+        orderObj["status"] = order.getstatus(res[0][4])[1]
         res = sql.get("SELECT `json` FROM `orderdetails` WHERE `order_id` = %s", (order_id))
         if len(res) == 0:
             return [False, "Invalid order id", 400]
         orderObj["details"] = json.loads(res[0][0])
         orderObj["payment"] = tpe.fromid(orderObj["payment"])[1]
+        orderObj["user"] = user.getdetails(None, orderObj["user"])[1]
         return [True, {"order": orderObj}, None]
 
     def gettoken(res):
@@ -82,3 +87,32 @@ class order:
         except:
             return  [False, "Invalid usr_token", 403]
         return [True, decoded, None]
+
+    def send_mail(user_id, order_id, status, ukeys = None):
+        text = "<h1>Your order "+order_id+" has been "+status+"</h1><br/>"
+        if status == "accepted":
+            idAndUkeys = ""
+            style = """ style="border: 1px solid black;padding: 10px;">"""
+            for floteur_id, ukey in ukeys.items():
+                idAndUkeys += """<tr"""+style+"""
+                    <td"""+style + floteur_id + """</td>
+                    <td"""+style + ukey + """</td>
+                </tr>"""
+            text += """<br/>
+            <table style="border-collapse: collapse;border: 1px solid black;">
+                <tr"""+style+"""
+                    <th"""+style+"""Device Id</th>
+                    <th"""+style+"""Device Key</th>
+                </tr>
+                """+idAndUkeys+"""
+            </table>"""
+        elif status == "rejected":
+            text += "<span>Please contact an administrator if you want more informations</span>"
+        elif status == "confirmed":
+            text += "<span>You can have more details in your dashboard (Section 'Your profile' > 'Orders')</span>"
+        else:
+            return [False, "Invalid status", 404]
+        use = user(user_id)
+        msg = MIMEText(text, 'html')
+        msg['Subject'] = "[Wellcheck] - Order " + status
+        return use.send_mail(msg)

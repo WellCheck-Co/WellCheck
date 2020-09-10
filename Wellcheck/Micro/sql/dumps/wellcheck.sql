@@ -20,7 +20,7 @@ CREATE TABLE `addresses` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `order_status` (
-  `id` int(11) NOT NULL,
+  `id` varchar(12) NOT NULL UNIQUE,
   `name` varchar(50) NOT NULL,
   `label` varchar(50) NOT NULL,
   `color` varchar(50) NOT NULL
@@ -28,7 +28,7 @@ CREATE TABLE `order_status` (
 
 CREATE TABLE `orderdetails` (
   `id` int(11) NOT NULL,
-  `order_id` int(11) NOT NULL,
+  `order_id` varchar(12) NOT NULL,
   `json` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -49,12 +49,14 @@ CREATE TABLE `paymentstripe` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `point` (
-  `id` varchar(36) NOT NULL,
+  `id` varchar(8) NOT NULL UNIQUE,
   `id_user` int(11) NOT NULL,
-  `id_sig` int(11) NOT NULL,
+  `id_sigfox` varchar(50) NOT NULL,
+  `ukey` varchar(4) NOT NULL,
   `name` varchar(60) NOT NULL,
   `surname` varchar(60) NOT NULL,
-  `date` varchar(30) NOT NULL
+  `date` varchar(30) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `point_shared` (
@@ -123,9 +125,6 @@ ALTER TABLE `order_status`
 ALTER TABLE `orderdetails`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 ALTER TABLE `paymentstripe`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -143,7 +142,7 @@ INSERT INTO `order_status` (`name`, `label`, `color`) VALUES
 ("processing", "Being processed", "info"),
 ("sent", "Package sent", "primary"),
 ("processed", "Finalized", "success"),
-("canceled", "Canceled", "danger");
+("rejected", "Rejected", "danger");
 
 COMMIT;
 
