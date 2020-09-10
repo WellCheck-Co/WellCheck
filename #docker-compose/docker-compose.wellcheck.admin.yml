@@ -63,10 +63,12 @@ services:
         - ../Wellcheck/Admin/front:/script:ro
         - ../Wellcheck/Admin/services/goaccess/front:/stats:ro
         - ../Wellcheck/Admin/services/contact:/contact:ro
+        - ../Wellcheck/Admin/services/orders:/orders:ro
       networks:
         - proxy
       environment:
         API_ADM: ${API_ADM}
+        API_HOST: ${METHOD}://api.${DOMAIN}/
 
    admin:
     image: nginx
