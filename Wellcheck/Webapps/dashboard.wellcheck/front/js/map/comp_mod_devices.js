@@ -44,7 +44,7 @@ let compModDevices = {
     addTest: function(){
       let data = {}
       data['headers'] = cred.methods.get_headers()
-      data['data'] = {"id_sig": -1, "lng": vm.$refs.main.$mapObject.center.lng(), "lat": vm.$refs.main.$mapObject.center.lat()}
+      data['data'] = {"id_sigfox": -1, "lng": vm.$refs.main.$mapObject.center.lng(), "lat": vm.$refs.main.$mapObject.center.lat()}
       user.methods.send('point/add', data, this.infos);
     },
     infos: function(res) {
@@ -165,7 +165,7 @@ let compModAdd_a_device = {
     adddevice: function(){
       let data = {}
       data['headers'] = cred.methods.get_headers()
-      data['data'] = {"id_sig": this.uid}
+      data['data'] = {"id_sigfox": this.uid}
       user.methods.send('point/add', data, this.infos);
     }
   },

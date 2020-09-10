@@ -20,7 +20,7 @@ class autodata:
               temp = data["temp"] if "temp" in data else 5
               temp = autodata.upval(temp, 0.3, 1, 25, 1)
               input={
-                "id_sig": point_data[str(i)][0]['id_sig'],
+                "id_sigfox": point_data[str(i)][0]['id_sigfox'],
                 "id_point": i,
                 'data': {
                    'data': {
@@ -55,7 +55,7 @@ class autodata:
                             "top_sales_hits": {
                               "top_hits": {
                                 "sort": [{"date": {"order": "desc"}}],
-                                "_source": {"includes": [ "date", "data", "id_sig" ]},
+                                "_source": {"includes": [ "date", "data", "id_sigfox" ]},
                                 "size" : 1
                               }
                             }
@@ -75,13 +75,13 @@ class autodata:
             for i2 in i["top_sales_hits"]["hits"]["hits"]:
                 if "date" in i2["_source"]:
                     i2["_source"]["date"] = str(i2["_source"]["date"])
-                if "id_sig" in i2["_source"]:
-                    i2["_source"]["id_sig"] = str(i2["_source"]["id_sig"])
+                if "id_sigfox" in i2["_source"]:
+                    i2["_source"]["id_sigfox"] = str(i2["_source"]["id_sigfox"])
                 ret[str(i["key"])].append(i2["_source"])
         return ret
 
     def get_points():
-        res =  autodata.get("SELECT id FROM `point` WHERE id_sig = -1", ())
+        res =  autodata.get("SELECT id FROM `point` WHERE id_sigfox = -1", ())
         points = []
         for i in res:
             points.append(i[0])

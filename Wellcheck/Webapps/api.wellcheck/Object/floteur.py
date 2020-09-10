@@ -12,30 +12,33 @@ class floteur:
     def __init__(self, usr_id = -1):
         self.usr_id = str(usr_id)
 
-    def add(self, id_sig, lat = None, lng = None):
-        id_sig = str(id_sig)
-        if (id_sig == "-1"):
+    def add(self, id_sigfox, lat = None, lng = None):
+        id_sigfox = str(id_sigfox)
+        if (id_sigfox == "-1"):
             if lat is None or lng is None:
                 return [False, "Missing lat or lng", 400]
-            number = sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s AND id_sig = -1", (self.usr_id))[0][0]
+            number = sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s AND id_sigfox = -1", (self.usr_id))[0][0]
             if number > 2:
                 return [False, "Can't have more than 3 test devices", 401]
             name = "test_" + str(number + 1)
         else:
             number = sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s", (self.usr_id))[0][0]
             name = "point_" + str(number + 1)
-            return [False, "Invalid Sigfox_id", 400]
+            if id_sigfox != "tmp":
+                return [False, "Invalid Sigfox_id", 400]
         date = str(int(round(time.time() * 1000)))
-        id_point = str(uuid.uuid4())
-        succes = sql.input("INSERT INTO `point` (`id`, `id_user`, `id_sig`, `name`, `surname`, `date`) VALUES (%s, %s, %s, %s, %s, %s)", \
-        (id_point, int(self.usr_id), id_sig, name, name, date))
+        uid = str(uuid.uuid4()).upper().split("-")
+        id_point = uid[0]
+        ukey = uid[1]
+        succes = sql.input("INSERT INTO `point` (`id`, `id_user`, `id_sigfox`, `ukey`, `name`, `surname`, `date`) VALUES (%s, %s, %s, %s, %s, %s, %s)", \
+        (id_point, self.usr_id, id_sigfox, ukey, name, name, date))
         if not succes:
             return [False, "data input error", 500]
-        if id_sig == "-1":
-            id_sig = self.__hash(id_sig)
+        if id_sigfox == "-1":
+            id_sigfox = self.__hash(id_sigfox)
             data = {"data": None, "pos": {"lat": lat, "lng": lng}}
-            input = self.inputrandom(id_point, id_sig, data, date)
-        return [True, {}, None]
+            input = self.inputrandom(id_point, id_sigfox, data, date)
+        return [True, {"ukey": ukey, "floteur_id": id_point}, None]
 
     def delete(self, id_points):
         return
@@ -155,7 +158,7 @@ class floteur:
         return ret
 
     def pdf_report(self, id_points, date_start = None, date_end = None, limit = 10000000):
-        res = sql.get("SELECT `id`, `id_sig`, `name`, `surname`, `id_user` FROM `point` WHERE id = %s", (id_points[0]))
+        res = sql.get("SELECT `id`, `id_sigfox`, `name`, `surname`, `id_user` FROM `point` WHERE id = %s", (id_points[0]))
         ret = {}
         for i in res:
             ret[str(i[0])] = {
@@ -178,7 +181,7 @@ class floteur:
         turb_point = 0 if float(turb) < float(921) else 3
         return float("{0:.1f}".format(ph_point + orp_point + temp_point + turb_point))
 
-    def inputrandom(self, id_point, id_sig, data, date):
+    def inputrandom(self, id_point, id_sigfox, data, date):
         ph = 7
         turbidity = 1000
         redox = 300
@@ -194,10 +197,10 @@ class floteur:
             inputs.append({
               "_index": "point_test",
               "_type": "_doc",
-              "_id": str(id_sig) + str(id_point) + str(i),
+              "_id": str(id_sigfox) + str(id_point) + str(i),
               "_score": 1,
               "_source": {
-                            "id_sig": id_sig,
+                            "id_sigfox": id_sigfox,
                             "id_point": id_point,
                             'data': {
                                'data': {
@@ -215,8 +218,8 @@ class floteur:
         helpers.bulk(es, inputs)
         return inputs[0]
 
-    def adddata(self, data, id_sig, id_point):
-        id_sig = self.__hash(id_sig)
+    def adddata(self, data, id_sigfox, id_point):
+        id_sigfox = self.__hash(id_sigfox)
         id_point = id_point
         date = int(round(time.time() * 1000))
         if "pos" not in data or not data["pos"]:
@@ -224,7 +227,7 @@ class floteur:
         if "lng" not in data['pos'] or "lat" not in data['pos']:
             return [False, "Missing inbex 'lon' or 'lat' inside data.pos", 400]
         input={
-                "id_sig": id_sig,
+                "id_sigfox": id_sigfox,
                 "id_point": id_point,
                 "data": data,
                 "date": date
@@ -265,7 +268,7 @@ class floteur:
         res = []
         if type == "proprietary":
             if details:
-                res = sql.get("SELECT `id`, `id_sig`, `name`, `surname`, `date` FROM `point` WHERE id_user = %s", (self.usr_id))
+                res = sql.get("SELECT `id`, `id_sigfox`, `name`, `surname`, `date` FROM `point` WHERE id_user = %s", (self.usr_id))
                 ret = {}
                 for i in res:
                     ret[str(i[0])] = {
@@ -282,7 +285,7 @@ class floteur:
                     ret.append(i[0])
         elif type == "shared":
             if details:
-                res = sql.get("SELECT point.id, point.id_sig, point.name, point_shared.surname, point_shared.date FROM `point_shared` INNER JOIN `point` ON `id_point` = point.id WHERE point_shared.id_user = %s", (self.usr_id))
+                res = sql.get("SELECT point.id, point.id_sigfox, point.name, point_shared.surname, point_shared.date FROM `point_shared` INNER JOIN `point` ON `id_point` = point.id WHERE point_shared.id_user = %s", (self.usr_id))
                 ret = {}
                 for i in res:
                     ret[str(i[0])] = {

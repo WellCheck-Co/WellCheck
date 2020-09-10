@@ -36,6 +36,7 @@
       <a onclick="switchiframe('./elastic/')" class="choice list-group-item list-group-item-action bg-light">Elasticsearch</a>
       <a onclick="switchiframe('./phpmyadmin/')" class="choice list-group-item list-group-item-action bg-light">SQL</a>
       <a onclick="switchiframe('./contact/')" class="choice list-group-item list-group-item-action bg-light">Contacts</a>
+      <a onclick="switchiframe('./orders/')" class="choice list-group-item list-group-item-action bg-light">Orders</a>
     </div>
   </div>
   <!-- /#sidebar-wrapper -->
