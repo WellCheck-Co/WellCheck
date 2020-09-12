@@ -1,0 +1,6 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target" : { "namespace": "android_app", "package_name": "fr.wellcheck.dashboard.twa",
+                   "sha256_cert_fingerprints": ["21:BA:81:EF:AD:8C:2C:96:56:06:A5:92:C8:BE:4C:73:DA:E4:D6:4D:F0:5C:D2:6B:01:2D:D7:1D:58:FC:EA:E7"] }
+    }]
+

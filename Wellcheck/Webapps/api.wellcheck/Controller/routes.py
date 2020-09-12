@@ -37,6 +37,8 @@ def setuproute(app, call):
     @app.route('/admin/login/',     ['OPTIONS', 'POST'],        lambda x = None: call([admtoken])                                               )
     @app.route('/admin/allusers/',  ['OPTIONS', 'GET'],         lambda x = None: call([authadmin, all_users])                                   )
     @app.route('/admin/spoof/',     ['OPTIONS', 'POST'],        lambda x = None: call([authadmin, gettokenadm])                                 )
-    @app.route('/data/add/',        ['OPTIONS', 'POST'],        lambda x = None: call([authadmin, data_add])                                    )
+    @app.route('/data/add/',        ['OPTIONS', 'POST'],        lambda x = None: call([data_add])                                               )
+    @app.route('/sigfox', 	    ['OPTIONS', 'GET'], 	lambda x = None: call([sigfox_data_get])                                        )
+    @app.route('/sigfox',           ['OPTIONS', 'POST'],        lambda x = None: call([sigfox_data_add])                                        )
     def base():
         return

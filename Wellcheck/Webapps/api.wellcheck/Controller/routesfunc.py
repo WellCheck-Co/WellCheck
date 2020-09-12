@@ -7,6 +7,9 @@ from Object.admin import admin
 from Object.floteur import floteur
 from Object.pdf import pdf_doc
 import json
+import os.path
+import binascii
+from os import path
 
 def getauth(cn, nextc):
     err = check.contain(cn.pr, ["pass"])
@@ -339,4 +342,100 @@ def gettokenadm(cn, nextc):
 
     use = user(cn.pr["usr_id"])
     err = use.gettoken()
+    return cn.call_next(nextc, err)
+
+def sigfox_data_get(cn, nextc):
+    f = open("test.txt", "r")
+    sig_data = json.loads(f.read())
+    f.close()
+    err =  [True, {"last": sig_data}, None]
+    return cn.call_next(nextc, err)
+
+dataTypeBytes = {
+    "Pression": {
+        "bits": 12,
+        "function": lambda x: (x + 8700) / 10,
+        "unit": "hP"
+    },
+"Turbidity": {
+        "bits": 10,
+        "function": lambda x: x * 5 / 1024,
+        "unit": "V"
+    },
+    "Temperature": {
+        "bits": 10,
+        "function": lambda x: x / 10,
+        "unit": "°C"
+    },
+    "GPS_lat": {
+        "bits": 20,
+        "function": lambda x: round(x * (10 / 4)) / 10000,
+        "unit": "°"
+    },
+    "GPS_long": {
+        "bits": 19,
+        "function": lambda x: round(x * (10 / 4)) / 10000,
+        "unit": "°"
+    },
+    "GPS_long_sign": {
+        "bits": 1,
+        "function": lambda x: x,
+        "unit": ""
+    },
+    "GPS_lat_sign": {
+        "bits": 1,
+        "function": lambda x: x,
+        "unit": ""
+    },
+    "pH": {
+        "bits": 7,
+        "function": lambda x: x / 10,
+        "unit": ""
+    },
+    "In Water": {
+        "bits": 1,
+        "function": lambda x: x,
+        "unit": ""
+    },
+    "ORP / RedOx": {
+        "bits": 10,
+        "function": lambda x: round(x * (10 / 2)) - 2000,
+        "unit": ""
+    },
+    "Antenna Battery": {
+        "bits": 2,
+        "function": lambda x: x * 25,
+        "unit": "%"
+    },
+    "Floater Battery": {
+        "bits": 2,
+        "function": lambda x: x * 25,
+        "unit": "%"
+    },
+}
+
+def decompress(data):
+    result = {}
+    binary = "{0:096b}".format(int(data, 16))
+    actualBit = 0
+    for dataType, item in dataTypeBytes.items():
+        print(dataType + " has " + str(item["bits"]) + " bit(s) and begin at bit " + str(actualBit))
+        binaryValue = binary[actualBit:actualBit + item["bits"]]
+        print("Binary value : " + binaryValue)
+        decimalValue = int(binaryValue, 2)
+        print("Decimal value : " + str(decimalValue))
+        value = item["function"](decimalValue)
+        print("Value : " + str(value) + item["unit"])
+        print()
+        actualBit += item["bits"]
+        result[dataType] = value
+    return result
+
+def sigfox_data_add(cn, nextc):
+    f = open("test.txt", "w")
+    if cn.pr and "data" in cn.pr:
+        cn.pr["data"] =  decompress(cn.pr["data"])
+    f.write(json.dumps(cn.pr))
+    f.close()
+    err = [True, {}, None]
     return cn.call_next(nextc, err)

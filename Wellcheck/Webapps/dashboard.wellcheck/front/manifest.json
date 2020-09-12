@@ -1,0 +1,17 @@
+{
+    "name": "Wellcheck",
+    "short_name": "Wellcheck",
+    "start_url": "./login",
+    "display": "fullscreen",
+    "description": "Monitor your water quality using wellcheck floats",
+    "theme_color": "#fcfdfc",
+    "background_color": "#ffffff",
+    "icons": [
+	{
+	    "src": "./imgs/wellcheck_879X879.png",
+	    "sizes": "879x879",
+	    "type": "image/png",
+            "purpose": "any maskable"
+	}
+    ]
+}

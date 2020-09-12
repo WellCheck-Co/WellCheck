@@ -20,8 +20,8 @@ services:
             - ../Proxy/vhost:/etc/nginx/vhost.d
             - ../Proxy/passwd:/etc/nginx/htpasswd
             - ../Proxy/logs/services:/customlogs
-            - ../Proxy/html:/usr/share/nginx/html
-            - ../Proxy/certs:/etc/nginx/certs:ro
+            - ../Proxy/data/html:/usr/share/nginx/html
+            - ../Proxy/data/certs:/etc/nginx/certs:ro
             - /var/run/docker.sock:/tmp/docker.sock:ro
         networks:
             - proxy

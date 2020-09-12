@@ -593,12 +593,18 @@ class floteur:
         n_opt = model["note"]
 
         dat = res["dedup"]["date_range"]["buckets"][0]["per_hour"]["buckets"]
-        min_date = dat[0]["key"]
-        max_date = dat[len(dat) - 1]["key"]
+        if len(dat) != 0:
+            min_date = dat[0]["key"]
+            max_date = dat[len(dat) - 1]["key"]
+        else:
+            max_date = 0
+            min_date = 0
         min_data = res["dedup"]["date_range"]["buckets"][0]["min"]["value"]
+        min_data = d_opt["min_x"] if min_data is  None else min_data
         min_data = d_opt["min_x"] if d_opt["min_x"] < min_data else min_data
         min_data = 0 if min_data < 1 else min_data - 1
         max_data = res["dedup"]["date_range"]["buckets"][0]["max"]["value"]
+        max_data = d_opt["max_x"] if max_data is  None else max_data
         max_data = (d_opt["max_x"] if d_opt["max_x"] > max_data else max_data) + 1
 
         ret1 = {"data": {"data": [], "label": []}, "limits": {"y": {"min": min_date, "max": max_date}, "x": {"min": n_opt["min_x"], "max": n_opt["max_x"]}, "opt": n_opt["opt"]}}
@@ -611,12 +617,18 @@ class floteur:
             i += 1
 
         dat = res["dedup"]["per_day"]["buckets"]
-        min_date = dat[0]["key"]
-        max_date = dat[len(dat) - 1]["key"]
+        if len(dat) != 0:
+            min_date = dat[0]["key"]
+            max_date = dat[len(dat) - 1]["key"]
+        else:
+            max_date = 0
+            min_date = 0
         min_data = res["dedup"]["min"]["value"]
+        min_data = d_opt["min_x"] if min_data is  None else min_data
         min_data = d_opt["min_x"] if d_opt["min_x"] < min_data else min_data
         min_data = 0 if min_data < 1 else min_data - 1
         max_data = res["dedup"]["max"]["value"]
+        max_data = d_opt["max_x"] if max_data is  None else max_data
         max_data = (d_opt["max_x"] if d_opt["max_x"] > max_data else max_data) + 1
 
         ret3 = { data: {"data": [], "limits": {"y": {"min": min_date, "max": max_date}, "x": {"min": min_data, "max": max_data}, "opt": d_opt["opt"]}}}

@@ -25,8 +25,10 @@ class pdf_doc:
     def report(self, floteur, id_points, date_start, date_end):
         data = floteur.pdf_report(id_points, date_start * 1000, date_end * 1000)
         if id_points[0] not in data[1]["data"]:
-            return [False, "no data", 400]
-        size_data = len(data[1]["data"][id_points[0]])
+        #    return [False, "no data", 400]
+            size_data = 0
+        else:
+            size_data = len(data[1]["data"][id_points[0]])
         total_page = round((size_data - 29) / 40 + 1)
         total_page = total_page if total_page > 0 else 1
         id_doc = str(uuid.uuid4())

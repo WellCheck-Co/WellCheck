@@ -451,10 +451,21 @@ methods: {
          this.charts["chart3"].config.data.datasets[0].label = this.received[0]
          this.charts["chart3"].update();
          this.request = 1;
+         this.up_size();
+         console.log(this.charts["chart2"].options);
        }
        this.received[1] = 1
     }
   },
+  up_size: function(){
+    if (window.innerWidth < 500){
+      this.charts["chart0"].options.legend.display = false;
+      this.charts["chart0"].update();
+    } else {
+      this.charts["chart0"].options.legend.display = true;
+      this.charts["chart0"].update();
+    }
+  }
 },
 
 mounted(){
@@ -462,6 +473,8 @@ mounted(){
   this.create1();
   this.create2();
   this.create3();
+  this.up_size();
+  window.addEventListener('resize', this.up_size);
 },
 
 template: `
@@ -548,7 +561,7 @@ template: `
                                   <td><pre style="margin-bottom: 0">{{ data.data.data.turbidity }}</pre></td>
                                 </tr>
                               </table>
-                                <div class="wc-button" style="width: 275px; margin-top: 20px;" v-on:click=reportlist> Reports for this device </div>
+                                <div class="wc-button" style="width: 120px;margin-top: 20px;" v-on:click=reportlist> Reports </div>
                     </container>
                   </div>
                   </div>
