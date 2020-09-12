@@ -1,6 +1,8 @@
 Vue.use(vcdonut.default);
 Vue.component('compModInfos', compModInfos);
 Vue.component('compModPassword', compModPassword);
+Vue.component('compModBilling', compModBilling);
+Vue.component('compModOrders', compModOrders);
 
 let vm = new Vue({
     el: '#profile',

@@ -165,6 +165,8 @@ def pay(cn, nextc):
 def ordering(cn, nextc):
     use = cn.private["user"]
     err = order.do_order(use.id, cn.private["pay_id"], cn.private["cmd"])
+    if err[0]:
+        cn.private["order_id"] = err[1]["order_id"]
     return cn.call_next(nextc, err)
 
 def payments(cn, nextc):
@@ -188,8 +190,7 @@ def orderdetails(cn, nextc):
         return cn.toret.add_error(err[1], err[2])
     cn.pr = err[1]
 
-    use = cn.private["user"]
-    err = order.orderdetails(use.id, cn.pr["order_id"])
+    err = order.orderdetails(cn.pr["order_id"])
     return cn.call_next(nextc, err)
 
 def history(cn, nextc):
@@ -206,15 +207,24 @@ def emulate(cn, nextc):
     err = sim.calc()
     return cn.call_next(nextc, err)
 
+def order_token(cn, nextc):
+    err = check.contain(cn.pr, ["order"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    err = order.gettoken(cn.pr["order"])
+    return cn.call_next(nextc, err)
+
 def point_add(cn, nextc):
-    err = check.contain(cn.pr, ["id_sig"])
+    err = check.contain(cn.pr, ["id_sigfox"])
     if not err[0]:
         return cn.toret.add_error(err[1], err[2])
     cn.pr = err[1]
     cn.pr = check.setnoneopt(cn.pr, ["lng", "lat"])
 
     use = floteur(cn.private["user"].id)
-    err = use.add(cn.pr["id_sig"], cn.pr["lat"], cn.pr["lng"])
+    err = use.add(cn.pr["id_sigfox"], cn.pr["lat"], cn.pr["lng"])
     return cn.call_next(nextc, err)
 
 def point_share(cn, nextc):
@@ -438,4 +448,84 @@ def sigfox_data_add(cn, nextc):
     f.write(json.dumps(cn.pr))
     f.close()
     err = [True, {}, None]
+    return cn.call_next(nextc, err)
+
+def add_address(cn, nextc):
+    err = check.contain(cn.pr, ["address"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    use = cn.private["user"]
+    err = tpe.addaddress(cn.pr["address"], use.id)
+    return cn.call_next(nextc, err)
+
+def list_addresses(cn, nextc):
+    use = cn.private["user"]
+    err = tpe.listaddresses(use.id)
+    return cn.call_next(nextc, err)
+
+def del_address(cn, nextc):
+    err = check.contain(cn.pr, ["address_id"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    err = tpe.deladdress(cn.pr["address_id"])
+    return cn.call_next(nextc, err)
+
+def get_address(cn, nextc):
+    err = check.contain(cn.pr, ["address_id"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    use = cn.private["user"]
+    err = tpe.getaddress(use.id, cn.pr["address_id"])
+    return cn.call_next(nextc, err)
+
+def get_new_orders(cn, nextc):
+    err = order.orders(None, True)
+    return cn.call_next(nextc, err)
+
+def accept_order(cn, nextc):
+    err = check.contain(cn.pr, ["order_id"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    err = admin.accept_or_reject_order(cn.pr["order_id"], True)
+    if err[0]:
+        cn.private["ukeys"] = err[1]["ukeys"]
+    return cn.call_next(nextc, err)
+
+def reject_order(cn, nextc):
+    err = check.contain(cn.pr, ["order_id"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    err = admin.accept_or_reject_order(cn.pr["order_id"], False)
+    return cn.call_next(nextc, err)
+
+def send_mail_accepted(cn, nextc):
+    err = check.contain(cn.pr, ["user_id", "order_id"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    err = order.send_mail(cn.pr["user_id"], cn.pr["order_id"], "accepted", cn.private["ukeys"])
+    return cn.call_next(nextc, err)
+
+def send_mail_rejected(cn, nextc):
+    err = check.contain(cn.pr, ["user_id", "order_id"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+
+    err = order.send_mail(cn.pr["user_id"], cn.pr["order_id"], "rejected")
+    return cn.call_next(nextc, err)
+
+def send_confirm_mail(cn, nextc):
+    err = order.send_mail(cn.private["user"].id, cn.private["order_id"], "confirmed")
     return cn.call_next(nextc, err)

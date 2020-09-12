@@ -639,7 +639,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"id_sig\": -1\n}",
+					"raw": "{\n\t\"id_sigfox\": -1\n}",
 					"options": {
 						"raw": {
 							"language": "json"

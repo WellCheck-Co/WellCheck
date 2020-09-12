@@ -64,9 +64,10 @@ services:
       DB_USER: ${DB_USER}
       DB_PASS: ${DB_PASS}
       STRIPE_PRIV: ${STRIPE_PRIV}
-      SMTP_USER: ${SMTP_USER}
-      SMTP_PASS: ${SMTP_PASS}
-      SMTP_SERVER: ${SMTP_SERVER}
+      MAILER_USER: ${EMAIL}
+      MAILER_PASS: ${EMAIL_PWD}
+      MAILER_HOST: ${MAILER_HOST}
+      MAILER_PORT: ${MAILER_PORT}
 
   map_landing:
     image: nginx

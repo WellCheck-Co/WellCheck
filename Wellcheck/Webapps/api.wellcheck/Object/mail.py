@@ -7,17 +7,17 @@ from Source.email.heb_report import *
 from Source.email.alerte import *
 from Source.email.new_user import *
 
-smtp_user =     str(os.getenv('SMTP_USER', None))
-smtp_pass =     str(os.getenv('SMTP_PASS', None))
-smtp_server =   str(os.getenv('SMTP_SERVER', None))
-
+smtp_user =     str(os.getenv('MAILER_USER', None))
+smtp_pass =     str(os.getenv('MAILER_PASS', None))
+smtp_server =   str(os.getenv('MAILER_HOST', None))
+smtp_port =   str(os.getenv('MAILER_PORT', None))
 
 class Mailer():
     def __init__(self):
         """Open connection to the mail server"""
         self.sender = smtp_user
         self.password = smtp_pass
-        self.server = smtplib.SMTP_SSL(smtp_server, 465)
+        self.server = smtplib.SMTP_SSL(smtp_server, smtp_port)
         self.server.login(self.sender, self.password)
         self.msg = MIMEMultipart()
 

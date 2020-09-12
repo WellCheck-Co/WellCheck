@@ -7,6 +7,8 @@ class auth:
     def gettoken(mypass):
         secret =    str(os.getenv('API_SCRT', '!@ws4RT4ws212@#%'))
         password =  str(os.getenv('API_PASS', 'password'))
+        print(password)
+        print(mypass)
         if mypass == password:
             exp = datetime.datetime.utcnow() + datetime.timedelta(hours=24)
             ret = jwt.encode({'exp': exp, 'password': hash(password + secret)}, secret).decode('utf-8')
