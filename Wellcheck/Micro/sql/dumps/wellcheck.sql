@@ -49,7 +49,7 @@ CREATE TABLE `orderdetails` (
 --
 
 CREATE TABLE `orders` (
-  `id` int(11) NOT NULL,
+  `id` varchar(12) NOT NULL UNIQUE,
   `user_id` int(11) NOT NULL,
   `payment_id` varchar(64) NOT NULL,
   `status_id` int(11) NOT NULL,
