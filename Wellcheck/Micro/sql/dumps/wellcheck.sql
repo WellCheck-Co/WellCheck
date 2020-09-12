@@ -77,7 +77,7 @@ CREATE TABLE `paymentstripe` (
 --
 
 CREATE TABLE `point` (
-  `id` varchar(8) NOT NULL UNIQUE,
+  `id` varchar(8) NOT NULL,
   `id_user` int(11) NOT NULL,
   `id_sigfox` varchar(50) NOT NULL,
   `ukey` varchar(4) NOT NULL,
