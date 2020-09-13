@@ -66,9 +66,6 @@ class Mailer():
         self.msg['To'] = ", ".join(self.to_list)
         self.msg.attach(MIMEText(self.html, 'html'))
         self.msg.attach(MIMEText(self.message, 'plain'))
-        print(self.msg)
-        print(self.msg['From'])
-        print(self.to_list)
         self.server.send_message(self.msg, self.msg['From'], self.to_list)
         self.__close()
         return

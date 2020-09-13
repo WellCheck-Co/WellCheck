@@ -14,7 +14,6 @@ self.addEventListener('install', function(event) {
   );
 });
 self.addEventListener('fetch', function(event) {
- console.log(event)
  if (event.request.method == "GET" && urlsToCache.includes(event.request.url.replace(address, "."))){
   event.respondWith(
     caches.match(event.request)
