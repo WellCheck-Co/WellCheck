@@ -6,7 +6,7 @@
 	$curl = curl_init();
 
 	curl_setopt_array($curl, array(
-		CURLOPT_URL => "map_bck-end:8080/admin/login/",
+		CURLOPT_URL => "$api_host/admin/login/",
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_TIMEOUT => 30,
 		CURLOPT_POST => true,
@@ -20,7 +20,7 @@
 	$admtoken = json_decode(curl_exec($curl))->data->admtoken;
 
 	curl_setopt_array($curl, array(
-		CURLOPT_URL => "map_bck-end:8080/admin/newOrders/",
+		CURLOPT_URL => "$api_host/admin/newOrders/",
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_TIMEOUT => 30,
 		CURLOPT_CUSTOMREQUEST => "GET",
