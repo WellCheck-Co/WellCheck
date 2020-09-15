@@ -14,41 +14,35 @@ class floteur:
     def __init__(self, usr_id=-1):
         self.usr_id = str(usr_id)
 
-    def add(self,
-            id_sig,
-            lat=None,
-            lng=None):
-        """
-            Add a float to a user
-
-            test floats are identified by `id_sig == -1`
-            `lat` and `lng` should be specified if this is a test float
-        """
-        id_sig = str(id_sig)
-        date = self.__time()
-        id_point = str(uuid.uuid4())
-        if (id_sig == "-1"):                                                    #check for test float
-            if lat is None or lng is None:                                      #check for args
+    def add(self, id_sigfox, lat = None, lng = None):
+        id_sigfox = str(id_sigfox)
+        date = str(int(round(time.time() * 1000)))
+        uid = str(uuid.uuid4()).upper().split("-")
+        id_point = uid[0]
+        if (id_sigfox == "-1"):
+            if lat is None or lng is None:
                 return [False, "Missing lat or lng", 400]
-            number = sql.get("SELECT COUNT(*) \
-                FROM `point` \
-                WHERE id_user = %s \
-                AND id_sig = -1",
-                (self.usr_id,))[0][0]
-            if number > 2:                                                      #check for max test float
+            number = sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s AND id_sigfox = -1", (self.usr_id))[0][0]
+            if number > 2:
                 return [False, "Can't have more than 3 test devices", 401]
             name = "test_" + str(number + 1)
             data = {"data": None, "pos": {"lat": lat, "lng": lng}}
             input = self.inputrandom(id_point, self.__hash(id_sig), data, date) #input random test data
         else:
-            return [False, "Invalid Sigfox_id", 400]                            #sigfox connection not supported yet
-        succes = sql.input("INSERT INTO `point` \
-            (`id`, `id_user`, `id_sig`, `name`, `surname`, `date`) \
-            VALUES (%s, %s, %s, %s, %s, %s)",
-            (id_point, int(self.usr_id), id_sig, name, name, date))
+            number = sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s", (self.usr_id))[0][0]
+            name = "point_" + str(number + 1)
+            if id_sigfox != "tmp":
+                return [False, "Invalid Sigfox_id", 400]
+        ukey = uid[1]
+        succes = sql.input("INSERT INTO `point` (`id`, `id_user`, `id_sigfox`, `ukey`, `name`, `surname`, `date`) VALUES (%s, %s, %s, %s, %s, %s, %s)", \
+        (id_point, self.usr_id, id_sigfox, ukey, name, name, date))
         if not succes:
             return [False, "data input error", 500]
-        return [True, {}, None]
+        if id_sigfox == "-1":
+            id_sigfox = self.__hash(id_sigfox)
+            data = {"data": None, "pos": {"lat": lat, "lng": lng}}
+            input = self.inputrandom(id_point, id_sigfox, data, date)
+        return [True, {"ukey": ukey, "floteur_id": id_point}, None]
 
     def delete(self,
                id_points):
@@ -257,14 +251,7 @@ class floteur:
         return ret
 
     def pdf_report(self, id_points, date_start = None, date_end = None, limit = 10000000):
-        """
-            return data in order to build a report pdf
-        """
-        res = sql.get("SELECT \
-            `id`, `id_sig`, `name`, `surname`, `id_user` \
-            FROM `point` \
-            WHERE id = %s",
-            (id_points[0],))
+        res = sql.get("SELECT `id`, `id_sigfox`, `name`, `surname`, `id_user` FROM `point` WHERE id = %s", (id_points[0]))
         ret = {}
         for i in res:
             ret[str(i[0])] = {
@@ -290,7 +277,7 @@ class floteur:
         turb_point = 0 if float(turb) < float(921) else 3
         return float("{0:.1f}".format(ph_point + orp_point + temp_point + turb_point))
 
-    def inputrandom(self, id_point, id_sig, data, date):
+    def inputrandom(self, id_point, id_sigfox, data, date):
         """
             input one data set each 15 minutes 1004 times for a given float
         """
@@ -309,10 +296,10 @@ class floteur:
             inputs.append({
               "_index": "point_test",
               "_type": "_doc",
-              "_id": str(id_sig) + str(id_point) + str(i),
+              "_id": str(id_sigfox) + str(id_point) + str(i),
               "_score": 1,
               "_source": {
-                            "id_sig": id_sig,
+                            "id_sigfox": id_sigfox,
                             "id_point": id_point,
                             'data': {
                                'data': {
@@ -330,18 +317,18 @@ class floteur:
         helpers.bulk(es, inputs)
         return inputs[0]
 
-    def adddata(self, id_sig, id_point, ph, turbidity, redox, temp, pos):
+    def adddata(self, id_sigfox, id_point, ph, turbidity, redox, temp, pos):
         """
             add manually a data set for a given float
         """
-        id_sig = self.__hash(id_sig)
+        id_sigfox = self.__hash(id_sigfox)
         id_point = id_point
         date = int(round(time.time() * 1000))
         if "lng" not in pos or "lat" not in pos:
             return [False, "Missing inbex 'lon' or 'lat' inside pos", 400]
         note = self.note(ph, turbidity, redox, temp)
         input={
-                "id_sig": id_sig,
+                "id_sigfox": id_sigfox,
                 "id_point": id_point,
                 'data': {
                    'data': {
@@ -441,11 +428,7 @@ class floteur:
         res = []
         if type == "proprietary":
             if details:
-                res = sql.get("SELECT \
-                    `id`, `id_sig`, `name`, `surname`, `date` \
-                    FROM `point` \
-                    WHERE id_user = %s",
-                    (self.usr_id))
+                res = sql.get("SELECT `id`, `id_sigfox`, `name`, `surname`, `date` FROM `point` WHERE id_user = %s", (self.usr_id))
                 ret = {}
                 for i in res:
                     ret[str(i[0])] = {
@@ -467,7 +450,7 @@ class floteur:
         elif type == "shared":
             if details:
                 res = sql.get("SELECT \
-                    point.id, point.id_sig, point.name, \
+                    point.id, point.id_sigfox, point.name, \
                     point_shared.surname, point_shared.date \
                     FROM `point_shared` \
                     INNER JOIN `point` \

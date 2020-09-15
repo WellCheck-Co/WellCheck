@@ -819,7 +819,8 @@ input.text {
 	text-align: center;
 	-webkit-transition: margin-left 0.5s ease-in-out; /* For Safari 3.1 to 6.0 */
   transition: margin-left 0.5s ease-in-out;
-	box-shadow: 0px 0px 12px 3px rgba(226, 225, 227, 0.5);
+	border-right: 1px solid rgba(226, 225, 227, 0.6);
+	box-shadow: 0px 3px 10px 3px rgba(226, 225, 227, 0.5);
 	width: 200px;
 }
 
@@ -987,32 +988,6 @@ input.text {
 .nav-second-active:hover:before {
 	background-color: #211267;
 	color: #211267;
-}
-
-@media(max-height:800px){
-    .in-nav p {
-        font-size: .7rem;
-	margin-bottom: 0rem;
-    }
-    .sep {
-	 margin-top: 0px;
-	 margin-bottom: 0px;
-     }
-
-     .nav-text {
-	 font-size: 1rem;
-     }
-
-     .nav-second {
-	 font-size: .8rem;
-     }
-
-     .nav-second-active::before {
-	 width: 7px;
-	 height: 7px;
-	 margin-right: 3px;
-	 margin-left: 4px;
-     }
 }
 
 .back {
@@ -1707,6 +1682,10 @@ font-size: 21px;
 	overflow-y: scroll;
 }
 
+#vuecart {
+	overflow-y: scroll;
+}
+
 .list-devices-stats {
 	position: relative;
   display: block;
@@ -1728,4 +1707,9 @@ font-size: 21px;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	margin-bottom: 30px
+}
+
+.basic-input {
+	border: 1px solid #ced4da;
+	color: black;
 }

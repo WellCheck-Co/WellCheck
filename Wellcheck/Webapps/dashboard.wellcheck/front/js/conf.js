@@ -1,4 +1,4 @@
-var address = "wellcheck.fr";
+var address = "localhost";
 var api = "api." + address;
-var method = "https";
+var method = "http";
 var redirect = "/map";

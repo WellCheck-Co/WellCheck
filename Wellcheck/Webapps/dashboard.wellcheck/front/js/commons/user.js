@@ -60,6 +60,10 @@ let user = {
       vm.$refs.extern.check(data, callback, redirect, message)
     },
 
+    test: function() {
+      console.log(vm.$refs.extern);
+    },
+
     error: function(error) {
       vm.$refs.extern.set(String(error), "error")
     },

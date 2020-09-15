@@ -1,5 +1,7 @@
 from .sql import sql
 import json, datetime, time, jwt, os
+from .order import order
+from .floteur import floteur
 
 class admin:
     def gettoken(mypass):
@@ -49,3 +51,20 @@ class admin:
                 details["date"] = str(res[0][1])
             ret.append(details)
         return [True, {"users": ret, "total": len(ret)}, None]
+
+    def accept_or_reject_order(order_id, accepted):
+        status = order.getstatus(("processing" if accepted else "rejected"))[1]
+        succes = sql.input("UPDATE `orders` SET `status_id` = %s WHERE `id` = %s", (status["id"], order_id))
+        if not succes:
+            return [False, "Data input error", 500]
+        if not accepted:
+            return [True, {"order_id": order_id}, None]
+        orderInfos = order.orderdetails(order_id)[1]["order"]
+        devicesNumber = orderInfos["details"]["devicesNumber"]
+        flot = floteur(orderInfos["user"]["id"])
+        ukeys = {}
+        for i in range(int(devicesNumber)):
+            err = flot.add("tmp", 48.8589507, 2.3522)
+            if err[0]:
+                ukeys[err[1]["floteur_id"]] = err[1]["ukey"]
+        return [True, {"ukeys": ukeys}, None]
