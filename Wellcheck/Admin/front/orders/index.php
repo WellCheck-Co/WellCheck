@@ -6,7 +6,7 @@
 	$curl = curl_init();
 
 	curl_setopt_array($curl, array(
-		CURLOPT_URL => "$api_host/admin/login/",
+		CURLOPT_URL => "map_bck-end:8080/admin/login/",
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_TIMEOUT => 30,
 		CURLOPT_POST => true,
@@ -20,7 +20,7 @@
 	$admtoken = json_decode(curl_exec($curl))->data->admtoken;
 
 	curl_setopt_array($curl, array(
-		CURLOPT_URL => "$api_host/admin/newOrders/",
+		CURLOPT_URL => "map_bck-end:8080/admin/newOrders/",
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_TIMEOUT => 30,
 		CURLOPT_CUSTOMREQUEST => "GET",
@@ -86,7 +86,7 @@
 					"order_id": order_id,
 					"user_id": user_id
 				};
-				axios.post(api_host + "admin/validateOrder/", data.data, { headers: data.headers})
+				axios.post(api_host + "/admin/validateOrder/", data.data, { headers: data.headers})
 					  .then(response => {
 						location.reload();
 					})
@@ -99,7 +99,7 @@
 					"order_id": order_id,
 					"user_id": user_id
 				};
-				axios.post(api_host + "admin/rejectOrder/", data.data, { headers: data.headers})
+				axios.post(api_host + "/admin/rejectOrder/", data.data, { headers: data.headers})
           			.then(response => {
 						location.reload();
 					})
