@@ -68,7 +68,7 @@ services:
         - proxy
       environment:
         API_ADM: ${API_ADM}
-        API_HOST: ${METHOD}://api.${DOMAIN}/
+        API_HOST: ${METHOD}://api.${DOMAIN}
 
    admin:
     image: nginx
