@@ -256,7 +256,7 @@ class floteur:
         for i in res:
             ret[str(i[0])] = {
                     "id": i[0],
-                    "sig_id": i[1],
+                    "sigfox_id": i[1],
                     "name": i[2],
                     "surname": i[3],
                     "user_id": i[4]

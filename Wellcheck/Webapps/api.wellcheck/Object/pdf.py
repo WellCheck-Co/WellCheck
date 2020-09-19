@@ -76,7 +76,7 @@ class pdf_doc:
 
         pdf.setFont("Helvetica-Oblique", 12)
         diff = round((int(date_end) - int(date_start)) / 3600 , 1)
-        pdf.drawString(65 * mm, (267 - 54) * mm, str(data[1]["detail"][id_points[0]]["sig_id"]))
+        pdf.drawString(65 * mm, (267 - 54) * mm, str(data[1]["detail"][id_points[0]]["sigfox_id"]))
         pdf.drawString(65 * mm, (267 - 58) * mm, str(data[1]["detail"][id_points[0]]["name"]))
         pdf.drawString(65 * mm, (267 - 62) * mm, str(data[1]["detail"][id_points[0]]["user_id"]))
         pdf.drawString(136 * mm, (267 - 54) * mm, str(datetime.fromtimestamp(int(date_start))))
