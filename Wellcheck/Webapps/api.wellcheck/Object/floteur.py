@@ -27,7 +27,7 @@ class floteur:
                 return [False, "Can't have more than 3 test devices", 401]
             name = "test_" + str(number + 1)
             data = {"data": None, "pos": {"lat": lat, "lng": lng}}
-            input = self.inputrandom(id_point, self.__hash(id_sig), data, date) #input random test data
+            input = self.inputrandom(id_point, self.__hash(id_sigfox), data, date) #input random test data
         else:
             number = sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s", (self.usr_id))[0][0]
             name = "point_" + str(number + 1)
