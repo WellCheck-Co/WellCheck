@@ -26,8 +26,6 @@ class floteur:
             if number > 2:
                 return [False, "Can't have more than 3 test devices", 401]
             name = "test_" + str(number + 1)
-            data = {"data": None, "pos": {"lat": lat, "lng": lng}}
-            input = self.inputrandom(id_point, self.__hash(id_sigfox), data, date) #input random test data
         else:
             number = sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s", (self.usr_id))[0][0]
             name = "point_" + str(number + 1)
@@ -38,10 +36,10 @@ class floteur:
         (id_point, self.usr_id, id_sigfox, ukey, name, name, date))
         if not succes:
             return [False, "data input error", 500]
-        if id_sigfox == "-1":
-            id_sigfox = self.__hash(id_sigfox)
-            data = {"data": None, "pos": {"lat": lat, "lng": lng}}
-            input = self.inputrandom(id_point, id_sigfox, data, date)
+        #if id_sigfox == "-1": for demo
+        id_sigfox = self.__hash(id_sigfox)
+        data = {"data": None, "pos": {"lat": lat, "lng": lng}}
+        input = self.inputrandom(id_point, id_sigfox, data, date)
         return [True, {"ukey": ukey, "floteur_id": id_point}, None]
 
     def delete(self,
@@ -173,7 +171,6 @@ class floteur:
         shardetail = self.__get_point("shared", details=True)
         propdata = self.__infos_query(prop, period_start, period_end, limit)
         shardata = self.__infos_query(shar, period_start, period_end, limit)
-
         ret = {
             "proprietary": [],
             "shared": []

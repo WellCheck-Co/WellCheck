@@ -6,7 +6,8 @@ let compModShare = {
       points: [],
       shared: [],
       already: {},
-      display_test: true
+      display_test: true,
+      disable_test: false
     }
   },
 
@@ -28,7 +29,10 @@ let compModShare = {
       this.display_test = localStorage.testmode == "true" ? true : false;
       this.fshared();
       this.$nextTick(function () {
-          document.querySelector("#c2d.test-checkbox").checked = this.display_test;
+          var cases = document.querySelector("#c2d.test-checkbox")
+          if (cases != void 0){
+          cases.checked = this.display_test;
+          }
       });
     },
     fshared: function() {
@@ -107,9 +111,9 @@ let compModShare = {
                   <div class="col-sm-12 col-12 margin5px">{{ points.length > 1 ? "Your devices (" + points.length + ")" : "Your device" }}
                   <br><small>Test devices : <input id="c2d" type="checkbox" class="test-checkbox" v-on:click="display_test = !display_test"></small></div>
                   <br><br><br>
-                  <div v-for="point in points" v-if="point.test == false || point.test == true && display_test == true" class="pointshare col-md-6 col-sm-6 col-lg-4" :style="already[point.id.toString()] != void 0 || point.test == true ? 'color: rgb(154, 156, 165);background-color: #f5f6fc' : ''">
+                  <div v-for="point in points" v-if="point.test == false || point.test == true && display_test == true " class="pointshare col-md-6 col-sm-6 col-lg-4" :style="already[point.id.toString()] != void 0 || point.test == true ? 'color: rgb(154, 156, 165);background-color: #f5f6fc' : ''">
                     <label for="c2d" class="ml-0 mr-5">{{ point.surname}}</label>
-                    <input id="c2d" type="checkbox" class="ml-5 mr-0" :class="point.test == true ? 'test-checkbox large-checkbox' : ''" v-on:click="switchshare(point.id)" :checked="already[point.id.toString()] != void 0 || point.test == true" :disabled="already[point.id.toString()] != void 0 || point.test == true">
+                    <input id="c2d" type="checkbox" class="ml-5 mr-0" :class="point.test == true && disable_test == true ? 'test-checkbox large-checkbox' : ''" v-on:click="switchshare(point.id)" :checked="already[point.id.toString()] != void 0 || point.test == true && disable_test == true" :disabled="already[point.id.toString()] != void 0 || point.test == true && disable_test == true">
                     <div v-if="already[point.id.toString()] != void 0" style="text-align: center;font-size: 11px;padding: 0px;">
                         Shared {{ already[point.id.toString()][1] | tostr }}
                     </div>
@@ -127,7 +131,10 @@ let compModShare = {
   mounted(){
     this.fshared();
     this.$nextTick(function () {
-        document.querySelector("#c2d.test-checkbox").checked = this.display_test;
+        var cases = document.querySelector("#c2d.test-checkbox")
+        if (cases != void 0){
+          cases.checked = this.display_test;
+        }
     });
   },
   beforeMount(){

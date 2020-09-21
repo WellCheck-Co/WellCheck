@@ -18,7 +18,7 @@ watch:{
   data:function(newd, oldd){
     var i;
     var i2;
-    var arr;
+    var arr = void 0;
     if (this.data["proprietary"].length + this.data["shared"].length == 0){
       this.request = 1;
     }
@@ -31,7 +31,8 @@ watch:{
             this.select(arr);
           }
         }
-      } else if (this.data["shared"].length > 0){
+      }
+      if (this.data["shared"].length > 0){
         for ( i2 = 0; i2 < this.data["shared"].length; i2++) {
           if (this.data["shared"][i2].id == localStorage["selected"]) {
             i =  this.data["shared"][i2]
@@ -41,6 +42,7 @@ watch:{
         }
       }
     }
+    console.log(arr);
     if (oldd == "" && this.selected.length == 0 && arr == void 0){
       if (this.data["proprietary"].length > 0){
         i =  this.data["proprietary"][0]
@@ -527,6 +529,13 @@ template: `
                             <div v-if="!point.data[0]" class="ml-auto mr-0 datelist"> No data </div>
                           </div>
                         </li>
+                        <li v-for="point in data.shared" v-if="point.test == false || point.test == true" v-on:click="select([point.id, point.surname, point.data])" class="list-devices-stats list-group-item-action">
+                          <div class="row">
+                            <div class="ml-1 mr-0"style="text-align: left"> {{ point.surname }}</div>
+                            <div v-if="selected[0] == point.id" class="ml-1 mr-0"style="text-align: left; color: #1C94FE"> &#10004</div>
+                            <div v-if="point.data[0]" class="ml-auto mr-1 datelist"> Up. {{ point.data[0].date  | tostr }} min ago</div>
+                            <div v-if="!point.data[0]" class="ml-auto mr-0 datelist"> No data </div>
+                          </div>                        </li>
                       </ul>
                     </container>
                   </div>

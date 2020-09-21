@@ -74,19 +74,22 @@ let vm = new Vue({
       update: function(){
         var test;
         var last_data;
-        for (var i = 0; i < this.markers['proprietary'].length; i++){
-          if (this.markers['proprietary'][i]["data"].length > 0) {
-            last_data = this.markers['proprietary'][i]["data"][0]
-            this.markers['proprietary'][i]['note'] = 3
-            this.markers['proprietary'][i]["marker"] = {
+        var types = ["proprietary", "shared"];
+        for (var j = 0; j < types.length; j++){
+        var type = types[j];
+        for (var i = 0; i < this.markers[type].length; i++){
+          if (this.markers[type][i]["data"].length > 0) {
+            last_data = this.markers[type][i]["data"][0]
+            this.markers[type][i]['note'] = 3
+            this.markers[type][i]["marker"] = {
                   position: {
                               lat: parseFloat(last_data['data']['pos']['lat']),
                               lng: parseFloat(last_data['data']['pos']['lng'])
                             },
-                  title:this.markers['proprietary'][i]["name"],
-                  data: {'id': this.markers['proprietary'][i]['id'], 'order': i, 'test': this.markers['proprietary'][i]["test"]},
+                  title:this.markers[type][i]["name"],
+                  data: {'id': this.markers[type][i]['id'], 'order': i, 'test': this.markers[type][i]["test"]},
                   icon: {
-                      url: this.buildsvg(this.markers['proprietary'][i]["test"] == true ? 'test' : 'your', this.markers['proprietary'][i]["data"][0]["data"]["data"]['note']), //this.markers['proprietary'][i]["test"] == true ? "./imgs/float.svg" : "./imgs/float.svg", // url
+                      url: this.buildsvg(this.markers[type][i]["test"] == true ? 'test' : 'your', this.markers[type][i]["data"][0]["data"]["data"]['note']), //this.markers['proprietary'][i]["test"] == true ? "./imgs/float.svg" : "./imgs/float.svg", // url
                       scaledSize: {height: 39, i: undefined, j: undefined, width: 39}, // scaled size
                       origin: {x: 0, y: 0} // origin
                   },
@@ -94,25 +97,25 @@ let vm = new Vue({
                     <div class="container">
                       <div class="row">
                         <div class="col-12 col-sm-6" style="margin-top: 5px;">
-                          Name: ` + this.markers['proprietary'][i]['name'] + `
+                          Name: ` + this.markers[type][i]['name'] + `
                         </div>
                         <div class="col-12 col-sm-6" style="margin-top: 5px;">
-                          Surname: ` + this.markers['proprietary'][i]['surname'] + `
+                          <a href="./stats?bindlocal=true&page=Stats&selected=` + this.markers[type][i]['id'] +`&force=true">Go to Stats</a>
                         </div>
                         <div class="col-12 col-sm-6" style="font-size: 11px;margin-top: 5px;">
-                          Since: ` + this.datestr(this.markers['proprietary'][i]['date']) + `
+                          Since: ` + this.datestr(this.markers[type][i]['date']) + `
                         </div>
                         <div class="col-12 col-sm-6" style="font-size: 11px;margin-top: 5px;">
-                          Last report: ` + (this.markers['proprietary'][i]['data'].length > 0 ? this.datestr(this.markers['proprietary'][i]['data'][0]["date"]) : '/' ) + `
+                          Last report: ` + (this.markers[type][i]['data'].length > 0 ? this.datestr(this.markers[type][i]['data'][0]["date"]) : '/' ) + `
                         </div>
                         <div class="col-12 col-sm-12" style="text-align: center; margin-top: 5px;">
-                        Score: ` + (this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] != void 0 ? this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] / 2 : '_' ) + ` / 10
+                        Score: ` + (this.markers[type][i]["data"][0]["data"]["data"]['note'] != void 0 ? this.markers[type][i]["data"][0]["data"]["data"]['note'] / 2 : '_' ) + ` / 10
                         <div class="notebarholder">
                           <div class="notebar" style=" ` + (
-                              this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] != void 0 ?
-                              this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] > 15 ? 'background-color: #03ba00; width: ' + (this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] * 5) + '%;' :
-                              this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] > 10 ? 'background-color: #ff970f; width: ' + (this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] * 5) + '%;' :
-                              'background-color: red; width: ' + ((this.markers['proprietary'][i]["data"][0]["data"]["data"]['note'] + 1) * 5) + '%;' : 'width: 0%' ) + `">
+                              this.markers[type][i]["data"][0]["data"]["data"]['note'] != void 0 ?
+                              this.markers[type][i]["data"][0]["data"]["data"]['note'] > 15 ? 'background-color: #03ba00; width: ' + (this.markers[type][i]["data"][0]["data"]["data"]['note'] * 5) + '%;' :
+                              this.markers[type][i]["data"][0]["data"]["data"]['note'] > 10 ? 'background-color: #ff970f; width: ' + (this.markers[type][i]["data"][0]["data"]["data"]['note'] * 5) + '%;' :
+                              'background-color: red; width: ' + ((this.markers[type][i]["data"][0]["data"]["data"]['note'] + 1) * 5) + '%;' : 'width: 0%' ) + `">
                           </div>
                         </div>
                         </div>
@@ -122,7 +125,7 @@ let vm = new Vue({
                 };
           }
         }
-
+       }
       },
       testpointer: function(d){
         this.testmode = d + "";
