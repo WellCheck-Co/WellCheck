@@ -1265,20 +1265,20 @@ font-size: 21px;
 
 .compinput {
 	color: rgb(74, 79, 98) !important;
-	border: .5px solid rgb(216, 215, 217) !important;
+	border: 1px solid rgb(216, 215, 217) !important;
 	text-align: center;
 	caret-color: rgb(28, 148, 254);
 }
 
 .compinput:focus {
 	box-shadow: 0px 3px 10px 3px rgba(226, 225, 227, 0.5) !important;
-	border: .5px solid rgb(28, 148, 254) !important;
+	border: 1px solid rgb(28, 148, 254) !important;
 	color: rgb(28, 148, 254) !important;
 }
 
 .compinput:hover {
 	box-shadow: 0px 3px 10px 3px rgba(226, 225, 227, 0.5) !important;
-	border: .5px solid rgb(28, 148, 254) !important;
+	border: 1px solid rgb(28, 148, 254) !important;
 }
 
 .sepinput {
