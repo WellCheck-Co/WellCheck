@@ -5,7 +5,9 @@ def setuproute(app, call):
     @app.route('/login/',    	        ['OPTIONS', 'POST'],        lambda x = None: call([getauth])                                     )
 
     @app.route('/signup/',    	        ['OPTIONS', 'POST'],        lambda x = None: call([myauth, signup, signin, gettoken])                               )
+    @app.route('/validate/',    	['OPTIONS', 'POST'],        lambda x = None: call([myauth, verifykey, gettoken])                            )
     @app.route('/signin/',    	        ['OPTIONS', 'POST'],        lambda x = None: call([myauth, signin, gettoken])                                       )
+    @app.route('/password/',    	['OPTIONS', 'POST'],        lambda x = None: call([myauth, authuser, changepassword, gettoken])             )
     @app.route('/renew/',    	        ['OPTIONS', 'GET'],         lambda x = None: call([myauth, authuser, gettoken])                                     )
 
     @app.route('/infos/',    	        ['OPTIONS', 'GET'],         lambda x = None: call([myauth, authuser, infos])                                        )

@@ -1,10 +1,7 @@
 <?php
 $pass = getenv("API_ADM");
-$dat = "'";
-if ($pass != false){
-  $dat .= $pass;
-}
-$dat .= "'";
+$method = getenv("METHOD");
+$host = getenv("DOMAIN");
 ?>
 
 <html>
@@ -112,9 +109,9 @@ $dat .= "'";
     <script src="/js/jquery.dataTables.min.js"></script>
     <script>
 
-      var method = "http://";
-      var host = "localhost";
-      var password = <?= $dat ?>;
+      var method = "<?= $method ?> + ://";
+      var host = "<?= $host ?>";
+      var password = "<?= $pass ?>";
       var token = "";
 
       function get_token(){

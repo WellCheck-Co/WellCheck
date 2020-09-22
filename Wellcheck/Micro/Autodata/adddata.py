@@ -81,7 +81,7 @@ class autodata:
         return ret
 
     def get_points():
-        res =  autodata.get("SELECT id FROM `point` WHERE id_sigfox = -1", ())
+        res =  autodata.get("SELECT id FROM `point` WHERE id_sigfox = -1 OR id_sigfox = '-1'", ())
         points = []
         for i in res:
             points.append(i[0])

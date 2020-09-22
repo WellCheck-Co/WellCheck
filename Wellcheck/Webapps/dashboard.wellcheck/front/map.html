@@ -48,6 +48,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<gmap-info-window :options="infoOptions" :position="infoWindowPos" :opened="infoWinOpen" @closeclick="infoWinOpen=false">
 			</gmap-info-window>
 			<gmap-marker  :key="i" v-for="(m,i) in markers['proprietary']" v-if="m['marker']['data']['test'] == false || (m['marker']['data']['test'] && testmode == 'true')" :position="m['marker'].position" :icon="m['marker'].icon" :clickable="true" @click="toggleInfoWindow(m,i)"></gmap-marker>
+                        <gmap-marker  :key="i" v-for="(m,i) in markers['shared']" v-if="m['marker']['data']['test'] == false || (m['marker']['data']['test'] && testmode == 'true')" :position="m['marker'].position" :icon="m['marker'].icon" :clickable="true" @click="toggleInfoWindow(m,i)"></gmap-marker>
 		</gmap-cluster>
 
 		</gmap-map>

@@ -1,7 +1,9 @@
 <?php
 	$orders = [];
 	$admpassword = getenv("API_ADM");
-	$api_host = getenv("API_HOST");
+	$method = getenv("METHOD");
+	$domain = getenv("DOMAIN");
+	$api_host = "$method://api.$domain/";
 
 	$curl = curl_init();
 
