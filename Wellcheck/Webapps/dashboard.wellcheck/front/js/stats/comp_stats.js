@@ -42,7 +42,6 @@ watch:{
         }
       }
     }
-    console.log(arr);
     if (oldd == "" && this.selected.length == 0 && arr == void 0){
       if (this.data["proprietary"].length > 0){
         i =  this.data["proprietary"][0]
@@ -454,7 +453,6 @@ methods: {
          this.charts["chart3"].update();
          this.request = 1;
          this.up_size();
-         console.log(this.charts["chart2"].options);
        }
        this.received[1] = 1
     }

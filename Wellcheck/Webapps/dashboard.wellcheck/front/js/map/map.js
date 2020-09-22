@@ -173,7 +173,6 @@ let vm = new Vue({
          map.setZoom(position['zoom']);
        }
        this.$refs.main.$on('zoom_changed', function(){
-         console.log(map.getZoom());
          let center = map.getCenter();
          let pos = {'lat': center.lat(), 'lng': center.lng(), 'zoom': map.getZoom()};
          localStorage.position = JSON.stringify(pos);
