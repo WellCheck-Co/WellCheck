@@ -362,42 +362,42 @@ def sigfox_data_get(cn, nextc):
     return cn.call_next(nextc, err)
 
 dataTypeBytes = {
-    "Pression": {
+    "pressure": {
         "bits": 12,
         "function": lambda x: (x + 8700) / 10,
         "unit": "hP"
     },
-"Turbidity": {
+    "turbidity": {
         "bits": 10,
         "function": lambda x: x * 5 / 1024,
         "unit": "V"
     },
-    "Temperature": {
+    "temp": {
         "bits": 10,
         "function": lambda x: x / 10,
         "unit": "°C"
     },
-    "GPS_lat": {
+    "lat": {
         "bits": 20,
         "function": lambda x: round(x * (10 / 4)) / 10000,
         "unit": "°"
     },
-    "GPS_long": {
+    "lng": {
         "bits": 19,
         "function": lambda x: round(x * (10 / 4)) / 10000,
         "unit": "°"
     },
-    "GPS_long_sign": {
+    "lng_sign": {
         "bits": 1,
         "function": lambda x: x,
         "unit": ""
     },
-    "GPS_lat_sign": {
+    "lat_sign": {
         "bits": 1,
         "function": lambda x: x,
         "unit": ""
     },
-    "pH": {
+    "ph": {
         "bits": 7,
         "function": lambda x: x / 10,
         "unit": ""
@@ -407,7 +407,7 @@ dataTypeBytes = {
         "function": lambda x: x,
         "unit": ""
     },
-    "ORP / RedOx": {
+    "redox": {
         "bits": 10,
         "function": lambda x: round(x * (10 / 2)) - 2000,
         "unit": ""
@@ -442,12 +442,23 @@ def decompress(data):
     return result
 
 def sigfox_data_add(cn, nextc):
-    f = open("test.txt", "w")
-    if cn.pr and "data" in cn.pr:
-        cn.pr["data"] =  decompress(cn.pr["data"])
-    f.write(json.dumps(cn.pr))
-    f.close()
-    err = [True, {}, None]
+    err = check.contain(cn.pr, ["data", "device"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+    cn.pr = err[1]
+    decompressed = decompress(cn.pr["data"])
+    if not decompressed["lat_sign"]:
+        decompressed["lat"] = "-" + decompressed["lat"]
+    if not decompressed["lng_sign"]:
+        decompressed["lng"] = "-" + decompressed["lng"]
+    use = floteur()
+    err = use.adddata(cn.pr["device"],
+        "",
+        decompressed["ph"],
+        decompressed["turbidity"],
+        decompressed["redox"],
+        decompressed["temp"],
+        {"lat": decompressed["lat"], "lng": decompressed["lng"]})
     return cn.call_next(nextc, err)
 
 def add_address(cn, nextc):

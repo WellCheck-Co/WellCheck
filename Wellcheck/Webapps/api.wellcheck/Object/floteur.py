@@ -313,13 +313,26 @@ class floteur:
               })
         helpers.bulk(es, inputs)
         return inputs[0]
+    
+    def getIdBySigfoxId(self, id_sigfox):
+        """
+            Get point id from sigfox id
+        """
+        res = sql.get("SELECT `id` FROM `point` WHERE id_sigfox = %s", (id_sigfox))
+        if len(res) <= 0:
+            return [False, "No point found with this sigfox id", 404]
+        return [True, {"point_id": res[0][0]}, None]
 
     def adddata(self, id_sigfox, id_point, ph, turbidity, redox, temp, pos):
         """
             add manually a data set for a given float
         """
+        if id_point == "":
+            id_point = self.getIdBySigfoxId(id_sigfox)
+            if not id_point[0]:
+                return id_point
+            id_point = id_point[1]["point_id"]
         id_sigfox = self.__hash(id_sigfox)
-        id_point = id_point
         date = int(round(time.time() * 1000))
         if "lng" not in pos or "lat" not in pos:
             return [False, "Missing inbex 'lon' or 'lat' inside pos", 400]
