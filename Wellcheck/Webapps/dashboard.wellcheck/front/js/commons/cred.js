@@ -1,6 +1,7 @@
 let cred = {
   methods: {
     usr_cred: function() {
+      console.log(window.location.href);
       let actual = window.location.href.split(address)[1].split('?')[0]
       let get =  this.get_parm()
       if (get["bindlocal"] == "true"){

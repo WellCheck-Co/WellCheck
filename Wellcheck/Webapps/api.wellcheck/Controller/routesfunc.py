@@ -288,7 +288,7 @@ def points_shared(cn, nextc):
     return cn.call_next(nextc, err)
 
 def data_add(cn, nextc):
-    err = check.contain(cn.pr, ["data", "sig_id", "point_id"])
+    err = check.contain(cn.pr, ["data", "sigfox_id", "point_id"])
     if not err[0]:
         return cn.toret.add_error(err[1], err[2])
     cn.pr = err[1]
@@ -302,7 +302,7 @@ def data_add(cn, nextc):
     cn.pr["data"]["data"] = err[1]
 
     use = floteur()
-    err = use.adddata(cn.pr["sig_id"],
+    err = use.adddata(cn.pr["sigfox_id"],
                       cn.pr["point_id"],
                       cn.pr["data"]["data"]["ph"],
                       cn.pr["data"]["data"]["turbidity"],

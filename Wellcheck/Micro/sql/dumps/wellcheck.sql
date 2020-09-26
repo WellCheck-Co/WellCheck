@@ -96,7 +96,7 @@ CREATE TABLE `point` (
 CREATE TABLE `point_shared` (
   `id` varchar(36) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `id_point` int(11) NOT NULL,
+  `id_point` varchar(8) NOT NULL,
   `date` varchar(30) NOT NULL,
   `surname` varchar(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -171,6 +171,12 @@ ALTER TABLE `paymentstripe`
 -- Index pour la table `point`
 --
 ALTER TABLE `point`
+  ADD UNIQUE KEY `id` (`id`);
+
+--
+-- Index pour la table `point_shared`
+--
+ALTER TABLE `point_shared`
   ADD UNIQUE KEY `id` (`id`);
 
 --

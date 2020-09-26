@@ -747,7 +747,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\"data\": {\n\t\"my data\": \"test3\",\n\t\"pos\": {\"lon\": 1, \"lat\": 12}\n},\n\"point_id\": 1,\n\"sig_id\": -1\n}",
+					"raw": "{\n\"data\": {\n\t\"my data\": \"test3\",\n\t\"pos\": {\"lon\": 1, \"lat\": 12}\n},\n\"point_id\": 1,\n\"sigfox_id\": -1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
