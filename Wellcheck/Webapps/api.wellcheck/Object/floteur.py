@@ -261,18 +261,26 @@ class floteur:
         data = self.__infos_query(id_points, date_start, date_end, limit)
         return [True, {"detail": ret, "data": data}, None]
 
-    def note(self, ph, turb, orp, temp):
+    def note(self, ph, turbidity, redox, temp):
         """
             calculate a mark from all mesurement
         """
-        ph_point = 1.4 * 10 ** -32 - 29.3 * ph + 8.19 * ph ** 2 - 0.56 * ph ** 3
-        ph_point = 0 if float(ph_point) < float(0) else 5 if float(ph_point) > float(5) else ph_point
-        orp_point = -3.39 * 10 ** -32 - 0.0846 * turb + 6.73 * 10 ** -4 * turb ** 2 - 1.12 * 10 ** -6 * turb ** 3
-        orp_point = 0 if float(ph_point) < float(0) else 5 if float(ph_point) > float(5) else ph_point
-        temp_point = 5.83 + 0.235 * temp - 0.0241 * temp ** 2
-        temp_point = 0 if float(orp_point) < float(0) else 6 if float(orp_point) > float(6) else orp_point
-        turb_point = 0 if float(turb) < float(921) else 3
-        return float("{0:.1f}".format(ph_point + orp_point + temp_point + turb_point))
+        score = 0
+        if turbidity > 4.5:
+            score += 3
+        if ph > 6.5 and ph < 8.2:
+            phScore = 1.4 * pow(10, -32) -29.3 * ph + 8.19 * pow(ph, 2) - 0.56 * pow(ph, 3)
+            phScore = 0 if phScore < 0 else 5 if phScore > 5 else phScore
+            score += phScore
+        if redox > 220 and redox < 400:
+            redoxScore = -3.39 * pow(10, -32) -0.0846 * redox + 6.73 * pow(10, -4) * pow(redox, 2) - 1.12 * pow(10, -6) * pow(redox, 3)
+            redoxScore = 0 if redoxScore < 0 else 5 if redoxScore > 5 else redoxScore
+            score += redoxScore
+        if temp < 20:
+            tempScore = 5.83 + 0.235 * temp - 0.0241 * pow(temp, 2)
+            tempScore = 0 if tempScore < 0 else 6 if tempScore > 6 else tempScore
+            score += tempScore
+        return float("{0:.1f}".format(score))
 
     def inputrandom(self, id_point, id_sigfox, data, date):
         """
@@ -313,13 +321,26 @@ class floteur:
               })
         helpers.bulk(es, inputs)
         return inputs[0]
+    
+    def getIdBySigfoxId(self, id_sigfox):
+        """
+            Get point id from sigfox id
+        """
+        res = sql.get("SELECT `id` FROM `point` WHERE id_sigfox = %s", (id_sigfox))
+        if len(res) <= 0:
+            return [False, "No point found with this sigfox id", 404]
+        return [True, {"point_id": res[0][0]}, None]
 
     def adddata(self, id_sigfox, id_point, ph, turbidity, redox, temp, pos):
         """
             add manually a data set for a given float
         """
+        if id_point == "":
+            id_point = self.getIdBySigfoxId(id_sigfox)
+            if not id_point[0]:
+                return id_point
+            id_point = id_point[1]["point_id"]
         id_sigfox = self.__hash(id_sigfox)
-        id_point = id_point
         date = int(round(time.time() * 1000))
         if "lng" not in pos or "lat" not in pos:
             return [False, "Missing inbex 'lon' or 'lat' inside pos", 400]
