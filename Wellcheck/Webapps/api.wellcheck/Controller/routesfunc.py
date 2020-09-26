@@ -354,13 +354,6 @@ def gettokenadm(cn, nextc):
     err = use.gettoken()
     return cn.call_next(nextc, err)
 
-def sigfox_data_get(cn, nextc):
-    f = open("test.txt", "r")
-    sig_data = json.loads(f.read())
-    f.close()
-    err =  [True, {"last": sig_data}, None]
-    return cn.call_next(nextc, err)
-
 dataTypeBytes = {
     "pressure": {
         "bits": 12,

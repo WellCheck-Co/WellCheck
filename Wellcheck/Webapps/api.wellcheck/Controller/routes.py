@@ -47,7 +47,6 @@ def setuproute(app, call):
     @app.route('/admin/rejectOrder/',   ['OPTIONS', 'POST'],        lambda x = None: call([authadmin, reject_order, send_mail_rejected])                    )
 
     @app.route('/data/add/',            ['OPTIONS', 'POST'],        lambda x = None: call([data_add])                                                       )
-    @app.route('/sigfox', 	            ['OPTIONS', 'GET'], 	    lambda x = None: call([sigfox_data_get])                                                )
     @app.route('/sigfox',               ['OPTIONS', 'POST'],        lambda x = None: call([sigfox_data_add])                                                )
     def base():
         return
