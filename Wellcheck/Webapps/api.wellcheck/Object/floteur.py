@@ -29,8 +29,8 @@ class floteur:
         else:
             number = sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s", (self.usr_id))[0][0]
             name = "point_" + str(number + 1)
-            if id_sigfox != "tmp":
-                return [False, "Invalid Sigfox_id", 400]
+            #if id_sigfox != "tmp":
+                #return [False, "Invalid Sigfox_id", 400]
         ukey = uid[1]
         succes = sql.input("INSERT INTO `point` (`id`, `id_user`, `id_sigfox`, `ukey`, `name`, `surname`, `date`) VALUES (%s, %s, %s, %s, %s, %s, %s)", \
         (id_point, self.usr_id, id_sigfox, ukey, name, name, date))
@@ -653,6 +653,12 @@ class floteur:
             }
           }
         }
+
+        try:
+            es.indices.create(index="point_test")
+        except Exception as e:
+            pass
+
         es.indices.refresh(index="point_test")
         res = es.search(index="point_test", body=query)
         ret = {}

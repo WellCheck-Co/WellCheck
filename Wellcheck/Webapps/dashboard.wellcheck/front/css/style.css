@@ -1648,13 +1648,11 @@ font-size: 21px;
 
 .inf-content {
 	width: 300px;
-	height: 80px;
 }
 
 @media(max-width:576px){
 	.inf-content {
 		width: 200px;
-		height: 120px;
 	}
 }
 

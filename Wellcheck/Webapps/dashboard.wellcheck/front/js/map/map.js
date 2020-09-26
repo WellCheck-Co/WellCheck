@@ -2,7 +2,7 @@ Vue.component('compModDevices', compModDevices);
 Vue.component('compModShare', compModShare);
 Vue.component('compModAdd_a_device', compModAdd_a_device);
 Vue.use(VueGoogleMaps, {
-  load: {key: 'AIzaSyDbGl0_XwDOzKEqu-CrXstGvjlTbsNXNTs',libraries: 'places'},
+  load: {key: 'AIzaSyC2wj8Pplhih9CcgrWIeTWD62hyIOqW39Q',libraries: 'places'},
   autobindAllEvents: false,
   installComponents: true
 })
@@ -100,7 +100,7 @@ let vm = new Vue({
                           Name: ` + this.markers[type][i]['name'] + `
                         </div>
                         <div class="col-12 col-sm-6" style="margin-top: 5px;">
-                          <a href="./stats?bindlocal=true&page=Stats&selected=` + this.markers[type][i]['id'] +`&force=true">Go to Stats</a>
+                          <a style="font-size: 10px;padding: 5px;float: right;" class="btn btn-primary" href="./stats?bindlocal=true&page=Stats&selected=` + this.markers[type][i]['id'] +`&force=true">Go to Stats ></a>
                         </div>
                         <div class="col-12 col-sm-6" style="font-size: 11px;margin-top: 5px;">
                           Since: ` + this.datestr(this.markers[type][i]['date']) + `
