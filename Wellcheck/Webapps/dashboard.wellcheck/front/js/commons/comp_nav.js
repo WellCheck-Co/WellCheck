@@ -8,6 +8,37 @@ let leftnav = {
     }
   },
   methods: {
+    update: function(){
+     this.$nextTick(function () {
+      if (!Array.prototype.last){
+        Array.prototype.last = function(){
+          return this[this.length - 1];
+        };
+      };
+      let elem = null;
+      let add = false;
+      let cont = false;
+      for (i in this.$refs){
+        elem = this.$refs[i];
+        if (add){
+          cont = false;
+          for (i2 in elem.classList) {
+            if (elem.classList[i2] == 'nav-second') {
+              elem.classList.add('display');
+              cont = true;
+            }          }
+          if (cont == false) {
+              add = false;
+            }        }
+        let name = elem.innerHTML.split(' ').last();
+        let upname = name.charAt(0).toUpperCase() + name.slice(1);
+        if (name == this.page || upname == this.page) {
+          elem.classList.add('nav-active');
+          add = true;        }
+      }
+      document.querySelector("#s2d.test-switch").checked = this.display_test;
+    })
+    },
     changeopen: function() {
       this.open = !this.open;
       this.type = this.open ? 'open' : 'closediv';
@@ -63,38 +94,7 @@ let leftnav = {
     this.display_test = localStorage.testmode == "true" ? true : false;
   },
   mounted: function () {
-    this.$nextTick(function () {
-      if (!Array.prototype.last){
-        Array.prototype.last = function(){
-          return this[this.length - 1];
-        };
-      };
-      let elem = null;
-      let add = false;
-      let cont = false;
-      for (i in this.$refs){
-        elem = this.$refs[i];
-        if (add){
-          cont = false;
-          for (i2 in elem.classList) {
-            if (elem.classList[i2] == 'nav-second') {
-              elem.classList.add('display');
-              cont = true;
-            }
-          }
-          if (cont == false) {
-              add = false;
-            }
-        }
-        let name = elem.innerHTML.split(' ').last();
-        let upname = name.charAt(0).toUpperCase() + name.slice(1);
-        if (name == this.page || upname == this.page) {
-          elem.classList.add('nav-active');
-          add = true;
-        }
-      }
-      document.querySelector("#s2d.test-switch").checked = this.display_test;
-    })
+    this.update();
   },
   template: `
             <div class="nav" :class=type>
