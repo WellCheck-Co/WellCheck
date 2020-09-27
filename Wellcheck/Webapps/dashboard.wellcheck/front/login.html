@@ -29,7 +29,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<div class="agileits-top">
 					<input class="text email" type="email" name="email" v-model="email" placeholder="Email" required="">
 					<input class="text" type="password" name="password" v-model="password1" placeholder="Password" required="">
-					<input type="submit" value="SIGN IN" v-on:click="login">
+					<input id="submit_button" type="submit" value="SIGN IN" v-on:click="login">
 				<p>Don't have an account ? <a href="./"> Register Now!</a></p>
 			</div>
 		</div>
@@ -71,7 +71,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
         window.addEventListener('load', () => {
             navigator.serviceWorker.register('sw.js').then(function() {console.log("Done")});
         });
-    }
+	}
+	
+	window.addEventListener("keydown", function(event) {
+		if (event.keyCode == 13) {
+			$("#submit_button").click();
+		}
+	});
 </script>
 
 </body>
