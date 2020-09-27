@@ -3,6 +3,7 @@ import uuid
 from .sql import sql
 from .mail import Mailer
 from .elastic import es
+from .users import user
 import requests
 import hashlib
 import random
@@ -331,6 +332,15 @@ class floteur:
             return [False, "No point found with this sigfox id", 404]
         return [True, {"point_id": res[0][0]}, None]
 
+    def getPointEmailInfos(self, id_point):
+        """
+            Get point's user id
+        """
+        res = sql.get("SELECT `id_user`, `name` FROM `point` WHERE id = %s", (id_point))
+        if len(res) <= 0:
+            return [False, "No point found with id", 404]
+        return [True, {"user_id": res[0][0], "point_name": res[0][1]}, None]
+
     def adddata(self, id_sigfox, id_point, ph, turbidity, redox, temp, pos):
         """
             add manually a data set for a given float
@@ -360,13 +370,18 @@ class floteur:
                    },
                 "date": date
             }
-        res = es.index(index='point_test',body=input)
         act = []
         if note < 5 :
-            maillist = ["eliot.courtel@gmail.com"]
-            point_name = ""
+            points_infos = self.getPointEmailInfos(id_point)
+            if not points_infos[0]:
+                return points_infos
+            usr = user(points_infos[1]["user_id"])
+            email = usr.getdetails()[1]["email"]
+            maillist = [email]
+            point_name = points_infos[1]["point_name"]
             Mailer().alerte(maillist, point_name, id_point, date/1000, note)
             act.append({"email": [maillist, point_name, id_point, date/1000, note]})
+        res = es.index(index='point_test',body=input)
         return [True, {"data_added": input, "actions": act}, None]
 
     # def pref_mail(self, id_point, mail = 0):
