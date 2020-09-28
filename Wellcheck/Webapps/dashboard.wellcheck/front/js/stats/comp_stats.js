@@ -104,7 +104,7 @@ methods: {
     var ctx = document.getElementById('globalbar')
     ctx = ctx.getContext('2d');
     var barChartData = {
-			labels: ['Good', 'Medium', 'Bad'],
+			labels: ['Bad', 'Medium', 'Good'],
 			datasets: [{
 				label: 'Test',
 				backgroundColor: '#ff970f',
@@ -417,9 +417,9 @@ methods: {
   store: function(data) {
     if (data != '') {
        if ( this.charts["chart1"] != void 0) {
-         this.charts["chart0"].config.data.datasets[0]["data"] = data["chart0"]["Test"]
-         this.charts["chart0"].config.data.datasets[1]["data"] = data["chart0"]["Your\'s"]
-         this.charts["chart0"].config.data.datasets[2]["data"] = data["chart0"]["Shared with you"]
+         this.charts["chart0"].config.data.datasets[0]["data"] = data["chart0"]["Test"].reverse()
+         this.charts["chart0"].config.data.datasets[1]["data"] = data["chart0"]["Your\'s"].reverse()
+         this.charts["chart0"].config.data.datasets[2]["data"] = data["chart0"]["Shared with you"].reverse()
          this.charts["chart0"].update();
 
          this.charts["chart1"].config.data.labels = data["chart1"]["data"]["label"];
@@ -519,7 +519,7 @@ template: `
                   <div class="col-lg-5 col-sm-12 marge" style="height: inherit;">
                     <container name="Devices datas" hover=true style="height: 100%; min-height: 230px;">
                       <ul class='list-group col-12 sm-modalelist' style="overflow-x: hidden; height: calc(100% - 33px);">
-                        <li v-for="point in data.proprietary" v-if="point.test == false || point.test == true" v-on:click="select([point.id, point.surname, point.data])" class="list-devices-stats list-group-item-action">
+                        <li v-for="point in data.proprietary" v-if="point.test == false || point.test == true" v-on:click="select([point.id, point.surname, point.data, point.date, point.test])" class="list-devices-stats list-group-item-action">
                           <div class="row">
                             <div class="ml-1 mr-0"style="text-align: left"> {{ point.surname }}</div>
                             <div v-if="selected[0] == point.id" class="ml-1 mr-0"style="text-align: left; color: #1C94FE"> &#10004</div>
@@ -527,7 +527,7 @@ template: `
                             <div v-if="!point.data[0]" class="ml-auto mr-0 datelist"> No data </div>
                           </div>
                         </li>
-                        <li v-for="point in data.shared" v-if="point.test == false || point.test == true" v-on:click="select([point.id, point.surname, point.data])" class="list-devices-stats list-group-item-action">
+                        <li v-for="point in data.shared" v-if="point.test == false || point.test == true" v-on:click="select([point.id, point.surname, point.data, point.date, point.test])" class="list-devices-stats list-group-item-action">
                           <div class="row">
                             <div class="ml-1 mr-0"style="text-align: left"> {{ point.surname }}</div>
                             <div v-if="selected[0] == point.id" class="ml-1 mr-0"style="text-align: left; color: #1C94FE"> &#10004</div>
@@ -576,7 +576,7 @@ template: `
                   <div class="col-lg-12 col-sm-12 marge">
                     <container hover=false
                                border=false
-                               style="padding: 0px">
+                               style="padding: 0px; min-height: 0px;">
                                  <div class="row">
                                   <div class="col-md-6 col-lg-3" style="margin-bottom: 30px">
                                     <div class="wc-button"  v-on:click="change('ph')"> ph </div>

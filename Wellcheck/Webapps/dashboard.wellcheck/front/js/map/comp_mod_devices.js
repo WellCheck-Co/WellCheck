@@ -82,7 +82,7 @@ let compModDevices = {
               <ul class='list-group col-12 sm-modalelist' style="overflow-x: hidden">
                   <li v-for="point in points.proprietary" v-if="point.test == false || point.test == true && display_test == true"  class="list-group-item list-group-item-action">
                     <div class="row" v-on:click="redirect('/stats?bindlocal=true&selected=' + point.id )">
-                      <div class="ml-0 mr-0" style="width: 80px; height: auto; color: grey; cursor: pointer;" data-toggle="tooltip" :title="point.id" > {{point.id | limitid }} </div>
+                      <div class="ml-0 mr-0" style="width: 100px; height: auto; color: grey; cursor: pointer;" data-toggle="tooltip" :title="point.id" > {{point.id | limitid }} </div>
                       <div class="ml-0 mr-auto"style="text-align: left"> {{ point.surname }}</div>
                       <div class="ml-0 mr-0 datelist"> Added {{ point.date | tostr }} </div>
                       <div v-if="point.test == true" class="ml-3 mr-3 testbtn" style="text-align: right"> Test &#10004; </div>
@@ -100,7 +100,7 @@ let compModDevices = {
                 <ul class='list-group col-12 sm-modalelist' style="overflow-x: hidden">
                     <li v-for="point in points.shared" class="list-group-item list-group-item-action">
                       <div class="row">
-                        <div class="ml-0 mr-0" style="width: 40px; height: auto; color: grey"> {{point.id}} </div>
+                        <div class="ml-0 mr-0" style="width: 100px; height: auto; color: grey"> {{point.id}} </div>
                         <div class="ml-0 mr-0"style="text-align: left"> {{ point.surname }} </div>
                         <div class="ml-auto mr-0 datelist"> Shared {{ point.date | tostr }} </div>
 

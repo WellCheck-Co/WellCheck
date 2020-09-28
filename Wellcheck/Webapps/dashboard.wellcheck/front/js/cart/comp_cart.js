@@ -200,7 +200,7 @@ let cart = {
                   <div v-if="page == 0" class="marge" style="height: inherit;">
                     <container note="Your cart"
                       name="My cart"
-                      hover=true
+                      hover=false
                       style="height: 100%">
                       <div class="row justify-content-md-center">
                           <label class="col-md-4">Number of devices</label>
@@ -216,12 +216,12 @@ let cart = {
                     </container>
                   </div>
                   <div v-if="page == 1" class="col-md-12 marge" style="height: inherit;">
-                    <container note="Enter your billing and shipping informations"
-                      name="Billing and shipping informations"
-                      hover=true>
+                      <div class="row">
+                      <div class="col-lg-6 col-md-12">
                       <container note="Choose or add a billing address"
                         name="Billing address"
-                        hover=true
+                        hover=false
+                        border=true
                         style="margin-top: 20px;">
                         <span v-if="addresses.length < 1">You don't have any address yet, please add one</span>
                         <br/>
@@ -229,7 +229,7 @@ let cart = {
                           <div class="col-sm-12 col-12 margin5px" for="input2">{{ addresses.length > 1 ? "Your address" : "Your addresses" }}</div>
                           </br>
                           <div class="col-md-1 hidesms"></div>
-                          <ul class='list-group col-8 offset-2 modalelist'>
+                          <ul class='list-group col-12  modalelist'>
                             <li :id="'billing_' + address.id" v-for="address in addresses" class="list-group-item list-group-item-action" v-on:click="select('billing_' + address.id)">
                               <div class="row ml-1">
                                 <input class="mr-3 ml-0" type="radio" name="billingaddress" :value="JSON.stringify(address)"/>
@@ -243,9 +243,12 @@ let cart = {
                         </div>
                         <div style="width:auto" class="wc-button" data-toggle="modal" data-target="#addressModal">Add a new address</div>
                       </container>
+                      </div>
+                      <div class="col-lg-6 col-md-12">
                       <container note="Choose or add a shipping address"
                         name="Shipping address"
-                        hover=true
+                        hover=false
+                        border=true
                         style="margin-top: 20px;">
                         <span v-if="addresses.length < 1">You don't have any address yet, please add one</span>
                         <br/>
@@ -253,7 +256,7 @@ let cart = {
                           <div class="col-sm-12 col-12 margin5px" for="input2">{{ addresses.length > 1 ? "Your address" : "Your addresses" }}</div>
                           </br>
                           <div class="col-md-1 hidesms"></div>
-                          <ul class='list-group col-8 offset-2 modalelist'>
+                          <ul class='list-group col-12 modalelist'>
                             <li :id="'shipping_' + address.id" v-for="address in addresses" class="list-group-item list-group-item-action" v-on:click="select('shipping_' + address.id)">
                               <div class="row ml-1">
                                 <input class="mr-3 ml-0" type="radio" name="shippingaddress" :value="JSON.stringify(address)"/>
@@ -267,9 +270,11 @@ let cart = {
                         </div>
                         <div style="width:auto" class="wc-button" data-toggle="modal" data-target="#addressModal">Add a new address</div>
                       </container>
+                      </div>
                       <container note="Choose or add a credit card"
                         name="Credit card"
-                        hover=true
+                        hover=false
+                        border=true
                         style="margin-top: 20px;">
                         <span v-if="cards.length < 1">You don't have any card yet, please add one</span>
                         <div v-if="cards.length > 0" class="col-12">
@@ -296,7 +301,7 @@ let cart = {
                         <div style="width:auto" class="wc-button" v-on:click=addCreditCard>Add new credit card</div>
                       </container>
                       <div class="sepinput"></div>
-                      <div style="width:auto" class="wc-button" v-on:click=showOrderHistory>Continue</div>
+                      <div style="width:auto; margin-left: auto" class="wc-button" v-on:click=showOrderHistory>Continue</div>
                     </container>
                     <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-hidden="true">
                       <div class="modal-dialog modal-lg" role="document">
@@ -395,8 +400,8 @@ let cart = {
                         </div>
                       </container>
                       <div class="sepinput"></div>
-                      <div style="width:auto" class="wc-button" v-on:click=pay()>Validate the order</div>
-                    </container>
+                      <div style="width:auto;" class="wc-button" v-on:click=pay()>Validate the order</div>
+                      </div>
                   </div>
                 </div>
               </div>

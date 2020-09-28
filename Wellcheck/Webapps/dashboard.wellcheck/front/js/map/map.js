@@ -100,7 +100,7 @@ let vm = new Vue({
                           Name: ` + this.markers[type][i]['name'] + `
                         </div>
                         <div class="col-12 col-sm-6" style="margin-top: 5px;">
-                          <a style="font-size: 10px;padding: 5px;float: right;" class="btn btn-primary" href="./stats?bindlocal=true&page=Stats&selected=` + this.markers[type][i]['id'] +`&force=true">Go to Stats ></a>
+                          <a style="font-size: 10px;padding: 1px 3px 1px 3px;;float: right;color: white" class="btn btn-primary" onclick="loc.methods.redirect('/stats?bindlocal=true&selected=` + this.markers[type][i]['id'] +`')">Go to Stats ></a>
                         </div>
                         <div class="col-12 col-sm-6" style="font-size: 11px;margin-top: 5px;">
                           Since: ` + this.datestr(this.markers[type][i]['date']) + `
