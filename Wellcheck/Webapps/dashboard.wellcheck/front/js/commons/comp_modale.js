@@ -63,6 +63,7 @@ let mod = {
 
     },
     change: function() {
+      this.page = localStorage.location.slice(1);
       this.data = ''
       this.warning = false;
       this.note = null;
