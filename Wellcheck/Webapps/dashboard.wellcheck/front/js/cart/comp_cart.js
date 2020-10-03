@@ -216,7 +216,7 @@ let cart = {
                     </container>
                   </div>
                   <div v-if="page == 1" class="col-md-12 marge" style="height: inherit;">
-                      <div class="row">
+                    <div class="row">
                       <div class="col-lg-6 col-md-12">
                       <container note="Choose or add a billing address"
                         name="Billing address"
@@ -302,7 +302,7 @@ let cart = {
                       </container>
                       <div class="sepinput"></div>
                       <div style="width:auto; margin-left: auto" class="wc-button" v-on:click=showOrderHistory>Continue</div>
-                    </container>
+                    </div>
                     <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-hidden="true">
                       <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
@@ -401,7 +401,8 @@ let cart = {
                       </container>
                       <div class="sepinput"></div>
                       <div style="width:auto;" class="wc-button" v-on:click=pay()>Validate the order</div>
-                      </div>
+                    </container>
+                    </div>
                   </div>
                 </div>
               </div>
