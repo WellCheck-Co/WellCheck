@@ -3,7 +3,7 @@
 	$admpassword = getenv("API_ADM");
 	$method = getenv("METHOD");
 	$domain = getenv("DOMAIN");
-	$api_host = "$method://api.$domain/";
+	$api_host = "$method://api.$domain";
 
 	$curl = curl_init();
 
