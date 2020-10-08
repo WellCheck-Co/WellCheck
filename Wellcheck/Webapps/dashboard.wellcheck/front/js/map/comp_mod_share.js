@@ -16,8 +16,8 @@ let compModShare = {
       let date = new Date(parseInt(timestamp));
       let day = ("00" + date.getDate())
       day = day.substr(day.length - 2);
-      let month = ("0" + (date.getMonth() + 1))
-      month = month.substr(day.length - 2);
+      let month = ("00" + (date.getMonth() + 1))
+      month = month.substr(month.length - 2);
       let str = day + '.' + month + '.' + date.getFullYear();
       return str;
     }

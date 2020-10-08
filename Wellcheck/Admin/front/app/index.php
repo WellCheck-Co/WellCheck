@@ -109,7 +109,7 @@ $host = getenv("DOMAIN");
     <script src="/js/jquery.dataTables.min.js"></script>
     <script>
 
-      var method = "<?= $method ?> + ://";
+      var method = "<?= $method ?>" + "://";
       var host = "<?= $host ?>";
       var password = "<?= $pass ?>";
       var token = "";
