@@ -32,7 +32,7 @@ let leftnav = {
             }        }
         let name = elem.innerHTML.split(' ').last();
         let upname = name.charAt(0).toUpperCase() + name.slice(1);
-        if (name == this.page || upname == this.page) {
+        if (name == this.page || upname == this.page || (this.page == "Cart" && upname == "Buy")) {
           elem.classList.add('nav-active');
           add = true;        }
       }

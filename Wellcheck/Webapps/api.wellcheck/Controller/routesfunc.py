@@ -104,6 +104,15 @@ def infos(cn, nextc):
     err = use.getdetails()
     return cn.call_next(nextc, err)
 
+def point_activate(cn, nextc):
+    err = check.contain(cn.pr, ["id_point", "ukey"])
+    if not err[0]:
+        return cn.toret.add_error(err[1], err[2])
+
+    use = floteur(cn.private["user"].id)
+    err = use.activate(cn.pr["id_point"], cn.pr["ukey"])
+    return cn.call_next(nextc, err)
+
 def upinfos(cn, nextc):
     err = check.contain(cn.pr, ["firstname", "lastname", "phone"])
     if not err[0]:
