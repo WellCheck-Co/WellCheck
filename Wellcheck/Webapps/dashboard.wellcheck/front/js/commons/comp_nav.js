@@ -111,7 +111,7 @@ let leftnav = {
                   <div ref="link5" class="nav-text nav-second" v-on:click="modale('Devices')"    >Devices</div>
                   <div ref="link6" class="nav-text nav-second" v-on:click="modale('Share')"     >Share</div>
                   <div ref="link7" class="nav-text"  v-on:click="redirect('/stats')"            >Stats</div>
-                  <div ref="link8" class="nav-text"  v-on:click="redirect('/cart')"            >Cart</div>
+                  <div ref="link8" class="nav-text"  v-on:click="redirect('/cart')"            >Buy</div>
                   <div ref="link9" class="nav-text" v-on:click="user.methods.logout"          >Logout</div>
                   <br>
                   <div ref="link9" class="nav-text test-nav">
