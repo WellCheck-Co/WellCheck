@@ -175,7 +175,6 @@ let compModAdd_a_device = {
       data['headers'] = cred.methods.get_headers()
       data['data'] = {"id_point": this.uid, "ukey": this.key}
       user.methods.send('point/activate', data, this.infos);
-      console.log("test");
     }
   },
   template: `
