@@ -7,7 +7,7 @@ let compModShare = {
       shared: [],
       already: {},
       display_test: true,
-      disable_test: false
+      disable_test: true
     }
   },
 

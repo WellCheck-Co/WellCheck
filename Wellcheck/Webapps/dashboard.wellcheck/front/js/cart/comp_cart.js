@@ -22,9 +22,9 @@ let cart = {
   },
 
   components: {container, warning},
-  
+
   props: {data: {default: void 0}},
-  
+
   methods: {
       handleChanges: function() {
           $("#number").on("change", (event) => {
@@ -95,7 +95,6 @@ let cart = {
           address[name] = $(elem).val();
         });
         data['data']['address'] = address;
-        
         user.methods.send('addaddress', data, this.getAddresses);
         $('[name^="address_"]').each((index, elem) => {
           $(elem).val("");
@@ -229,12 +228,12 @@ let cart = {
                           <div class="col-sm-12 col-12 margin5px" for="input2">{{ addresses.length > 1 ? "Your address" : "Your addresses" }}</div>
                           </br>
                           <div class="col-md-1 hidesms"></div>
-                          <ul class='list-group col-12  modalelist'>
-                            <li :id="'billing_' + address.id" v-for="address in addresses" class="list-group-item list-group-item-action" v-on:click="select('billing_' + address.id)">
+                          <ul class='list-group col-12  modalelist' style="margin-left: 0px;overflow-x: hidden;">
+                            <li :id="'billing_' + address.id" v-for="address in addresses" class="list-group-item list-group-item-action" style="width: calc(100% + 14px);padding: .5rem .30rem;" v-on:click="select('billing_' + address.id)">
                               <div class="row ml-1">
-                                <input class="mr-3 ml-0" type="radio" name="billingaddress" :value="JSON.stringify(address)"/>
+                                <input class="mr-1 ml-0" type="radio" name="billingaddress" :value="JSON.stringify(address)"/>
                                 <div style="text-align: left">{{ address.name }}</div>
-                                <div class="ml-auto mr-0" style="text-align: right">{{ address.city }}</div>
+                                <div class="ml-auto mr-0" style="text-align: right"><small>{{ address.city }}</small></div>
                                 <div class="ml-3 mr-3" style="text-align: right"><div class="deletecard cross" v-on:click="deleteaddress(address.id)">╳</div></div>
                               </div>
                             </li>
@@ -256,12 +255,12 @@ let cart = {
                           <div class="col-sm-12 col-12 margin5px" for="input2">{{ addresses.length > 1 ? "Your address" : "Your addresses" }}</div>
                           </br>
                           <div class="col-md-1 hidesms"></div>
-                          <ul class='list-group col-12 modalelist'>
-                            <li :id="'shipping_' + address.id" v-for="address in addresses" class="list-group-item list-group-item-action" v-on:click="select('shipping_' + address.id)">
+                          <ul class='list-group col-12 modalelist' style="margin-left: 0px;overflow-x: hidden;">
+                            <li :id="'shipping_' + address.id" v-for="address in addresses" class="list-group-item list-group-item-action" style="width: calc(100% + 14px);padding: .5rem .30rem" v-on:click="select('shipping_' + address.id)">
                               <div class="row ml-1">
                                 <input class="mr-3 ml-0" type="radio" name="shippingaddress" :value="JSON.stringify(address)"/>
                                 <div style="text-align: left">{{ address.name }}</div>
-                                <div class="ml-auto mr-0" style="text-align: right">{{ address.city }}</div>
+                                <div class="ml-auto mr-0" style="text-align: right"><small>{{ address.city }}</small></div>
                                 <div class="ml-3 mr-3" style="text-align: right"><div class="deletecard cross" v-on:click="deleteaddress(address.id)">╳</div></div>
                               </div>
                             </li>
