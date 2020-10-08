@@ -173,8 +173,8 @@ let compModAdd_a_device = {
     adddevice: function(){
       let data = {}
       data['headers'] = cred.methods.get_headers()
-      data['data'] = {"id_sigfox": this.uid, "lng": vm.$refs.main.$mapObject.center.lng(), "lat": vm.$refs.main.$mapObject.center.lat()}
-      user.methods.send('point/add', data, this.infos);
+      data['data'] = {"id_point": this.uid, "ukey": this.key}
+      user.methods.send('point/activate', data, this.infos);
     }
   },
   template: `
