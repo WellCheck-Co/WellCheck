@@ -63,8 +63,8 @@ let mod = {
 
     },
     change: function() {
-      this.page = localStorage.location.slice(1);
-      this.data = ''
+      this.page = localStorage.location.slice(1).split('?')[0];
+      this.data = '';
       this.warning = false;
       this.note = null;
       let id = "vue" + this.page;

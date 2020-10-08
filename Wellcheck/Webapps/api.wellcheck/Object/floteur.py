@@ -27,14 +27,16 @@ class floteur:
             if number > 2:
                 return [False, "Can't have more than 3 test devices", 401]
             name = "test_" + str(number + 1)
+            active = 1
         else:
             number = sql.get("SELECT COUNT(*) FROM `point` WHERE id_user = %s", (self.usr_id))[0][0]
             name = "point_" + str(number + 1)
-            #if id_sigfox != "tmp":
-                #return [False, "Invalid Sigfox_id", 400]
+            active = 0
+            if id_sigfox == "tmp":
+                id_sigfox = uid[4]
         ukey = uid[1]
-        succes = sql.input("INSERT INTO `point` (`id`, `id_user`, `id_sigfox`, `ukey`, `name`, `surname`, `date`) VALUES (%s, %s, %s, %s, %s, %s, %s)", \
-        (id_point, self.usr_id, id_sigfox, ukey, name, name, date))
+        succes = sql.input("INSERT INTO `point` (`id`, `id_user`, `id_sigfox`, `ukey`, `name`, `surname`, `date`, `active`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", \
+        (id_point, self.usr_id, id_sigfox, ukey, name, name, date, active))
         if not succes:
             return [False, "data input error", 500]
         #if id_sigfox == "-1": for demo
@@ -42,6 +44,17 @@ class floteur:
         data = {"data": None, "pos": {"lat": lat, "lng": lng}}
         input = self.inputrandom(id_point, id_sigfox, data, date)
         return [True, {"ukey": ukey, "floteur_id": id_point}, None]
+
+    def activate(self, id_point, ukey):
+        res = sql.get("SELECT `id` from `point` WHERE id = %s AND ukey = %s AND id_user = %s", \
+            (id_point, ukey, self.usr_id))
+        if len(res) <= 0:
+            return [False, "Cannot associate the given couple id - key", 404]
+        succes = sql.input("UPDATE `point` SET active = 1 WHERE id = %s AND ukey = %s AND id_user = %s", \
+            (id_point, ukey, self.usr_id))
+        if not succes:
+            return [False, "data input error", 500]
+        return [True, {"id_point": id_point}, None]
 
     def delete(self,
                id_points):
@@ -461,7 +474,7 @@ class floteur:
         res = []
         if type == "proprietary":
             if details:
-                res = sql.get("SELECT `id`, `id_sigfox`, `name`, `surname`, `date` FROM `point` WHERE id_user = %s", (self.usr_id))
+                res = sql.get("SELECT `id`, `id_sigfox`, `name`, `surname`, `date` FROM `point` WHERE id_user = %s AND active = 1", (self.usr_id))
                 ret = {}
                 for i in res:
                     ret[str(i[0])] = {
@@ -475,7 +488,7 @@ class floteur:
                 res = sql.get("SELECT \
                     `id` \
                     FROM `point` \
-                    WHERE id_user = %s",
+                    WHERE id_user = %s AND active = 1",
                     (self.usr_id))
                 ret = []
                 for i in res:
@@ -487,8 +500,8 @@ class floteur:
                     point_shared.surname, point_shared.date \
                     FROM `point_shared` \
                     INNER JOIN `point` \
-                    ON `id_point` = point.id \
-                    WHERE point_shared.id_user = %s",
+                    ON point_shared.id_point = point.id \
+                    WHERE point_shared.id_user = %s AND point.active = 1",
                     (self.usr_id))
                 ret = {}
                 for i in res:
@@ -501,9 +514,11 @@ class floteur:
                         }
             else:
                 res = sql.get("SELECT \
-                    `id_point` \
+                    point_shared.id_point \
                     FROM `point_shared` \
-                    WHERE id_user = %s",
+                    INNER JOIN `point` \
+                    ON point_shared.id_point = point.id \
+                    WHERE point_shared.id_user = %s AND point.active = 1",
                     (self.usr_id))
                 ret = []
                 for i in res:
